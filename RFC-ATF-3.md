@@ -93,21 +93,10 @@ Copyright Notice
 
 Acknowledgements
 
-   The formal distinction between Cryptographic Interoperability and
-   Governance Interoperability was identified by Antonio Socorro (May
-   2026), whose public commentary on the policy divergence surface
-   between sovereign ATF runtimes directly motivated the specification
-   of the Governance Policy Interoperability Layer (§5) and ADR-161.
-
-   The observation that two fully ATF-RGC-Compliant runtimes can reach
-   divergent governance conclusions from identical signed artifacts —
-   not as a defect but as a deliberate property of the sovereign runtime
-   model — is the foundational insight that GPIL formalizes.
-
-   Dr. Hajar OMRANA's commentary (May 2026) on context-bound validation
-   in multi-runtime environments provided independent confirmation of
-   the structural gap that the Policy Parameter Registry (§5.2) and
-   the Cross-Runtime Governance Contract (§5.3) address.
+   This document extends the work established in RFC-ATF-1 and
+   RFC-ATF-2.  The foundational interoperability observations that
+   motivated the GPIL specification (§5) are formally credited in
+   RFC-ATF-2 §21, where they originated.
 
 
 Table of Contents
@@ -1855,7 +1844,4 @@ Author's Address
    United Kingdom
    Email: standards@omnixquantum.com
 
-   Acknowledgements of formal contributions:
-   Antonio Socorro — Governance Policy Interoperability analysis, May 2026.
-   Dr. Hajar OMRANA — Context-bound validation in multi-runtime environments, May 2026.
 ```
