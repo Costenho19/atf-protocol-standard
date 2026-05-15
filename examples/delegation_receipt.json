@@ -1,0 +1,31 @@
+{
+  "_comment": "RFC-ATF-1 §5 — Delegation Receipt (DR) example. Content hash and PQC signature are illustrative.",
+  "delegation_id": "ATFDR-3A7F9B2C1D4E5F6A",
+  "delegator_id": "HUMAN-harold.nunes",
+  "delegate_id": "AID-FINANCE-9B8C7D6E5F4A3B2C",
+  "task_scope": {
+    "action": "equity_order_execution",
+    "domain": "FINANCE",
+    "constraints": [
+      "max_order_value_usd:50000",
+      "approved_tickers:AAPL,MSFT,GOOG",
+      "no_leveraged_products"
+    ]
+  },
+  "authority_budget_delegator": 100,
+  "authority_budget_granted": 60,
+  "parent_delegation_id": null,
+  "chain_root_id": "ATFDR-3A7F9B2C1D4E5F6A",
+  "delegation_depth": 0,
+  "delegator_public_key": "BASE64_ML_DSA_65_PUBLIC_KEY_HERE",
+  "content_hash": "sha256:a3f5b2c1d4e6789012345678abcdef0123456789abcdef0123456789abcdef01",
+  "pqc_signature": "BASE64_ML_DSA_65_SIGNATURE_OVER_CONTENT_HASH",
+  "pqc_algorithm": "dilithium3",
+  "expires_at": "2026-05-16T00:00:00Z",
+  "status": "ACTIVE",
+  "created_at": "2026-05-15T12:00:00Z",
+  "metadata": {
+    "regulatory_framework": "EU-AI-Act-Art9",
+    "issuer": "OMNIX QUANTUM LTD"
+  }
+}
