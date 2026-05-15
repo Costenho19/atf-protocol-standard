@@ -1,0 +1,127 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/Costenho19/atf-protocol-standard/blob/main/schemas/delegation_receipt.schema.json",
+  "title": "ATF Delegation Receipt",
+  "description": "RFC-ATF-1 §5 — Agent Trust Fabric Delegation Receipt (DR). A PQC-signed artifact produced at every agent authority delegation event.",
+  "type": "object",
+  "required": [
+    "delegation_id",
+    "delegator_id",
+    "delegate_id",
+    "task_scope",
+    "authority_budget_delegator",
+    "authority_budget_granted",
+    "chain_root_id",
+    "delegation_depth",
+    "delegator_public_key",
+    "content_hash",
+    "status",
+    "created_at"
+  ],
+  "properties": {
+    "delegation_id": {
+      "type": "string",
+      "pattern": "^ATFDR-[0-9A-F]{16}$",
+      "description": "Unique DR identifier. Format: ATFDR-{16HEX}."
+    },
+    "delegator_id": {
+      "type": "string",
+      "description": "AID or HUMAN-{id} of the delegating principal."
+    },
+    "delegate_id": {
+      "type": "string",
+      "pattern": "^AID-[A-Z]+-[0-9A-F]{16}$",
+      "description": "AID of the receiving agent."
+    },
+    "task_scope": {
+      "type": "object",
+      "required": [
+        "action"
+      ],
+      "properties": {
+        "action": {
+          "type": "string"
+        },
+        "domain": {
+          "type": "string"
+        },
+        "constraints": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "authority_budget_delegator": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 100
+    },
+    "authority_budget_granted": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 100
+    },
+    "parent_delegation_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "chain_root_id": {
+      "type": "string",
+      "pattern": "^ATFDR-[0-9A-F]{16}$"
+    },
+    "delegation_depth": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "delegator_public_key": {
+      "type": "string",
+      "description": "Base64-encoded ML-DSA-65 public key of the delegator."
+    },
+    "content_hash": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "pqc_signature": {
+      "type": "string",
+      "description": "Base64-encoded ML-DSA-65 signature over content_hash."
+    },
+    "pqc_algorithm": {
+      "type": "string",
+      "enum": [
+        "dilithium3"
+      ]
+    },
+    "expires_at": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date-time"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "ACTIVE",
+        "EXPIRED",
+        "REVOKED"
+      ]
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "metadata": {
+      "type": "object"
+    }
+  },
+  "allOf": [
+    {
+      "description": "ATF-INV-001: Monotonic Authority Reduction — granted MUST NOT exceed delegator budget.",
+      "$comment": "authority_budget_granted <= authority_budget_delegator — enforced at issuance time."
+    }
+  ]
+}
