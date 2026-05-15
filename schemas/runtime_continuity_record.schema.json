@@ -1,0 +1,146 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/Costenho19/atf-protocol-standard/blob/main/schemas/runtime_continuity_record.schema.json",
+  "title": "ATF Runtime Continuity Record",
+  "description": "RFC-ATF-2 §5 — Runtime Continuity Record (RCR). PQC-signed authority health snapshot emitted at governed sampling boundaries throughout agent execution.",
+  "type": "object",
+  "required": [
+    "rcr_id",
+    "tar_id",
+    "delegation_id",
+    "agent_id",
+    "chain_root_id",
+    "execution_ns",
+    "execution_ts",
+    "ces_score",
+    "ces_temporal",
+    "ces_budget",
+    "ces_context",
+    "ces_integrity",
+    "continuity_status",
+    "budget_at_admission",
+    "budget_remaining",
+    "context_drift_pct",
+    "active_anomalies",
+    "fragmentation_score",
+    "sample_reason",
+    "content_hash"
+  ],
+  "properties": {
+    "rcr_id": {
+      "type": "string",
+      "pattern": "^ATFRCR-[0-9A-F]{16}$"
+    },
+    "tar_id": {
+      "type": "string",
+      "pattern": "^ATFTAR-[0-9A-F]{16}$",
+      "description": "RGC-INV-001: MUST NOT be null."
+    },
+    "delegation_id": {
+      "type": "string",
+      "pattern": "^ATFDR-[0-9A-F]{16}$"
+    },
+    "agent_id": {
+      "type": "string",
+      "pattern": "^AID-[A-Z]+-[0-9A-F]{16}$"
+    },
+    "chain_root_id": {
+      "type": "string"
+    },
+    "execution_ns": {
+      "type": "integer",
+      "description": "RGC-INV-006: MUST be strictly increasing within session."
+    },
+    "execution_ts": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "ces_score": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 100,
+      "description": "RGC-INV-002: CES = T×0.30 + B×0.30 + D×0.20 + I×0.20"
+    },
+    "ces_temporal": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 100
+    },
+    "ces_budget": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 100
+    },
+    "ces_context": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 100
+    },
+    "ces_integrity": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 100
+    },
+    "continuity_status": {
+      "type": "string",
+      "enum": [
+        "NOMINAL",
+        "MONITORING",
+        "WARNING",
+        "CRITICAL",
+        "HALT"
+      ]
+    },
+    "predecessor_rcr_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "budget_at_admission": {
+      "type": "number",
+      "minimum": 0
+    },
+    "budget_remaining": {
+      "type": "number",
+      "minimum": 0
+    },
+    "context_drift_pct": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 100
+    },
+    "active_anomalies": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "fragmentation_score": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 100
+    },
+    "sample_reason": {
+      "type": "string",
+      "enum": [
+        "SCHEDULED",
+        "EVENT_DRIVEN",
+        "MANUAL",
+        "EXECUTION_COMPLETE",
+        "HALT"
+      ]
+    },
+    "content_hash": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "pqc_signature": {
+      "type": "string"
+    },
+    "pqc_algorithm": {
+      "type": "string",
+      "enum": [
+        "dilithium3"
+      ]
+    }
+  }
+}
