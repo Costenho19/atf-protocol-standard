@@ -111,17 +111,17 @@
 
   ## Coverage Summary
 
-  | Family | Total | ✅ Covered | 🔶 Partial | ❌ Gap |
-  |---|---|---|---|---|
-  | ATF-INV | 6 | 5 | 1 | 0 |
-  | RGC-INV | 8 | 3 | 0 | 5 |
-  | GPIL-INV | 3 | 0 | 0 | 3 |
-  | ELR-INV | 4 | 0 | 0 | 4 |
-  | EAP-INV | 7 | 2 | 0 | 5 |
-  | OEP-INV | 6 | 0 | 0 | 6 |
-  | FEA-INV | 5 | 0 | 0 | 5 |
-  | FVP-INV | 1 | 1 | 0 | 0 |
-  | **TOTAL** | **40** | **11** | **1** | **28** |
+  | Family | Total | ✅ Covered | 🔶 Partial | ❌ Gap | Added in |
+  |---|---|---|---|---|---|
+  | ATF-INV | 6 | 6 | 0 | 0 | v3.1.0 |
+  | RGC-INV | 8 | 6 | 0 | 2 | v3.1.0 |
+  | GPIL-INV | 3 | 0 | 0 | 3 | — |
+  | ELR-INV | 4 | 0 | 0 | 4 | — |
+  | EAP-INV | 7 | 4 | 0 | 3 | v3.1.0 |
+  | OEP-INV | 6 | 4 | 0 | 2 | v3.1.0 |
+  | FEA-INV | 5 | 0 | 0 | 5 | — |
+  | FVP-INV | 1 | 1 | 0 | 0 | v3.0.0 |
+  | **TOTAL** | **40** | **21** | **0** | **19** | — |
 
   > Gaps are documented and tracked. RFC-ATF-3 invariants (L5) require a full Evidence Archive Pipeline implementation to cover — currently specified in RFC-ATF-3 and tracked for the reference implementation roadmap. See [CONTRIBUTING.md](./CONTRIBUTING.md) to contribute coverage.
 
