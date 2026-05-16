@@ -99,7 +99,7 @@
             <div><div style="font-weight:700;font-size:.9rem">atf-langchain</div><div style="font-size:.72rem;color:var(--muted)">ATF-RGC-Compliant</div></div>
             <code style="margin-left:auto;font-family:var(--mono);font-size:.7rem;background:var(--bg2);padding:.2rem .5rem;border-radius:4px;color:var(--muted)">pip install -e ./integrations/langchain</code>
           </div>
-          <p style="font-size:.8rem;color:var(--muted);line-height:1.6;margin-bottom:.75rem">ATFCallbackHandler intercepts every LLM call and tool invocation. Verifies ATF-INV-001–006, samples CES, enforces HALT (RGC-INV-003 — CES &lt; 10.0 → ATFHaltError). LCEL-compatible via ATFGovernedRunnable.</p>
+          <p style="font-size:.8rem;color:var(--muted);line-height:1.6;margin-bottom:.75rem">ATFCallbackHandler intercepts every LLM call and tool invocation. Verifies ATF-INV-001–006, samples CES, implements the HALT protocol (RGC-INV-003 — CES &lt; 10.0 → ATFHaltError). LCEL-compatible via ATFGovernedRunnable.</p>
           <div style="display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:.75rem">
             <span style="font-size:.7rem;background:rgba(63,185,80,.12);color:var(--green);border:1px solid rgba(63,185,80,.3);padding:.1rem .5rem;border-radius:4px">ATFCallbackHandler</span>
             <span style="font-size:.7rem;background:rgba(63,185,80,.12);color:var(--green);border:1px solid rgba(63,185,80,.3);padding:.1rem .5rem;border-radius:4px">ATFGovernedRunnable</span>
@@ -110,7 +110,7 @@
         <div style="background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:1.25rem">
           <div style="display:flex;align-items:center;gap:.6rem;margin-bottom:.75rem">
             <div style="width:32px;height:32px;background:linear-gradient(135deg,#009485,#00c4a7);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:.9rem">⚡</div>
-            <div><div style="font-weight:700;font-size:.9rem">atf-fastapi</div><div style="font-size:.72rem;color:var(--muted)">ATF-Compliant</div></div>
+            <div><div style="font-weight:700;font-size:.9rem">atf-fastapi</div><div style="font-size:.72rem;color:var(--muted)">ATF-RGC Conformant</div></div>
             <code style="margin-left:auto;font-family:var(--mono);font-size:.7rem;background:var(--bg2);padding:.2rem .5rem;border-radius:4px;color:var(--muted)">pip install -e ./integrations/fastapi</code>
           </div>
           <p style="font-size:.8rem;color:var(--muted);line-height:1.6;margin-bottom:.75rem">Starlette middleware + FastAPI dependency. Validates DR from Authorization header. HALT → HTTP 503. Adds X-ATF-RCR-ID, X-ATF-CES-Score, X-ATF-Status audit headers to every response.</p>
@@ -124,7 +124,7 @@
         <div style="background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:1.25rem">
           <div style="display:flex;align-items:center;gap:.6rem;margin-bottom:.75rem">
             <div style="width:32px;height:32px;background:linear-gradient(135deg,#1a1a2e,#30363d);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:.9rem;border:1px solid #484f58">🤖</div>
-            <div><div style="font-weight:700;font-size:.9rem">atf-openai-agents</div><div style="font-size:.72rem;color:var(--muted)">ATF-Compliant</div></div>
+            <div><div style="font-weight:700;font-size:.9rem">atf-openai-agents</div><div style="font-size:.72rem;color:var(--muted)">ATF-RGC Conformant</div></div>
             <code style="margin-left:auto;font-family:var(--mono);font-size:.7rem;background:var(--bg2);padding:.2rem .5rem;border-radius:4px;color:var(--muted)">pip install -e ./integrations/openai-agents</code>
           </div>
           <p style="font-size:.8rem;color:var(--muted);line-height:1.6;margin-bottom:.75rem">ATFAgentGuard wraps OpenAI Agents SDK runs. ATFHandoffGuard validates sub-delegations before handoffs (ATF-INV-001 MAR). ATFRunHooks implements the native RunHooks interface for inline governance.</p>
@@ -378,7 +378,7 @@
       }
       fmt.Printf("Agent: %s\n", air.AgentID)
 
-      // Issue Delegation Receipt — MAR enforced at SDK level
+      // Issue Delegation Receipt — MAR validated at SDK level
       dr, err := client.IssueDR(atf.DRConfig{
           DelegateID:    air.AgentID,
           TaskScope:     atf.TaskScope{Action: "governance_decision", Domain: "FINANCE"},
@@ -789,7 +789,7 @@ Final verdict: {result.final_verdict}")
     </div>
 
     <div class="interop-note">
-      <strong>Interoperability note (GPIL):</strong> ATF supports three levels of governance policy interoperability across runtimes — Cryptographic (shared ML-DSA-65 primitives), Protocol (shared wire format and invariants), and Governance Policy (sovereign policy divergence via Policy Parameter Registry). DRs and RCRs from any ATF-compliant runtime are verifiable by the same verifier, regardless of the originating platform. See <a href="../rfc/index.html">RFC-ATF-3</a> for the complete GPIL specification.
+      <strong>Interoperability note (GPIL):</strong> ATF supports three levels of governance policy interoperability across runtimes — Cryptographic (shared ML-DSA-65 primitives), Protocol (shared wire format and invariants), and Governance Policy (sovereign policy divergence via Policy Parameter Registry). DRs and RCRs from any ATF-conformant runtime are verifiable by the same verifier, regardless of the originating platform. See <a href="../rfc/index.html">RFC-ATF-3</a> for the complete GPIL specification.
     </div>
   </div>
   <footer>ATF Protocol Standard · Example Integrations · <a href="../index.html">Home</a> · <a href="https://github.com/Costenho19/atf-protocol-standard" target="_blank">GitHub</a> · CC BY 4.0</footer>
