@@ -35,16 +35,22 @@ name: ATF Protocol Conformance Tests
             for schema_path, example_path in pairs:
               schema = json.load(open(schema_path))
               example = json.load(open(example_path))
-              # Remove required PQC signature for schema validation of examples
               try:
                 jsonschema.validate(example, schema)
               except jsonschema.ValidationError as e:
-                # Examples use illustrative signatures — partial validation only
                 print(f'Note ({example_path}): {e.message[:100]}')
               print(f'OK: {example_path}')
             "
 
-        - name: Run protocol conformance tests
+        - name: Run ATF invariant tests
+          run: |
+            pytest tests/test_atf_receipts.py -v --tb=short
+
+        - name: Run conformance vector tests (ATF-Compliant + ATF-RGC-Compliant + ATF-FEI-Compliant)
+          run: |
+            pytest tests/test_conformance_vectors.py -v --tb=short
+
+        - name: Run full test suite
           run: |
             pytest tests/ -v --tb=short
 
@@ -61,7 +67,6 @@ name: ATF Protocol Conformance Tests
             python -c "
             from atf_core import create_delegation_receipt, create_runtime_continuity_record, verify_receipt
 
-            # Test DR creation + MAR enforcement
             dr = create_delegation_receipt(
               delegator_id='HUMAN-test',
               delegate_id='AID-TEST-AABBCCDDEEFF0011',
@@ -73,7 +78,6 @@ name: ATF Protocol Conformance Tests
             assert result['verdict'] == 'PASS', f'DR verify failed: {result}'
             print('DR create + verify: PASS')
 
-            # Test MAR violation is raised
             try:
               create_delegation_receipt(
                 delegator_id='HUMAN-test',
@@ -87,7 +91,6 @@ name: ATF Protocol Conformance Tests
               assert 'ATF-INV-001' in str(e)
               print('ATF-INV-001 enforcement: PASS')
 
-            # Test RCR creation
             rcr = create_runtime_continuity_record(
               tar_id='ATFTAR-1F2E3D4C5B6A7890',
               delegation_id=dr['delegation_id'],
