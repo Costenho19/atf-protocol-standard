@@ -5,10 +5,10 @@
   | Integration | Framework | Badge | Install |
   |---|---|---|---|
   | **atf-langchain** | LangChain / LCEL | ATF-RGC-Compliant | `pip install -e ./integrations/langchain` *(PyPI: Q3 2026)* |
-  | **atf-fastapi** | FastAPI / Starlette | ATF-Compliant | `pip install -e ./integrations/fastapi` *(PyPI: Q3 2026)* |
-  | **atf-openai-agents** | OpenAI Agents SDK | ATF-Compliant | `pip install -e ./integrations/openai-agents` *(PyPI: Q3 2026)* |
+  | **atf-fastapi** | FastAPI / Starlette | ATF-RGC Conformant | `pip install -e ./integrations/fastapi` *(PyPI: Q3 2026)* |
+  | **atf-openai-agents** | OpenAI Agents SDK | ATF-RGC Conformant | `pip install -e ./integrations/openai-agents` *(PyPI: Q3 2026)* |
 
-  All integrations enforce:
+  All integrations implement protocol validation for:
   - **ATF-INV-001** — Monotonic Authority Reduction (MAR): budget_granted ≤ budget_delegator
   - **ATF-INV-004** — Content hash integrity (SHA-256, FVP-INV-007)
   - **ATF-INV-006** — Temporal validity: DR not expired
@@ -18,10 +18,10 @@
   Each integration directory includes:
   - Full Python package (`pyproject.toml`, `README.md`)
   - Type-annotated source with comprehensive docstrings
-  - Production-ready error handling with ATF reason codes (FVP-INV-007)
+  - error handling designed for production environments with ATF reason codes (FVP-INV-007)
 
   See [conformance program](https://costenho19.github.io/atf-protocol-standard/conformance/)
-  to claim your ATF-Compliant badge for your own integration.
+  to claim your ATF-RGC Conformant badge for your own integration.
 
   ## References
 
