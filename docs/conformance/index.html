@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+  <html lang="en">
+  <head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Conformance Program — ATF Protocol Standard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  :root{--bg:#0d1117;--bg2:#161b22;--bg3:#21262d;--border:#30363d;--border2:#21262d;--blue:#58a6ff;--blue-dim:#1f6feb;--blue-dark:#0d419d;--green:#3fb950;--gold:#d29922;--amber:#f0883e;--red:#f85149;--purple:#bc8cff;--text:#e6edf3;--muted:#8b949e;--faint:#484f58;--font:'Inter',system-ui,sans-serif;--mono:'JetBrains Mono',monospace;}
+  html{scroll-behavior:smooth}body{background:var(--bg);color:var(--text);font-family:var(--font);line-height:1.6;overflow-x:hidden}
+  a{color:var(--blue);text-decoration:none}a:hover{text-decoration:underline}
+  nav{position:sticky;top:0;z-index:100;background:rgba(13,17,23,.92);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:.75rem 2rem;gap:1rem;flex-wrap:wrap}
+  .nav-brand{display:flex;align-items:center;gap:.6rem;font-weight:700;font-size:.95rem;color:var(--text);text-decoration:none!important}
+  .nav-badge{background:var(--blue-dark);color:var(--blue);font-size:.65rem;font-weight:600;padding:.15rem .5rem;border-radius:999px;border:1px solid var(--blue-dim)}
+  .nav-links{display:flex;align-items:center;gap:.25rem;flex-wrap:wrap}
+  .nav-links a{color:var(--muted);font-size:.85rem;padding:.4rem .75rem;border-radius:6px;transition:all .15s}
+  .nav-links a:hover,.nav-links a.active{color:var(--text);background:var(--bg3);text-decoration:none}
+  .page-header{padding:3.5rem 2rem 2.5rem;max-width:1100px;margin:0 auto;border-bottom:1px solid var(--border)}
+  .section-label{font-size:.75rem;font-weight:600;color:var(--blue);letter-spacing:.1em;text-transform:uppercase;margin-bottom:.75rem}
+  .page-header h1{font-size:clamp(1.8rem,4vw,2.6rem);font-weight:800;letter-spacing:-.02em;margin-bottom:.75rem}
+  .page-header p{color:var(--muted);font-size:1rem;max-width:620px;line-height:1.7}
+  .main{max-width:1100px;margin:0 auto;padding:2.5rem 2rem}
+  .tier-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:1.5rem;margin-bottom:3rem}
+  .tier-card{background:var(--bg2);border:1px solid var(--border);border-radius:16px;overflow:hidden;transition:border-color .2s,transform .15s}
+  .tier-card:hover{transform:translateY(-2px)}
+  .tier-card.t1:hover{border-color:var(--blue-dim)}
+  .tier-card.t2:hover{border-color:var(--purple)}
+  .tier-card.t3:hover{border-color:var(--gold)}
+  .tier-header{padding:1.5rem 1.75rem 1.25rem;position:relative}
+  .tier-header::after{content:'';position:absolute;bottom:0;left:0;right:0;height:1px;background:var(--border)}
+  .tier-n{font-size:.72rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;margin-bottom:.4rem}
+  .t1 .tier-n{color:var(--blue)}.t2 .tier-n{color:var(--purple)}.t3 .tier-n{color:var(--gold)}
+  .tier-header h3{font-size:1.15rem;font-weight:700;margin-bottom:.35rem}
+  .tier-header .cov{font-size:.8rem;color:var(--muted)}
+  .tier-body{padding:1.5rem 1.75rem}
+  .req-list{list-style:none;display:flex;flex-direction:column;gap:.5rem;margin-bottom:1.5rem}
+  .req-list li{font-size:.83rem;display:flex;align-items:flex-start;gap:.6rem;color:var(--muted)}
+  .req-list li::before{content:'✓';flex-shrink:0;margin-top:.05rem}
+  .t1 .req-list li::before{color:var(--blue)}.t2 .req-list li::before{color:var(--purple)}.t3 .req-list li::before{color:var(--gold)}
+  .req-list li strong{color:var(--text);font-weight:500}
+  .badge-row{background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:1rem;text-align:center;margin-bottom:1.25rem}
+  .badge-row p{font-size:.72rem;color:var(--faint);margin-bottom:.5rem}
+  .badge-code{background:var(--bg);border:1px solid var(--border);border-radius:6px;padding:.6rem .9rem;font-family:var(--mono);font-size:.7rem;color:var(--muted);text-align:left;overflow-x:auto;margin-top:.75rem;white-space:nowrap}
+  .inv-count{display:inline-flex;align-items:center;gap:.4rem;background:var(--bg3);border:1px solid var(--border);border-radius:5px;font-family:var(--mono);font-size:.72rem;padding:.2rem .6rem;color:var(--muted);margin-bottom:1rem}
+
+  .process-section{margin-bottom:3rem}
+  .process-section h2{font-size:1.5rem;font-weight:700;letter-spacing:-.01em;margin-bottom:.5rem}
+  .process-section p{color:var(--muted);font-size:.9rem;margin-bottom:2rem}
+  .steps-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1rem}
+  .step-card{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:1.5rem}
+  .step-n{font-family:var(--mono);font-size:.7rem;color:var(--faint);margin-bottom:.4rem}
+  .step-card h4{font-size:.9rem;font-weight:600;margin-bottom:.5rem}
+  .step-card p{font-size:.8rem;color:var(--muted);line-height:1.5}
+  .step-card a{font-size:.8rem;font-weight:500;display:inline-block;margin-top:.6rem}
+
+  .vectors-section{margin-bottom:3rem}
+  .vectors-section h2{font-size:1.5rem;font-weight:700;margin-bottom:.5rem}
+  .vectors-section p{color:var(--muted);font-size:.9rem;margin-bottom:1.5rem}
+  .vectors-table{width:100%;border-collapse:collapse;font-size:.83rem;background:var(--bg2);border:1px solid var(--border);border-radius:12px;overflow:hidden}
+  .vectors-table th{text-align:left;color:var(--muted);font-size:.72rem;font-weight:600;letter-spacing:.05em;text-transform:uppercase;padding:.75rem 1rem;background:var(--bg3);border-bottom:1px solid var(--border)}
+  .vectors-table td{padding:.65rem 1rem;border-bottom:1px solid var(--border2);color:var(--muted)}
+  .vectors-table td:first-child{font-family:var(--mono);color:var(--blue);font-size:.78rem}
+  .vectors-table tr:last-child td{border-bottom:none}
+  .vectors-table tr:hover td{background:var(--bg3)}
+  .vtag{display:inline-block;font-family:var(--mono);font-size:.67rem;padding:.1rem .35rem;border-radius:3px;margin-left:.35rem}
+  .vtag.p{background:rgba(63,185,80,.15);color:var(--green)}.vtag.n{background:rgba(248,81,73,.15);color:var(--red)}
+
+  footer{border-top:1px solid var(--border);padding:2rem;margin-top:3rem;text-align:center;font-size:.78rem;color:var(--faint)}
+  </style>
+  </head>
+  <body>
+  <nav>
+    <a class="nav-brand" href="../index.html"><svg width="20" height="20" viewBox="0 0 22 22" fill="none"><polygon points="11,2 20,7 20,15 11,20 2,15 2,7" fill="none" stroke="#58a6ff" stroke-width="1.5"/><polygon points="11,6 16,9 16,13 11,16 6,13 6,9" fill="#58a6ff" opacity=".3"/><circle cx="11" cy="11" r="2" fill="#58a6ff"/></svg>&nbsp;ATF Protocol<span class="nav-badge">v3.0</span></a>
+    <div class="nav-links">
+      <a href="../rfc/index.html">RFC Index</a>
+      <a href="../verify/index.html">Verifier</a>
+      <a href="../conformance/index.html" class="active" style="color:var(--text);background:var(--bg3)">Conformance</a>
+      <a href="https://github.com/Costenho19/atf-protocol-standard" target="_blank">GitHub</a>
+    </div>
+  </nav>
+  <div class="page-header">
+    <div class="section-label">Conformance Program · v1.0</div>
+    <h1>ATF Conformance Program</h1>
+    <p>The official mechanism by which implementations of the Agent Trust Fabric protocol declare and evidence their compliance. Three progressive profiles — each with a defined invariant set, conformance test suite, and badge.</p>
+  </div>
+  <div class="main">
+    <div class="tier-grid">
+      <!-- TIER 1 -->
+      <div class="tier-card t1">
+        <div class="tier-header">
+          <div class="tier-n">Tier 1</div>
+          <h3>ATF-Compliant</h3>
+          <div class="cov">RFC-ATF-1 · 6 invariants · Basic AI agent delegation</div>
+        </div>
+        <div class="tier-body">
+          <div class="inv-count"><span style="color:var(--blue);font-weight:700">6</span> invariants</div>
+          <ul class="req-list">
+            <li><strong>ATF-INV-001</strong> — Monotonic Authority Reduction enforced</li>
+            <li><strong>ATF-INV-002</strong> — ML-DSA-65 signature on every receipt</li>
+            <li><strong>ATF-INV-003</strong> — Chain traces to TIER-1 human root</li>
+            <li><strong>ATF-INV-004</strong> — Budget ceiling respected</li>
+            <li><strong>ATF-INV-005</strong> — SHA-256 content hash on all receipts</li>
+            <li><strong>ATF-INV-006</strong> — Offline independent verifiability</li>
+          </ul>
+          <div class="badge-row">
+            <p>Badge for your README or documentation:</p>
+            <img src="https://img.shields.io/badge/ATF-Compliant-1f6feb?style=flat-square&labelColor=0d1117" alt="ATF-Compliant" style="max-width:160px">
+            <div class="badge-code">![ATF-Compliant](https://img.shields.io/badge/ATF-Compliant-1f6feb?style=flat-square)</div>
+          </div>
+          <a href="https://github.com/Costenho19/atf-protocol-standard/blob/main/CONFORMANCE.md" target="_blank" style="font-size:.83rem;font-weight:500">View full requirements →</a>
+        </div>
+      </div>
+      <!-- TIER 2 -->
+      <div class="tier-card t2">
+        <div class="tier-header">
+          <div class="tier-n">Tier 2</div>
+          <h3>ATF-RGC-Compliant</h3>
+          <div class="cov">RFC-ATF-1 + RFC-ATF-2 · 14 invariants · Long-running agent tasks</div>
+        </div>
+        <div class="tier-body">
+          <div class="inv-count"><span style="color:var(--purple);font-weight:700">14</span> invariants (6 ATF + 8 RGC)</div>
+          <ul class="req-list">
+            <li>All Tier 1 (ATF-INV-001–006) requirements</li>
+            <li><strong>RGC-INV-001</strong> — CES = T×0.30 + B×0.30 + D×0.20 + I×0.20 (fixed)</li>
+            <li><strong>RGC-INV-002</strong> — RCR chain integrity with predecessor linkage</li>
+            <li><strong>RGC-INV-003</strong> — HALT protocol when CES &lt; 10.0</li>
+            <li><strong>RGC-INV-004</strong> — Escalation event integrity</li>
+            <li><strong>RGC-INV-005</strong> — Authority Fragmentation Guard</li>
+            <li><strong>RGC-INV-006</strong> — Reauthorization challenge integrity</li>
+            <li><strong>RGC-INV-007/008</strong> — Threshold immutability + TAR anchor</li>
+          </ul>
+          <div class="badge-row">
+            <p>Badge for your README or documentation:</p>
+            <img src="https://img.shields.io/badge/ATF--RGC-Compliant-8A2BE2?style=flat-square&labelColor=0d1117" alt="ATF-RGC-Compliant" style="max-width:200px">
+            <div class="badge-code">![ATF-RGC-Compliant](https://img.shields.io/badge/ATF--RGC-Compliant-8A2BE2?style=flat-square)</div>
+          </div>
+          <a href="https://github.com/Costenho19/atf-protocol-standard/blob/main/CONFORMANCE.md" target="_blank" style="font-size:.83rem;font-weight:500">View full requirements →</a>
+        </div>
+      </div>
+      <!-- TIER 3 -->
+      <div class="tier-card t3">
+        <div class="tier-header">
+          <div class="tier-n">Tier 3 — Full Evidence Integrity</div>
+          <h3>ATF-FEI-Compliant</h3>
+          <div class="cov">RFC-ATF-1 + 2 + 3 · 40 invariants · Forensic-grade</div>
+        </div>
+        <div class="tier-body">
+          <div class="inv-count"><span style="color:var(--gold);font-weight:700">40</span> invariants (all families)</div>
+          <ul class="req-list">
+            <li>All Tier 1 + Tier 2 requirements</li>
+            <li><strong>GPIL-INV-001–003</strong> — Policy interoperability at 3 levels</li>
+            <li><strong>ELR-INV-001–004</strong> — Evidence lifecycle + tier ordering</li>
+            <li><strong>EAP-INV-001–007</strong> — Merkle-chained archive pipeline</li>
+            <li><strong>OEP-INV-001–006</strong> — Self-contained evidence packages</li>
+            <li><strong>FEA-INV-001–005</strong> — RBAC export gate + key isolation</li>
+            <li><strong>FVP-INV-007</strong> — Two-plane verification independence</li>
+          </ul>
+          <div class="badge-row">
+            <p>Badge for your README or documentation:</p>
+            <img src="https://img.shields.io/badge/ATF--FEI-Compliant-d29922?style=flat-square&labelColor=0d1117" alt="ATF-FEI-Compliant" style="max-width:200px">
+            <div class="badge-code">![ATF-FEI-Compliant](https://img.shields.io/badge/ATF--FEI-Compliant-d29922?style=flat-square)</div>
+          </div>
+          <a href="https://github.com/Costenho19/atf-protocol-standard/blob/main/CONFORMANCE.md" target="_blank" style="font-size:.83rem;font-weight:500">View full requirements →</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="process-section">
+      <h2>How to claim conformance</h2>
+      <p>The conformance process is self-certification backed by the public conformance test suite.</p>
+      <div class="steps-grid">
+        <div class="step-card"><div class="step-n">Step 01</div><h4>Run the Conformance Suite</h4><p>Clone the repository and run the conformance test vectors against your implementation.</p><a href="https://github.com/Costenho19/atf-protocol-standard/tree/main/conformance" target="_blank">Get test vectors →</a></div>
+        <div class="step-card"><div class="step-n">Step 02</div><h4>All Vectors Must Pass</h4><p>For your chosen profile, all positive vectors must PASS and all negative vectors must produce the documented error.</p><a href="../verify/index.html">Use the verifier →</a></div>
+        <div class="step-card"><div class="step-n">Step 03</div><h4>Add the Badge</h4><p>Copy the Markdown badge for your declared profile tier and add it to your README or documentation.</p></div>
+        <div class="step-card"><div class="step-n">Step 04</div><h4>Submit to IMPLEMENTATIONS.md</h4><p>Open a Pull Request adding your implementation to the public implementations registry.</p><a href="https://github.com/Costenho19/atf-protocol-standard/blob/main/IMPLEMENTATIONS.md" target="_blank">IMPLEMENTATIONS.md →</a></div>
+      </div>
+    </div>
+
+    <div class="vectors-section">
+      <h2>Conformance test vectors</h2>
+      <p>66 machine-readable test vectors in <code style="font-family:var(--mono);font-size:.85rem;color:var(--blue)">conformance/conformance_vectors.json</code>. Each vector specifies the input, the expected verdict, and the invariant being exercised.</p>
+      <table class="vectors-table">
+        <thead><tr><th>Vector ID</th><th>Profile</th><th>Invariant</th><th>Type</th><th>Description</th></tr></thead>
+        <tbody>
+          <tr><td>V-ATF-001-P</td><td>ATF-Compliant</td><td>ATF-INV-001</td><td><span class="vtag p">PASS</span></td><td>Valid DR with budget_granted &lt; budget_delegator</td></tr>
+          <tr><td>V-ATF-001-N</td><td>ATF-Compliant</td><td>ATF-INV-001</td><td><span class="vtag n">FAIL</span></td><td>budget_granted &gt; budget_delegator — MAR violation</td></tr>
+          <tr><td>V-ATF-002-P</td><td>ATF-Compliant</td><td>ATF-INV-001</td><td><span class="vtag p">PASS</span></td><td>Equal budget — boundary case, still valid</td></tr>
+          <tr><td>V-ATF-005-N</td><td>ATF-Compliant</td><td>ATF-INV-005</td><td><span class="vtag n">FAIL</span></td><td>content_hash tampered — hash mismatch detection</td></tr>
+          <tr><td>V-RGC-001-P</td><td>ATF-RGC-Compliant</td><td>RGC-INV-001</td><td><span class="vtag p">PASS</span></td><td>RCR with CES = T×0.30+B×0.30+D×0.20+I×0.20</td></tr>
+          <tr><td>V-RGC-003-P</td><td>ATF-RGC-Compliant</td><td>RGC-INV-002</td><td><span class="vtag p">PASS</span></td><td>HALT status with escalation_event_id</td></tr>
+          <tr><td>V-RGC-002-N</td><td>ATF-RGC-Compliant</td><td>RGC-INV-002</td><td><span class="vtag n">FAIL</span></td><td>CES manipulation — declared ≠ computed</td></tr>
+          <tr><td>V-FEI-001-P</td><td>ATF-FEI-Compliant</td><td>EAP-INV-005</td><td><span class="vtag p">PASS</span></td><td>Valid OEP bundle with package signature</td></tr>
+          <tr><td>V-FEI-004-N</td><td>ATF-FEI-Compliant</td><td>FVP-INV-007</td><td><span class="vtag n">FAIL</span></td><td>Two-plane result inconsistency</td></tr>
+          <tr><td colspan="5" style="text-align:center;color:var(--faint);font-size:.78rem;padding:.75rem">+ 57 more vectors · <a href="https://github.com/Costenho19/atf-protocol-standard/blob/main/conformance/conformance_vectors.json" target="_blank">View all in GitHub →</a></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <footer>ATF Protocol Standard · OMNIX QUANTUM LTD · <a href="../index.html">Home</a> · <a href="https://github.com/Costenho19/atf-protocol-standard" target="_blank">GitHub</a> · CC BY 4.0</footer>
+  </body>
+  </html>
