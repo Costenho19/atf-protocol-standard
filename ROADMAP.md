@@ -17,7 +17,7 @@
   | 40 formal invariants (ATF + RGC + GPIL + ELR + EAP + OEP + FEA + FVP) | ✅ | |
   | Python reference implementation (`reference-implementation/`) | ✅ | pyproject.toml |
   | Offline verifier CLI (`verifier/verify_receipt.py`) | ✅ | Zero external deps |
-  | 66 conformance test vectors (CI green) | ✅ | |
+  | 34 conformance test vectors (CI green) | ✅ | |
   | GitHub Pages site (8 pages) | ✅ | Whitepaper · Verifier · Quickstart · Integrations · Diagrams |
   | Rust port skeleton (`ports/rust/`) | ✅ | cargo check passes |
   | Rust complete verifier (`ports/rust/src/`) | ✅ | All conformance tests pass |
@@ -34,8 +34,8 @@
   - `src/hash.ts` — canonical JSON + SHA-256
   - `src/verifier.ts` — DR + RCR verification
   - `src/cli.ts` — CLI entry point (`npx atf-verify receipt.json`)
-  - Published to npm as `@atf-protocol/verifier`
-  - Target: same 66 conformance vectors passing
+  - Published to npm as `@atf-protocol/verifier` *(npm: Q3 2026)*
+  - Target: same 34 conformance vectors passing
 
   ### PyPI publication (`pip install atf-verifier`)
   Publish the standalone verifier as a PyPI package.
