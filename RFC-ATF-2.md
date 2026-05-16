@@ -77,7 +77,7 @@ Status of This Memo
    Committee.
 
    Published: May 2026
-   DOI: pending (Zenodo submission in progress)
+   DOI: 10.5281/zenodo.20241344
    SSRN: 6763978
 
 
