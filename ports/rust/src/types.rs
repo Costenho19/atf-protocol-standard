@@ -104,21 +104,22 @@ pub struct RuntimeContinuityRecord {
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub enum Verdict { Pass, Fail, Warn }
 
+/// Per-check result — field names match TypeScript/Python ports (FVP-INV-007).
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct CheckResult {
     pub ok: bool,
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub reason_code: Option<ReasonCode>,
+    pub reason: Option<ReasonCode>,
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub detail: Option<String>,
+    pub note: Option<String>,
 }
 
 impl CheckResult {
-    pub fn pass(detail: impl Into<String>) -> Self {
-        Self { ok: true, reason_code: None, detail: Some(detail.into()) }
+    pub fn pass(note: impl Into<String>) -> Self {
+        Self { ok: true, reason: None, note: Some(note.into()) }
     }
-    pub fn fail(rc: ReasonCode, detail: impl Into<String>) -> Self {
-        Self { ok: false, reason_code: Some(rc), detail: Some(detail.into()) }
+    pub fn fail(rc: ReasonCode, note: impl Into<String>) -> Self {
+        Self { ok: false, reason: Some(rc), note: Some(note.into()) }
     }
 }
 
@@ -130,6 +131,9 @@ pub struct ReceiptVerificationResult {
     pub checks: std::collections::HashMap<String, CheckResult>,
     pub notes: Vec<String>,
 }
+
+/// Alias used throughout lib.rs — matches Python/TypeScript API surface (FVP-INV-007).
+pub type VerificationReport = ReceiptVerificationResult;
 
 #[derive(Debug, Clone, Default)]
 pub struct VerifyOptions {
