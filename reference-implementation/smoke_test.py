@@ -1,11 +1,7 @@
 #!/usr/bin/env python3
-  """Smoke test for the ATF Core reference implementation.
-  Verifies create_delegation_receipt, create_runtime_continuity_record,
-  and verify_receipt work end-to-end with the correct invariants enforced.
-  """
+  """Smoke test for the ATF Core reference implementation."""
   from atf_core import create_delegation_receipt, create_runtime_continuity_record, verify_receipt
 
-  # Test 1: Create a valid DR and verify it passes
   dr = create_delegation_receipt(
       delegator_id='HUMAN-test',
       delegate_id='AID-TEST-AABBCCDDEEFF0011',
@@ -14,10 +10,9 @@
       budget_delegator=100.0,
   )
   result = verify_receipt(dr)
-  assert result['verdict'] == 'PASS', f"DR verify failed: {result}"
+  assert result['verdict'] == 'PASS', 'DR verify failed: ' + str(result)
   print('DR create + verify: PASS')
 
-  # Test 2: ATF-INV-001 (MAR) — budget_granted > budget_delegator must raise
   try:
       create_delegation_receipt(
           delegator_id='HUMAN-test',
@@ -26,12 +21,11 @@
           budget_granted=110.0,
           budget_delegator=100.0,
       )
-      assert False, 'MAR violation should have raised ValueError'
-  except ValueError as e:
-      assert 'ATF-INV-001' in str(e), f"Expected ATF-INV-001 in error: {e}"
+      raise AssertionError('MAR violation should have raised ValueError')
+  except ValueError as exc:
+      assert 'ATF-INV-001' in str(exc), 'Expected ATF-INV-001 in: ' + str(exc)
       print('ATF-INV-001 enforcement: PASS')
 
-  # Test 3: Create a valid RCR (NOMINAL status)
   rcr = create_runtime_continuity_record(
       tar_id='ATFTAR-1F2E3D4C5B6A7890',
       delegation_id=dr['delegation_id'],
@@ -45,9 +39,9 @@
       budget_remaining=60.0,
       context_drift_pct=20.0,
   )
-  assert rcr['continuity_status'] == 'NOMINAL', f"Expected NOMINAL, got: {rcr['continuity_status']}"
+  assert rcr['continuity_status'] == 'NOMINAL', 'Expected NOMINAL: ' + str(rcr['continuity_status'])
   ces = rcr['ces_score']
-  status = rcr['continuity_status']
-  print(f'RCR: PASS — CES={ces} {status}')
+  cts = rcr['continuity_status']
+  print('RCR: PASS - CES=' + str(ces) + ' ' + cts)
   print('All smoke tests passed.')
   
