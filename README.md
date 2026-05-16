@@ -11,7 +11,10 @@
 [![Invariants](https://img.shields.io/badge/Invariants-40%20Formal-orange?style=flat-square)](#invariants)
 [![License](https://img.shields.io/badge/License-CC%20BY%204.0-lightgrey?style=flat-square)](https://creativecommons.org/licenses/by/4.0/)
   [![CI](https://github.com/Costenho19/atf-protocol-standard/actions/workflows/ci.yml/badge.svg)](https://github.com/Costenho19/atf-protocol-standard/actions/workflows/ci.yml)
+[![Website](https://img.shields.io/badge/Website-costenho19.github.io%2Fatf--protocol--standard-58a6ff?style=flat-square)](https://costenho19.github.io/atf-protocol-standard/)
 
+  > **[📖 Browse the Protocol Website →](https://costenho19.github.io/atf-protocol-standard/)** — RFC Index · Public Verifier · Conformance Program
+  
 ---
 
 ## What is ATF?
@@ -212,7 +215,76 @@ atf-protocol-standard/
 
 ---
 
-## Contributing
+
+  ---
+
+  ## Example Integrations
+
+  ### Python — Issue and Verify a Delegation Receipt
+
+  ```python
+  from atf_core import create_delegation_receipt, verify_receipt
+
+  # Human principal delegates authority to an AI agent
+  dr = create_delegation_receipt(
+      delegator_id="HUMAN-harold-nunes-001",
+      delegate_id="AID-UAE-20260516-AABBCCDDEEFF0011",
+      task_scope={"action": "governance_decision", "domain": "trading"},
+      budget_granted=0.75,       # agent gets 75% of principal's budget
+      budget_delegator=1.0,      # principal has full budget
+  )
+
+  # Verify the receipt independently (offline, no platform needed)
+  result = verify_receipt(dr)
+  assert result["verdict"] == "PASS"
+  print(f"DR {dr['delegation_id']}: {result['verdict']}")
+  # DR ATFDR-A1B2C3D4E5F60011: PASS
+  ```
+
+  ### Python — Runtime Continuity Scoring
+
+  ```python
+  from atf_core import create_runtime_continuity_record
+
+  # Sample runtime health mid-execution
+  rcr = create_runtime_continuity_record(
+      tar_id="ATFTAR-1F2E3D4C5B6A7890",
+      delegation_id=dr["delegation_id"],
+      agent_id="AID-UAE-20260516-AABBCCDDEEFF0011",
+      chain_root_id=dr["chain_root_id"],
+      ces_temporal=99.0,    # 99% of time window remaining
+      ces_budget=100.0,     # full budget intact
+      ces_context=80.0,     # 20% context drift
+      ces_integrity=100.0,  # chain integrity perfect
+      budget_at_admission=0.75,
+      budget_remaining=0.75,
+      context_drift_pct=20.0,
+  )
+
+  # CES = 99×0.30 + 100×0.30 + 80×0.20 + 100×0.20 = 94.9
+  print(f"CES: {rcr['ces_score']} — {rcr['continuity_status']}")
+  # CES: 94.9 — NOMINAL
+  ```
+
+  ### CLI — Verify a Receipt Offline
+
+  ```bash
+  # Verify any ATF receipt from a JSON file
+  python verifier/verify_receipt.py receipt.json
+
+  # Output:
+  # ✓ Type: DR (Delegation Receipt)
+  # ✓ ATF-INV-001 (MAR): budget_granted 0.75 ≤ budget_delegator 1.0
+  # ✓ ATF-INV-005: content_hash SHA-256 verified
+  # ✓ ATF-INV-006: receipt is independently verifiable
+  # VERDICT: PASS
+  ```
+
+  ### Browser — Interactive Verifier
+
+  Paste any ATF receipt at **[costenho19.github.io/atf-protocol-standard/verify/](https://costenho19.github.io/atf-protocol-standard/verify/)** — verifies MAR, CES formula, and content hash client-side. No data leaves your browser.
+
+  ## Contributing
 
 See [CONTRIBUTING.md](./CONTRIBUTING.md). We welcome language ports (Go, TypeScript, Rust), conformance test contributions, and feedback on invariant completeness via Issues.
 
