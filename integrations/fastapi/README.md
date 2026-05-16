@@ -1,14 +1,14 @@
 # atf-fastapi
 
-  **ATF Protocol governance middleware for FastAPI** — enforces RFC-ATF-1/2/3 at the HTTP boundary.
+  **ATF Protocol governance middleware for FastAPI** — implements RFC-ATF-1/2/3 at the HTTP boundary.
 
-  [![ATF-Compliant](https://img.shields.io/badge/ATF--Compliant-v1.0.0-58a6ff?style=flat-square)](https://costenho19.github.io/atf-protocol-standard/conformance/)
+  [![ATF-RGC Conformant](https://img.shields.io/badge/ATF--RGC--Conformant-v1.0.0-58a6ff?style=flat-square)](https://costenho19.github.io/atf-protocol-standard/conformance/)
   [![Python](https://img.shields.io/badge/python-3.9%2B-blue?style=flat-square)](https://python.org)
   [![License](https://img.shields.io/badge/license-CC--BY--4.0-gold?style=flat-square)](https://creativecommons.org/licenses/by/4.0/)
 
   Every request to your governed endpoints must carry an ATF Delegation Receipt.
   The middleware verifies MAR (ATF-INV-001), hash integrity (ATF-INV-004), temporal validity (ATF-INV-006),
-  CES health (RGC-INV-001), and enforces the HALT protocol (RGC-INV-003 — CES < 10.0 → 503).
+  CES health (RGC-INV-001), and implements the HALT protocol (RGC-INV-003 — CES < 10.0 → 503).
 
   ## Installation
 
@@ -16,7 +16,7 @@
   pip install atf-fastapi
   ```
 
-  ## Middleware (global enforcement)
+  ## Middleware (global validation)
 
   ```python
   from fastapi import FastAPI
