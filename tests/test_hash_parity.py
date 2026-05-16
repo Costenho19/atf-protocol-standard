@@ -31,12 +31,24 @@ EXCLUDE_FIELDS = {
 }
 
 
+def _norm(v):
+    """Normalize whole-number floats to int for cross-language hash parity (FVP-INV-007)."""
+    if isinstance(v, float) and v.is_integer():
+        return int(v)
+    if isinstance(v, dict):
+        return {k: _norm(val) for k, val in v.items()}
+    if isinstance(v, list):
+        return [_norm(item) for item in v]
+    return v
+
+
 def compute_content_hash(receipt: dict) -> str:
-    """RFC-ATF-1 §5.2 canonical SHA-256 — Python reference (FVP-INV-007)."""
-    payload = {k: v for k, v in receipt.items() if k not in EXCLUDE_FIELDS}
+    """RFC-ATF-1 §5.2 canonical SHA-256 — Python reference (FVP-INV-007).
+    Whole-number floats normalized to int so Python/TypeScript/Rust are byte-identical.
+    """
+    payload = _norm({k: v for k, v in receipt.items() if k not in EXCLUDE_FIELDS})
     canonical = json.dumps(payload, sort_keys=True, separators=(",", ":"), ensure_ascii=False)
     return "sha256:" + hashlib.sha256(canonical.encode("utf-8")).hexdigest()
-
 
 # ── Fixtures ───────────────────────────────────────────────────────────────────
 
