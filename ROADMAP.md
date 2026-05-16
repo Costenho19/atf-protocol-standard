@@ -60,7 +60,7 @@
   | Item | Status | Details |
   |---|---|---|
   | RFC-ATF-1: Agent Trust Fabric Delegation Protocol | ✅ | Published · DOI: 10.5281/zenodo.20155016 |
-  | RFC-ATF-2: Runtime Governance Continuity Protocol | ✅ | Published · SSRN: 6763978 |
+  | RFC-ATF-2: Runtime Governance Continuity Protocol | ✅ | Published · DOI: 10.5281/zenodo.20241344 · SSRN: 6763978 |
   | RFC-ATF-3: Evidence Lifecycle & Forensic Verification | ✅ | Published · May 2026 |
   | 40 formal invariants (ATF + RGC + GPIL + ELR + EAP + OEP + FEA + FVP) | ✅ | 8 invariant families across 3 RFCs |
   | Python reference implementation (`reference-implementation/`) | ✅ | pyproject.toml · ML-DSA-65 signing |
