@@ -563,7 +563,9 @@
         "context_drift_pct": 95,
         "content_hash": "sha256:placeholder",
         "pqc_signature": "illustrative",
-        "pqc_algorithm": "ML-DSA-65"
+        "pqc_algorithm": "ML-DSA-65",
+        "escalation_event_id": "ESC-HALT-AABBCCDDEEFF0022",
+        "_test_note": "CES=5.0 triggers HALT; escalation_event_id present per RGC-INV-004"
       },
       "expected": {
         "verdict": "PASS",
@@ -629,7 +631,9 @@
         "context_drift_pct": 99,
         "content_hash": "sha256:placeholder",
         "pqc_signature": "illustrative",
-        "pqc_algorithm": "ML-DSA-65"
+        "pqc_algorithm": "ML-DSA-65",
+        "escalation_event_id": "ESC-HALT-AABBCCDDEEFF0044",
+        "_test_note": "CES=3.0 triggers HALT; verifier must recognise HALT status and pass with escalation_event_id present"
       },
       "expected": {
         "verdict": "PASS",
