@@ -1,8 +1,8 @@
 # atf-openai-agents
 
-  **ATF Protocol governance for OpenAI Agents SDK** — delegation receipts, runtime continuity monitoring, and HALT enforcement at every agent run and handoff.
+  **ATF Protocol governance for OpenAI Agents SDK** — delegation receipts, runtime continuity monitoring, and HALT protocol at every agent run and handoff.
 
-  [![ATF-Compliant](https://img.shields.io/badge/ATF--Compliant-v1.0.0-58a6ff?style=flat-square)](https://costenho19.github.io/atf-protocol-standard/conformance/)
+  [![ATF-RGC Conformant](https://img.shields.io/badge/ATF--RGC--Conformant-v1.0.0-58a6ff?style=flat-square)](https://costenho19.github.io/atf-protocol-standard/conformance/)
   [![Python](https://img.shields.io/badge/python-3.9%2B-blue?style=flat-square)](https://python.org)
 
   ## Installation
@@ -37,7 +37,7 @@
 
   handoff_guard = ATFHandoffGuard(parent_dr=parent_dr)
 
-  # Sub-delegation: 60% of parent budget (ATF-INV-001 enforced)
+  # Sub-delegation: 60% of parent budget (ATF-INV-001 validated)
   sub_dr = handoff_guard.authorize_handoff(
       to_agent_id="AID-FINANCE-9B8C7D6E5F4A3B2C",
       task_scope={"action": "risk_analysis", "domain": "FINANCE"},
