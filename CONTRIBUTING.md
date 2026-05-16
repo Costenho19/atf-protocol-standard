@@ -24,6 +24,22 @@
   - New receipt types as the protocol evolves
 
   #### Language Ports
+
+### Quick start: Rust (skeleton ready)
+
+The fastest path to contributing an external implementation:
+
+```bash
+git clone https://github.com/Costenho19/atf-protocol-standard
+cd atf-protocol-standard/ports/rust
+cargo test   # See which tests fail (expected: "not implemented")
+```
+
+Implement three functions. Make `cargo test` pass. Open a PR.
+See [`ports/rust/PORTING_GUIDE.md`](./ports/rust/PORTING_GUIDE.md) for
+the complete step-by-step guide.
+
+### New language port (Go, Java, Swift, etc.)
   We particularly welcome ports in:
   - **Go** — `reference-implementation-go/`
   - **TypeScript/Node.js** — `reference-implementation-ts/`
