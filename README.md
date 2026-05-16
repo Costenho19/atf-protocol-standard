@@ -4,6 +4,7 @@
 
 [![RFC-ATF-1 DOI](https://img.shields.io/badge/DOI-10.5281%2Fzenodo.20155016-blue?style=flat-square)](https://doi.org/10.5281/zenodo.20155016)
 [![RFC-ATF-1 SSRN](https://img.shields.io/badge/SSRN-6757339-blue?style=flat-square)](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=6757339)
+[![RFC-ATF-2 DOI](https://img.shields.io/badge/DOI-10.5281%2Fzenodo.20241344-blue?style=flat-square)](https://doi.org/10.5281/zenodo.20241344)
 [![RFC-ATF-2 SSRN](https://img.shields.io/badge/SSRN-6763978-blue?style=flat-square)](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=6763978)
 [![PQC Algorithm](https://img.shields.io/badge/PQC-ML--DSA--65%20FIPS%20204-8A2BE2?style=flat-square)](https://csrc.nist.gov/pubs/fips/204/final)
 [![Offline Verifiable](https://img.shields.io/badge/Verification-Offline%20Independent-green?style=flat-square)](./verifier/verify_receipt.py)
