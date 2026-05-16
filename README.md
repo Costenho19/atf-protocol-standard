@@ -84,35 +84,76 @@ Algorithm: **ML-DSA-65** (Dilithium-3, FIPS 204) — designed to resist classica
 
 ---
 
-## Standards
+## Published Standards
 
-### RFC-ATF-1 — Verifiable AI Agent Authority Delegation
+> The ATF stack is composed of three formally specified, interoperable open standards.
+> Each RFC extends the prior without replacing it — the full stack is required for ATF-FEI-Compliant designation.
 
-Defines the cryptographic foundation: Agent Identity Records, Delegation Receipts, Trust Lattice, Monotonic Authority Reduction (MAR), and the six core invariants (ATF-INV-001–006).
+---
 
-- **Status:** Published
-- **DOI:** [10.5281/zenodo.20155016](https://doi.org/10.5281/zenodo.20155016)
-- **SSRN:** [6757339](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=6757339)
-- **Specification:** [RFC-ATF-1.md](./RFC-ATF-1.md)
+### ![RFC-ATF-1](https://img.shields.io/badge/RFC--ATF--1-FOUNDATION%20STANDARD-0B1628?style=for-the-badge&logoColor=white) &nbsp; Verifiable AI Agent Authority Delegation
 
-### RFC-ATF-2 — Runtime Governance Continuity
+Defines the cryptographic foundation of the ATF stack: Agent Identity Records (AIR), Delegation Receipts (DR), the Trust Lattice model, Monotonic Authority Reduction (MAR), and post-quantum signing via ML-DSA-65. Six core invariants: ATF-INV-001–006.
 
-Extends RFC-ATF-1 for long-running executions: Continuity Eligibility Score (CES), Authority Fragmentation Guard (AFG), Escalation Protocol, and Reauthorization Challenge (RC).
+| | |
+|---|---|
+| **Status** | ✅ Published — May 2026 |
+| **Designation** | `ATF-Compliant` |
+| **Invariants** | ATF-INV-001–006 (6) |
+| **DOI** | [10.5281/zenodo.20155016](https://doi.org/10.5281/zenodo.20155016) |
+| **SSRN** | [6757339](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=6757339) |
+| **Depends on** | — *(foundation layer)* |
+| **Specification** | [RFC-ATF-1.md](./RFC-ATF-1.md) |
 
-- **Status:** Published
-- **SSRN:** [6763978](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=6763978)
-- **Extends:** RFC-ATF-1
-- **Specification:** [RFC-ATF-2.md](./RFC-ATF-2.md)
+---
 
-### RFC-ATF-3 — Governance Policy Interoperability, Evidence Lifecycle & Forensic Verification
+### ![RFC-ATF-2](https://img.shields.io/badge/RFC--ATF--2-RUNTIME%20GOVERNANCE%20STANDARD-1E4A8A?style=for-the-badge&logoColor=white) &nbsp; Runtime Governance Continuity
 
-Adds Layer 5 — Forensic Evidence Infrastructure: policy interoperability across sovereign runtimes (GPIL), evidence lifecycle classification with HOT/WARM/COLD tiers (ELR), immutable Merkle archive pipeline (EAP), self-contained forensic packages (OEP), and key identity verification protocol (FVP).
+Extends RFC-ATF-1 for long-running agent executions: the Continuity Eligibility Score (CES) formula, Runtime Continuity Records (RCR), Authority Fragmentation Guard (AFG), and the Reauthorization Challenge (RC) protocol. Eight new invariants: RGC-INV-001–008.
 
-- **Status:** Published — May 2026
-- **DOI:** [10.5281/zenodo.20247342](https://doi.org/10.5281/zenodo.20247342)
-- **Extends:** RFC-ATF-1 + RFC-ATF-2
-- **New compliance designation:** ATF-FEI-Compliant
-- **Specification:** [RFC-ATF-3.md](./RFC-ATF-3.md)
+| | |
+|---|---|
+| **Status** | ✅ Published — May 2026 |
+| **Designation** | `ATF-RGC-Compliant` |
+| **Invariants** | RGC-INV-001–008 (8) · 14 total with RFC-ATF-1 |
+| **DOI** | [10.5281/zenodo.20241344](https://doi.org/10.5281/zenodo.20241344) |
+| **SSRN** | [6763978](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=6763978) |
+| **Depends on** | RFC-ATF-1 — `ATF-Compliant` implementation required |
+| **Specification** | [RFC-ATF-2.md](./RFC-ATF-2.md) |
+
+---
+
+### ![RFC-ATF-3](https://img.shields.io/badge/RFC--ATF--3-FORENSIC%20EVIDENCE%20STANDARD-C9A84C?style=for-the-badge&logoColor=black) &nbsp; Governance Policy Interoperability, Evidence Lifecycle & Forensic Verification
+
+Adds the Forensic Evidence Infrastructure layer: policy interoperability across sovereign governance runtimes (GPIL), evidence lifecycle classification with HOT/WARM/COLD retention tiers (ELR), immutable Merkle-chained archive pipeline (EAP), self-contained cryptographically sealed forensic packages (OEP), and export authentication with key isolation (FEA + FVP). Twenty-six new invariants across six families.
+
+| | |
+|---|---|
+| **Status** | ✅ Published — May 2026 |
+| **Designation** | `ATF-FEI-Compliant` *(highest tier)* |
+| **Invariants** | GPIL·ELR·EAP·OEP·FEA·FVP (26) · **40 total with RFC-ATF-1 + RFC-ATF-2** |
+| **DOI** | [10.5281/zenodo.20247342](https://doi.org/10.5281/zenodo.20247342) |
+| **Depends on** | RFC-ATF-1 + RFC-ATF-2 — `ATF-RGC-Compliant` implementation required |
+| **Specification** | [RFC-ATF-3.md](./RFC-ATF-3.md) |
+
+---
+
+### Dependency Chain
+
+```
+RFC-ATF-1  ──────────────────────────────────  FOUNDATION STANDARD
+    │         ATF-Compliant (6 invariants)
+    │
+    └──▶  RFC-ATF-2  ────────────────────────  RUNTIME GOVERNANCE STANDARD
+               │         ATF-RGC-Compliant (14 invariants)
+               │
+               └──▶  RFC-ATF-3  ─────────────  FORENSIC EVIDENCE STANDARD
+                                  ATF-FEI-Compliant (40 invariants)
+```
+
+> An implementation cannot claim `ATF-RGC-Compliant` without first satisfying all RFC-ATF-1 invariants.
+> An implementation cannot claim `ATF-FEI-Compliant` without satisfying all RFC-ATF-1 and RFC-ATF-2 invariants.
+> Conformance is verified using the [ATF Conformance Suite](./atf-conformance-suite/) — 92 vectors, zero external dependencies.
 
 ---
 
