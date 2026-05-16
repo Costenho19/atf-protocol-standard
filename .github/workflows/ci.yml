@@ -17,19 +17,14 @@ jobs:
       - name: cargo check (skeleton must compile without errors)
         working-directory: ports/rust
         run: cargo check
-        # cargo test will fail until verify_* functions are implemented.
-        # cargo check confirms types, signatures, and imports are correct.
       - name: Verify conformance vectors are loadable
         working-directory: ports/rust
         run: |
           cargo run --bin verify_receipt -- ../../examples/delegation_receipt.json 2>&1 || true
-          # Will panic with "not implemented" — that is expected for the skeleton.
-          # This step confirms the binary compiles and the example JSON parses.
 
   conformance-tests:
     name: Protocol Conformance Suite
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -40,8 +35,7 @@ jobs:
           python-version: "3.11"
 
       - name: Install dependencies
-        run: |
-          pip install pytest pypqc jsonschema
+        run: pip install pytest pypqc jsonschema
 
       - name: Validate JSON examples against schemas
         run: |
@@ -62,16 +56,13 @@ jobs:
           "
 
       - name: Run ATF invariant tests
-        run: |
-          pytest tests/test_atf_receipts.py -v --tb=short
+        run: pytest tests/test_atf_receipts.py -v --tb=short
 
       - name: Run conformance vector tests
-        run: |
-          pytest tests/test_conformance_vectors.py -v --tb=short
+        run: pytest tests/test_conformance_vectors.py -v --tb=short
 
       - name: Run full test suite
-        run: |
-          pytest tests/ -v --tb=short
+        run: pytest tests/ -v --tb=short
 
       - name: Run offline verifier on examples
         run: |
@@ -85,27 +76,59 @@ jobs:
           pip install -e .
           python smoke_test.py
 
-    typescript-port:
-      name: TypeScript Port — build + type-check
-      runs-on: ubuntu-latest
-      steps:
-        - uses: actions/checkout@v4
-        - name: Set up Node 20
-          uses: actions/setup-node@v4
-          with:
-            node-version: "20"
-        - name: Install dependencies
-          working-directory: ports/typescript
-          run: npm install
-        - name: Type-check
-          working-directory: ports/typescript
-          run: npx tsc --noEmit
-        - name: Run tests
-          working-directory: ports/typescript
-          run: npm test
-        - name: Verify CLI builds
-          working-directory: ports/typescript
-          run: |
-            npm run build
-            node dist/cli.js ../../examples/delegation_receipt.json || true
-  
+  typescript-port:
+    name: TypeScript Port — build + type-check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Node 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+      - name: Install dependencies
+        working-directory: ports/typescript
+        run: npm install
+      - name: Type-check
+        working-directory: ports/typescript
+        run: npx tsc --noEmit
+      - name: Run tests
+        working-directory: ports/typescript
+        run: npm test
+      - name: Verify CLI builds
+        working-directory: ports/typescript
+        run: |
+          npm run build
+          node dist/cli.js ../../examples/delegation_receipt.json || true
+
+  hash-parity:
+    name: Cross-language hash parity (FVP-INV-007)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Set up Node 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Install Rust stable
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Install Python deps
+        run: pip install pytest
+
+      - name: Build TypeScript port
+        working-directory: ports/typescript
+        run: npm install && npm run build
+
+      - name: Build Rust binary
+        working-directory: ports/rust
+        run: cargo build --release
+
+      - name: Run hash parity tests
+        run: pytest tests/test_hash_parity.py -v --tb=short
