@@ -1,0 +1,1113 @@
+{
+  "meta": {
+    "version": "1.0.0",
+    "generated": "2026-05-16",
+    "suite": "ATF Conformance Suite",
+    "description": "Complete test vectors for all 40 ATF invariants across RFC-ATF-1, RFC-ATF-2, and RFC-ATF-3",
+    "invariant_families": {
+      "ATF-INV": { "rfc": "RFC-ATF-1", "count": 6, "profile": "ATF-Compliant" },
+      "RGC-INV": { "rfc": "RFC-ATF-2", "count": 8, "profile": "ATF-RGC-Compliant" },
+      "GPIL-INV": { "rfc": "RFC-ATF-3", "count": 3, "profile": "ATF-FEI-Compliant" },
+      "ELR-INV": { "rfc": "RFC-ATF-3", "count": 4, "profile": "ATF-FEI-Compliant" },
+      "EAP-INV": { "rfc": "RFC-ATF-3", "count": 7, "profile": "ATF-FEI-Compliant" },
+      "OEP-INV": { "rfc": "RFC-ATF-3", "count": 6, "profile": "ATF-FEI-Compliant" },
+      "FEA-INV": { "rfc": "RFC-ATF-3", "count": 5, "profile": "ATF-FEI-Compliant" },
+      "FVP-INV": { "rfc": "RFC-ATF-3", "count": 1, "profile": "ATF-FEI-Compliant" }
+    },
+    "total_invariants": 40,
+    "total_vectors": 92
+  },
+  "vectors": [
+
+    {
+      "id": "V-ATF-001-P1",
+      "profile": "ATF-Compliant",
+      "invariant": "ATF-INV-001",
+      "kind": "positive",
+      "description": "Valid DR: granted budget strictly less than delegator",
+      "rfc_ref": "RFC-ATF-1 §7.1",
+      "input": {
+        "delegation_id": "ATFDR-AABBCCDDEEFF0001",
+        "authority_budget_delegator": 100,
+        "authority_budget_granted": 60,
+        "pqc_signature": "illustrative",
+        "pqc_algorithm": "ML-DSA-65",
+        "content_hash": "sha256:placeholder"
+      },
+      "expected": { "verdict": "PASS", "reason_code": null }
+    },
+    {
+      "id": "V-ATF-001-P2",
+      "profile": "ATF-Compliant",
+      "invariant": "ATF-INV-001",
+      "kind": "positive",
+      "description": "Valid DR: granted exactly equal to delegator (boundary case)",
+      "rfc_ref": "RFC-ATF-1 §7.1",
+      "input": {
+        "delegation_id": "ATFDR-AABBCCDDEEFF0002",
+        "authority_budget_delegator": 50,
+        "authority_budget_granted": 50
+      },
+      "expected": { "verdict": "PASS", "reason_code": null }
+    },
+    {
+      "id": "V-ATF-001-N1",
+      "profile": "ATF-Compliant",
+      "invariant": "ATF-INV-001",
+      "kind": "negative",
+      "description": "MAR violation: granted budget exceeds delegator",
+      "rfc_ref": "RFC-ATF-1 §7.1",
+      "input": {
+        "delegation_id": "ATFDR-AABBCCDDEEFF0003",
+        "authority_budget_delegator": 60,
+        "authority_budget_granted": 80
+      },
+      "expected": { "verdict": "FAIL", "reason_code": "MAR_VIOLATION" }
+    },
+    {
+      "id": "V-ATF-001-N2",
+      "profile": "ATF-Compliant",
+      "invariant": "ATF-INV-001",
+      "kind": "negative",
+      "description": "MAR violation: negative granted budget",
+      "rfc_ref": "RFC-ATF-1 §7.1",
+      "input": {
+        "delegation_id": "ATFDR-AABBCCDDEEFF0004",
+        "authority_budget_delegator": 100,
+        "authority_budget_granted": -10
+      },
+      "expected": { "verdict": "FAIL", "reason_code": "MAR_VIOLATION" }
+    },
+
+    {
+      "id": "V-ATF-002-P1",
+      "profile": "ATF-Compliant",
+      "invariant": "ATF-INV-002",
+      "kind": "positive",
+      "description": "Valid DR: PQC signature and content_hash present",
+      "rfc_ref": "RFC-ATF-1 §7.2",
+      "input": {
+        "delegation_id": "ATFDR-AABBCCDDEEFF0010",
+        "pqc_signature": "illustrative",
+        "pqc_algorithm": "ML-DSA-65",
+        "content_hash": "sha256:a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2"
+      },
+      "expected": { "verdict": "PASS", "reason_code": null }
+    },
+    {
+      "id": "V-ATF-002-N1",
+      "profile": "ATF-Compliant",
+      "invariant": "ATF-INV-002",
+      "kind": "negative",
+      "description": "Unsigned DR: pqc_signature is absent",
+      "rfc_ref": "RFC-ATF-1 §7.2",
+      "input": {
+        "delegation_id": "ATFDR-AABBCCDDEEFF0011",
+        "content_hash": "sha256:a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2"
+      },
+      "expected": { "verdict": "FAIL", "reason_code": "SIGNATURE_MISSING" }
+    },
+    {
+      "id": "V-ATF-002-N2",
+      "profile": "ATF-Compliant",
+      "invariant": "ATF-INV-002",
+      "kind": "negative",
+      "description": "Invalid algorithm: non-ATF PQC algorithm used",
+      "rfc_ref": "RFC-ATF-1 §7.2",
+      "input": {
+        "delegation_id": "ATFDR-AABBCCDDEEFF0012",
+        "pqc_signature": "illustrative",
+        "pqc_algorithm": "RSA-2048",
+        "content_hash": "sha256:a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2"
+      },
+      "expected": { "verdict": "FAIL", "reason_code": "ALGORITHM_INVALID" }
+    },
+
+    {
+      "id": "V-ATF-003-P1",
+      "profile": "ATF-Compliant",
+      "invariant": "ATF-INV-003",
+      "kind": "positive",
+      "description": "Root DR: chain_root_id equals delegation_id",
+      "rfc_ref": "RFC-ATF-1 §7.3",
+      "input": {
+        "delegation_id": "ATFDR-AABBCCDDEEFF0020",
+        "chain_root_id": "ATFDR-AABBCCDDEEFF0020",
+        "delegation_depth": 1
+      },
+      "expected": { "verdict": "PASS", "reason_code": null }
+    },
+    {
+      "id": "V-ATF-003-N1",
+      "profile": "ATF-Compliant",
+      "invariant": "ATF-INV-003",
+      "kind": "negative",
+      "description": "Root DR: chain_root_id does not match delegation_id",
+      "rfc_ref": "RFC-ATF-1 §7.3",
+      "input": {
+        "delegation_id": "ATFDR-AABBCCDDEEFF0021",
+        "chain_root_id": "ATFDR-DIFFERENT0000000",
+        "delegation_depth": 1
+      },
+      "expected": { "verdict": "FAIL", "reason_code": "CHAIN_ROOT_MISMATCH" }
+    },
+
+    {
+      "id": "V-ATF-004-P1",
+      "profile": "ATF-Compliant",
+      "invariant": "ATF-INV-004",
+      "kind": "positive",
+      "description": "Budget within ceiling (60 of 100 max)",
+      "rfc_ref": "RFC-ATF-1 §7.4",
+      "input": {
+        "delegation_id": "ATFDR-AABBCCDDEEFF0030",
+        "authority_budget_granted": 60,
+        "max_authority_budget": 100
+      },
+      "expected": { "verdict": "PASS", "reason_code": null }
+    },
+    {
+      "id": "V-ATF-004-N1",
+      "profile": "ATF-Compliant",
+      "invariant": "ATF-INV-004",
+      "kind": "negative",
+      "description": "Budget exceeds maximum authority ceiling",
+      "rfc_ref": "RFC-ATF-1 §7.4",
+      "input": {
+        "delegation_id": "ATFDR-AABBCCDDEEFF0031",
+        "authority_budget_granted": 150,
+        "max_authority_budget": 100
+      },
+      "expected": { "verdict": "FAIL", "reason_code": "BUDGET_CEILING_VIOLATION" }
+    },
+
+    {
+      "id": "V-ATF-005-P1",
+      "profile": "ATF-Compliant",
+      "invariant": "ATF-INV-005",
+      "kind": "positive",
+      "description": "Receipt integrity: content_hash in sha256: format",
+      "rfc_ref": "RFC-ATF-1 §7.5",
+      "input": {
+        "delegation_id": "ATFDR-AABBCCDDEEFF0040",
+        "content_hash": "sha256:a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2"
+      },
+      "expected": { "verdict": "PASS", "reason_code": null }
+    },
+    {
+      "id": "V-ATF-005-N1",
+      "profile": "ATF-Compliant",
+      "invariant": "ATF-INV-005",
+      "kind": "negative",
+      "description": "Tampered receipt: content_hash does not match declared_hash",
+      "rfc_ref": "RFC-ATF-1 §7.5",
+      "input": {
+        "delegation_id": "ATFDR-AABBCCDDEEFF0041",
+        "content_hash": "sha256:a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2",
+        "declared_hash": "sha256:deadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeef"
+      },
+      "expected": { "verdict": "FAIL", "reason_code": "HASH_MISMATCH" }
+    },
+    {
+      "id": "V-ATF-005-N2",
+      "profile": "ATF-Compliant",
+      "invariant": "ATF-INV-005",
+      "kind": "negative",
+      "description": "Missing content_hash — receipt cannot be verified for immutability",
+      "rfc_ref": "RFC-ATF-1 §7.5",
+      "input": {
+        "delegation_id": "ATFDR-AABBCCDDEEFF0042"
+      },
+      "expected": { "verdict": "FAIL", "reason_code": "HASH_MISSING" }
+    },
+
+    {
+      "id": "V-ATF-006-P1",
+      "profile": "ATF-Compliant",
+      "invariant": "ATF-INV-006",
+      "kind": "positive",
+      "description": "Independent verifiability: delegator_public_key embedded",
+      "rfc_ref": "RFC-ATF-1 §7.6",
+      "input": {
+        "delegation_id": "ATFDR-AABBCCDDEEFF0050",
+        "delegator_public_key": "base64:z3RmVGVzdFB1YmxpY0tleUZvckFURlByb3RvY29sVGVzdGluZw=="
+      },
+      "expected": { "verdict": "PASS", "reason_code": null }
+    },
+    {
+      "id": "V-ATF-006-N1",
+      "profile": "ATF-Compliant",
+      "invariant": "ATF-INV-006",
+      "kind": "negative",
+      "description": "Public key absent — offline verification is impossible",
+      "rfc_ref": "RFC-ATF-1 §7.6",
+      "input": {
+        "delegation_id": "ATFDR-AABBCCDDEEFF0051"
+      },
+      "expected": { "verdict": "FAIL", "reason_code": "PUBLIC_KEY_MISSING" }
+    },
+
+    {
+      "id": "V-RGC-001-P1",
+      "profile": "ATF-RGC-Compliant",
+      "invariant": "RGC-INV-001",
+      "kind": "positive",
+      "description": "Valid RCR: tar_id is present and non-null",
+      "rfc_ref": "RFC-ATF-2 §7.3",
+      "input": {
+        "rcr_id": "ATFRCR-AABBCCDDEEFF0001",
+        "tar_id": "ATFTAR-AABBCCDDEEFF0001",
+        "ces_score": 87.5
+      },
+      "expected": { "verdict": "PASS", "reason_code": null }
+    },
+    {
+      "id": "V-RGC-001-N1",
+      "profile": "ATF-RGC-Compliant",
+      "invariant": "RGC-INV-001",
+      "kind": "negative",
+      "description": "RCR without TAR anchor: tar_id is null",
+      "rfc_ref": "RFC-ATF-2 §7.3",
+      "input": {
+        "rcr_id": "ATFRCR-AABBCCDDEEFF0002",
+        "tar_id": null,
+        "ces_score": 87.5
+      },
+      "expected": { "verdict": "FAIL", "reason_code": "TAR_ANCHOR_MISSING" }
+    },
+
+    {
+      "id": "V-RGC-002-P1",
+      "profile": "ATF-RGC-Compliant",
+      "invariant": "RGC-INV-002",
+      "kind": "positive",
+      "description": "CES formula correct: T=80, B=90, D=70, I=100 → CES=85.0",
+      "rfc_ref": "RFC-ATF-2 §6.4",
+      "input": {
+        "rcr_id": "ATFRCR-AABBCCDDEEFF0010",
+        "temporal_score": 80,
+        "budget_score": 90,
+        "context_score": 70,
+        "integrity_score": 100,
+        "ces_score": 85.0
+      },
+      "expected": { "verdict": "PASS", "reason_code": null }
+    },
+    {
+      "id": "V-RGC-002-P2",
+      "profile": "ATF-RGC-Compliant",
+      "invariant": "RGC-INV-002",
+      "kind": "positive",
+      "description": "CES formula: all components at 100 → CES=100.0",
+      "rfc_ref": "RFC-ATF-2 §6.4",
+      "input": {
+        "rcr_id": "ATFRCR-AABBCCDDEEFF0011",
+        "temporal_score": 100,
+        "budget_score": 100,
+        "context_score": 100,
+        "integrity_score": 100,
+        "ces_score": 100.0
+      },
+      "expected": { "verdict": "PASS", "reason_code": null }
+    },
+    {
+      "id": "V-RGC-002-N1",
+      "profile": "ATF-RGC-Compliant",
+      "invariant": "RGC-INV-002",
+      "kind": "negative",
+      "description": "CES manipulation: reported score does not match formula",
+      "rfc_ref": "RFC-ATF-2 §6.4",
+      "input": {
+        "rcr_id": "ATFRCR-AABBCCDDEEFF0012",
+        "temporal_score": 80,
+        "budget_score": 90,
+        "context_score": 70,
+        "integrity_score": 100,
+        "ces_score": 99.0
+      },
+      "expected": { "verdict": "FAIL", "reason_code": "CES_FORMULA_VIOLATION" }
+    },
+    {
+      "id": "V-RGC-002-N2",
+      "profile": "ATF-RGC-Compliant",
+      "invariant": "RGC-INV-002",
+      "kind": "negative",
+      "description": "CES component out of range: budget_score=110 exceeds [0,100]",
+      "rfc_ref": "RFC-ATF-2 §6.4",
+      "input": {
+        "rcr_id": "ATFRCR-AABBCCDDEEFF0013",
+        "temporal_score": 80,
+        "budget_score": 110,
+        "context_score": 70,
+        "integrity_score": 100,
+        "ces_score": 87.0
+      },
+      "expected": { "verdict": "FAIL", "reason_code": "CES_COMPONENT_OUT_OF_RANGE" }
+    },
+
+    {
+      "id": "V-RGC-003-P1",
+      "profile": "ATF-RGC-Compliant",
+      "invariant": "RGC-INV-003",
+      "kind": "positive",
+      "description": "HALT propagation: all siblings marked REVOKED_BY_HALT",
+      "rfc_ref": "RFC-ATF-2 §10.5",
+      "input": {
+        "rcr_id": "ATFRCR-AABBCCDDEEFF0020",
+        "continuity_status": "HALT",
+        "halt_issued": true,
+        "sibling_session_statuses": [
+          { "session_id": "S-001", "status": "REVOKED_BY_HALT" },
+          { "session_id": "S-002", "status": "REVOKED_BY_HALT" }
+        ]
+      },
+      "expected": { "verdict": "PASS", "reason_code": null }
+    },
+    {
+      "id": "V-RGC-003-N1",
+      "profile": "ATF-RGC-Compliant",
+      "invariant": "RGC-INV-003",
+      "kind": "negative",
+      "description": "HALT not propagated: sibling session still ACTIVE",
+      "rfc_ref": "RFC-ATF-2 §10.5",
+      "input": {
+        "rcr_id": "ATFRCR-AABBCCDDEEFF0021",
+        "continuity_status": "HALT",
+        "halt_issued": true,
+        "sibling_session_statuses": [
+          { "session_id": "S-001", "status": "REVOKED_BY_HALT" },
+          { "session_id": "S-002", "status": "ACTIVE" }
+        ]
+      },
+      "expected": { "verdict": "FAIL", "reason_code": "HALT_PROPAGATION_FAILURE" }
+    },
+
+    {
+      "id": "V-RGC-004-P1",
+      "profile": "ATF-RGC-Compliant",
+      "invariant": "RGC-INV-004",
+      "kind": "positive",
+      "description": "AFG: fragmentation_score below limit",
+      "rfc_ref": "RFC-ATF-2 §8.4",
+      "input": {
+        "rcr_id": "ATFRCR-AABBCCDDEEFF0030",
+        "fragmentation_score": 0.65,
+        "afg_fragmentation_limit": 0.90
+      },
+      "expected": { "verdict": "PASS", "reason_code": null }
+    },
+    {
+      "id": "V-RGC-004-N1",
+      "profile": "ATF-RGC-Compliant",
+      "invariant": "RGC-INV-004",
+      "kind": "negative",
+      "description": "AFG violation: fragmentation_score exceeds limit",
+      "rfc_ref": "RFC-ATF-2 §8.4",
+      "input": {
+        "rcr_id": "ATFRCR-AABBCCDDEEFF0031",
+        "fragmentation_score": 0.95,
+        "afg_fragmentation_limit": 0.90
+      },
+      "expected": { "verdict": "FAIL", "reason_code": "AFG_VIOLATION" }
+    },
+
+    {
+      "id": "V-RGC-005-P1",
+      "profile": "ATF-RGC-Compliant",
+      "invariant": "RGC-INV-005",
+      "kind": "positive",
+      "description": "RCR is immutable: no update attempted, signature present",
+      "rfc_ref": "RFC-ATF-2 §5.5",
+      "input": {
+        "rcr_id": "ATFRCR-AABBCCDDEEFF0040",
+        "pqc_signature": "illustrative",
+        "update_attempted": false
+      },
+      "expected": { "verdict": "PASS", "reason_code": null }
+    },
+    {
+      "id": "V-RGC-005-N1",
+      "profile": "ATF-RGC-Compliant",
+      "invariant": "RGC-INV-005",
+      "kind": "negative",
+      "description": "RCR mutability violation: update attempted after issuance",
+      "rfc_ref": "RFC-ATF-2 §5.5",
+      "input": {
+        "rcr_id": "ATFRCR-AABBCCDDEEFF0041",
+        "pqc_signature": "illustrative",
+        "update_attempted": true
+      },
+      "expected": { "verdict": "FAIL", "reason_code": "RCR_MUTABILITY_VIOLATION" }
+    },
+
+    {
+      "id": "V-RGC-006-P1",
+      "profile": "ATF-RGC-Compliant",
+      "invariant": "RGC-INV-006",
+      "kind": "positive",
+      "description": "Chain acyclicity: execution_ns strictly increasing",
+      "rfc_ref": "RFC-ATF-2 §7.2",
+      "input": {
+        "rcr_id": "ATFRCR-AABBCCDDEEFF0050",
+        "execution_ns_chain": [1000000, 1000001, 1000100, 1001000]
+      },
+      "expected": { "verdict": "PASS", "reason_code": null }
+    },
+    {
+      "id": "V-RGC-006-N1",
+      "profile": "ATF-RGC-Compliant",
+      "invariant": "RGC-INV-006",
+      "kind": "negative",
+      "description": "Clock manipulation: execution_ns goes backward",
+      "rfc_ref": "RFC-ATF-2 §7.2",
+      "input": {
+        "rcr_id": "ATFRCR-AABBCCDDEEFF0051",
+        "execution_ns_chain": [1000000, 1000001, 999999, 1001000]
+      },
+      "expected": { "verdict": "FAIL", "reason_code": "CHAIN_ACYCLICITY_VIOLATION" }
+    },
+
+    {
+      "id": "V-RGC-007-P1",
+      "profile": "ATF-RGC-Compliant",
+      "invariant": "RGC-INV-007",
+      "kind": "positive",
+      "description": "CES inputs fresh: NOMINAL session with 20s input age",
+      "rfc_ref": "RFC-ATF-2 §6.4",
+      "input": {
+        "rcr_id": "ATFRCR-AABBCCDDEEFF0060",
+        "continuity_status": "NOMINAL",
+        "ces_input_age_seconds": 20
+      },
+      "expected": { "verdict": "PASS", "reason_code": null }
+    },
+    {
+      "id": "V-RGC-007-N1",
+      "profile": "ATF-RGC-Compliant",
+      "invariant": "RGC-INV-007",
+      "kind": "negative",
+      "description": "Stale inputs: CRITICAL session with 8s input age (>5s threshold)",
+      "rfc_ref": "RFC-ATF-2 §6.4",
+      "input": {
+        "rcr_id": "ATFRCR-AABBCCDDEEFF0061",
+        "continuity_status": "CRITICAL",
+        "ces_input_age_seconds": 8
+      },
+      "expected": { "verdict": "FAIL", "reason_code": "CES_STALE_INPUTS" }
+    },
+
+    {
+      "id": "V-RGC-008-P1",
+      "profile": "ATF-RGC-Compliant",
+      "invariant": "RGC-INV-008",
+      "kind": "positive",
+      "description": "RC TTL not expired: no HALT triggered",
+      "rfc_ref": "RFC-ATF-2 §10.4",
+      "input": {
+        "rcr_id": "ATFRCR-AABBCCDDEEFF0070",
+        "rc_ttl_seconds": 300,
+        "rc_ttl_expired": false
+      },
+      "expected": { "verdict": "PASS", "reason_code": null }
+    },
+    {
+      "id": "V-RGC-008-N1",
+      "profile": "ATF-RGC-Compliant",
+      "invariant": "RGC-INV-008",
+      "kind": "negative",
+      "description": "RC TTL expired but auto-HALT not triggered — enforcement failure",
+      "rfc_ref": "RFC-ATF-2 §10.4",
+      "input": {
+        "rcr_id": "ATFRCR-AABBCCDDEEFF0071",
+        "rc_ttl_expired": true,
+        "auto_halt_triggered": false
+      },
+      "expected": { "verdict": "FAIL", "reason_code": "RC_TTL_ENFORCEMENT_FAILURE" }
+    },
+
+    {
+      "id": "V-GPIL-001-P1",
+      "profile": "ATF-FEI-Compliant",
+      "invariant": "GPIL-INV-001",
+      "kind": "positive",
+      "description": "Valid interoperability layer: 'cryptographic'",
+      "rfc_ref": "RFC-ATF-3 §5.5",
+      "input": { "interoperability_layer": "cryptographic" },
+      "expected": { "verdict": "PASS", "reason_code": null }
+    },
+    {
+      "id": "V-GPIL-001-N1",
+      "profile": "ATF-FEI-Compliant",
+      "invariant": "GPIL-INV-001",
+      "kind": "negative",
+      "description": "Invalid layer: 'network' is not a valid ATF interoperability layer",
+      "rfc_ref": "RFC-ATF-3 §5.5",
+      "input": { "interoperability_layer": "network" },
+      "expected": { "verdict": "FAIL", "reason_code": "GPIL_LAYER_INVALID" }
+    },
+
+    {
+      "id": "V-GPIL-002-P1",
+      "profile": "ATF-FEI-Compliant",
+      "invariant": "GPIL-INV-002",
+      "kind": "positive",
+      "description": "Policy parameters within bounds: AFG=0.80, TTL=300s",
+      "rfc_ref": "RFC-ATF-3 §5.6",
+      "input": {
+        "afg_fragmentation_limit": 0.80,
+        "rc_ttl_seconds": 300,
+        "sampling_profile": "standard"
+      },
+      "expected": { "verdict": "PASS", "reason_code": null }
+    },
+    {
+      "id": "V-GPIL-002-N1",
+      "profile": "ATF-FEI-Compliant",
+      "invariant": "GPIL-INV-002",
+      "kind": "negative",
+      "description": "Policy parameter out of bounds: AFG=0.99 exceeds [0.01, 0.95]",
+      "rfc_ref": "RFC-ATF-3 §5.6",
+      "input": {
+        "afg_fragmentation_limit": 0.99,
+        "rc_ttl_seconds": 300
+      },
+      "expected": { "verdict": "FAIL", "reason_code": "POLICY_PARAMETER_OUT_OF_BOUNDS" }
+    },
+
+    {
+      "id": "V-GPIL-003-P1",
+      "profile": "ATF-FEI-Compliant",
+      "invariant": "GPIL-INV-003",
+      "kind": "positive",
+      "description": "CRGC: all listed parties have signatures",
+      "rfc_ref": "RFC-ATF-3 §5.7",
+      "input": {
+        "crgc_parties": ["org-A", "org-B"],
+        "crgc_signatures": { "org-A": "sig-a-illustrative", "org-B": "sig-b-illustrative" }
+      },
+      "expected": { "verdict": "PASS", "reason_code": null }
+    },
+    {
+      "id": "V-GPIL-003-N1",
+      "profile": "ATF-FEI-Compliant",
+      "invariant": "GPIL-INV-003",
+      "kind": "negative",
+      "description": "CRGC incomplete: org-B signature missing",
+      "rfc_ref": "RFC-ATF-3 §5.7",
+      "input": {
+        "crgc_parties": ["org-A", "org-B"],
+        "crgc_signatures": { "org-A": "sig-a-illustrative" }
+      },
+      "expected": { "verdict": "FAIL", "reason_code": "CRGC_SIGNATURE_INCOMPLETE" }
+    },
+
+    {
+      "id": "V-ELR-001-P1",
+      "profile": "ATF-FEI-Compliant",
+      "invariant": "ELR-INV-001",
+      "kind": "positive",
+      "description": "Tier transition: content_hash preserved",
+      "rfc_ref": "RFC-ATF-3 §6.7",
+      "input": {
+        "tier_transitioned": true,
+        "original_content_hash": "sha256:abc123",
+        "current_content_hash": "sha256:abc123"
+      },
+      "expected": { "verdict": "PASS", "reason_code": null }
+    },
+    {
+      "id": "V-ELR-001-N1",
+      "profile": "ATF-FEI-Compliant",
+      "invariant": "ELR-INV-001",
+      "kind": "negative",
+      "description": "Tier transition mutated content_hash",
+      "rfc_ref": "RFC-ATF-3 §6.7",
+      "input": {
+        "tier_transitioned": true,
+        "original_content_hash": "sha256:abc123",
+        "current_content_hash": "sha256:def456"
+      },
+      "expected": { "verdict": "FAIL", "reason_code": "VERIFIABILITY_BROKEN" }
+    },
+
+    {
+      "id": "V-ELR-002-P1",
+      "profile": "ATF-FEI-Compliant",
+      "invariant": "ELR-INV-002",
+      "kind": "positive",
+      "description": "LEGAL class artifact: no deletion attempted",
+      "rfc_ref": "RFC-ATF-3",
+      "input": { "evidence_class": "LEGAL", "deletion_attempted": false },
+      "expected": { "verdict": "PASS", "reason_code": null }
+    },
+    {
+      "id": "V-ELR-002-N1",
+      "profile": "ATF-FEI-Compliant",
+      "invariant": "ELR-INV-002",
+      "kind": "negative",
+      "description": "LEGAL class deletion attempted — permanence violation",
+      "rfc_ref": "RFC-ATF-3",
+      "input": { "evidence_class": "LEGAL", "deletion_attempted": true },
+      "expected": { "verdict": "FAIL", "reason_code": "EXCEPTION_PERMANENCE_VIOLATION" }
+    },
+
+    {
+      "id": "V-ELR-003-P1",
+      "profile": "ATF-FEI-Compliant",
+      "invariant": "ELR-INV-003",
+      "kind": "positive",
+      "description": "Classification unchanged: LEGAL stays LEGAL",
+      "rfc_ref": "RFC-ATF-3",
+      "input": { "original_evidence_class": "LEGAL", "current_evidence_class": "LEGAL" },
+      "expected": { "verdict": "PASS", "reason_code": null }
+    },
+    {
+      "id": "V-ELR-003-N1",
+      "profile": "ATF-FEI-Compliant",
+      "invariant": "ELR-INV-003",
+      "kind": "negative",
+      "description": "Classification downgraded: LEGAL → OPERATIONAL",
+      "rfc_ref": "RFC-ATF-3",
+      "input": { "original_evidence_class": "LEGAL", "current_evidence_class": "OPERATIONAL" },
+      "expected": { "verdict": "FAIL", "reason_code": "CLASSIFICATION_DOWNGRADE" }
+    },
+
+    {
+      "id": "V-ELR-004-P1",
+      "profile": "ATF-FEI-Compliant",
+      "invariant": "ELR-INV-004",
+      "kind": "positive",
+      "description": "HOT retention: 45 days before tier transition",
+      "rfc_ref": "RFC-ATF-3",
+      "input": { "hot_age_days": 45, "storage_tier": "WARM" },
+      "expected": { "verdict": "PASS", "reason_code": null }
+    },
+    {
+      "id": "V-ELR-004-N1",
+      "profile": "ATF-FEI-Compliant",
+      "invariant": "ELR-INV-004",
+      "kind": "negative",
+      "description": "HOT retention violation: premature transition at 10 days",
+      "rfc_ref": "RFC-ATF-3",
+      "input": { "premature_tier_transition": true },
+      "expected": { "verdict": "FAIL", "reason_code": "HOT_RETENTION_VIOLATION" }
+    },
+
+    {
+      "id": "V-EAP-001-P1",
+      "profile": "ATF-FEI-Compliant",
+      "invariant": "EAP-INV-001",
+      "kind": "positive",
+      "description": "Transition integrity: manifest hash recorded before transformation",
+      "rfc_ref": "RFC-ATF-3",
+      "input": { "manifest_hash_recorded_before_transform": true },
+      "expected": { "verdict": "PASS", "reason_code": null }
+    },
+    {
+      "id": "V-EAP-001-N1",
+      "profile": "ATF-FEI-Compliant",
+      "invariant": "EAP-INV-001",
+      "kind": "negative",
+      "description": "Transformation began without recording hash first",
+      "rfc_ref": "RFC-ATF-3",
+      "input": { "manifest_hash_recorded_before_transform": false },
+      "expected": { "verdict": "FAIL", "reason_code": "TRANSITION_INTEGRITY_VIOLATION" }
+    },
+
+    {
+      "id": "V-EAP-002-P1",
+      "profile": "ATF-FEI-Compliant",
+      "invariant": "EAP-INV-002",
+      "kind": "positive",
+      "description": "Signature preservation: signatures intact in COLD storage",
+      "rfc_ref": "RFC-ATF-3",
+      "input": { "signatures_stripped_in_cold": false },
+      "expected": { "verdict": "PASS", "reason_code": null }
+    },
+    {
+      "id": "V-EAP-002-N1",
+      "profile": "ATF-FEI-Compliant",
+      "invariant": "EAP-INV-002",
+      "kind": "negative",
+      "description": "PQC signatures stripped during COLD transition",
+      "rfc_ref": "RFC-ATF-3",
+      "input": { "signatures_stripped_in_cold": true },
+      "expected": { "verdict": "FAIL", "reason_code": "SIGNATURE_STRIPPED" }
+    },
+
+    {
+      "id": "V-EAP-003-P1",
+      "profile": "ATF-FEI-Compliant",
+      "invariant": "EAP-INV-003",
+      "kind": "positive",
+      "description": "Block chain integrity: predecessor chain unbroken",
+      "rfc_ref": "RFC-ATF-3",
+      "input": { "predecessor_chain_broken": false, "predecessor_block_hash": "sha256:aabbcc" },
+      "expected": { "verdict": "PASS", "reason_code": null }
+    },
+    {
+      "id": "V-EAP-003-N1",
+      "profile": "ATF-FEI-Compliant",
+      "invariant": "EAP-INV-003",
+      "kind": "negative",
+      "description": "Block chain has a gap in predecessor_block_hash chain",
+      "rfc_ref": "RFC-ATF-3",
+      "input": { "predecessor_chain_broken": true },
+      "expected": { "verdict": "FAIL", "reason_code": "BLOCK_CHAIN_BROKEN" }
+    },
+
+    {
+      "id": "V-EAP-004-P1",
+      "profile": "ATF-FEI-Compliant",
+      "invariant": "EAP-INV-004",
+      "kind": "positive",
+      "description": "LEGAL artifact in COLD: not compressed or stripped",
+      "rfc_ref": "RFC-ATF-3",
+      "input": { "evidence_class": "LEGAL", "content_compressed": false, "fields_stripped": false },
+      "expected": { "verdict": "PASS", "reason_code": null }
+    },
+    {
+      "id": "V-EAP-004-N1",
+      "profile": "ATF-FEI-Compliant",
+      "invariant": "EAP-INV-004",
+      "kind": "negative",
+      "description": "LEGAL artifact compressed in COLD storage",
+      "rfc_ref": "RFC-ATF-3",
+      "input": { "evidence_class": "LEGAL", "content_compressed": true },
+      "expected": { "verdict": "FAIL", "reason_code": "IMMUTABLE_CLASS_MODIFIED" }
+    },
+
+    {
+      "id": "V-EAP-005-P1",
+      "profile": "ATF-FEI-Compliant",
+      "invariant": "EAP-INV-005",
+      "kind": "positive",
+      "description": "Offline reconstructable: verification needs only block + public key",
+      "rfc_ref": "RFC-ATF-3",
+      "input": { "verification_requires_platform_access": false },
+      "expected": { "verdict": "PASS", "reason_code": null }
+    },
+    {
+      "id": "V-EAP-005-N1",
+      "profile": "ATF-FEI-Compliant",
+      "invariant": "EAP-INV-005",
+      "kind": "negative",
+      "description": "Offline verification impossible: requires platform API call",
+      "rfc_ref": "RFC-ATF-3",
+      "input": { "verification_requires_platform_access": true },
+      "expected": { "verdict": "FAIL", "reason_code": "OFFLINE_VERIFICATION_IMPOSSIBLE" }
+    },
+
+    {
+      "id": "V-EAP-006-P1",
+      "profile": "ATF-FEI-Compliant",
+      "invariant": "EAP-INV-006",
+      "kind": "positive",
+      "description": "Manifest entry present before transition",
+      "rfc_ref": "RFC-ATF-3",
+      "input": { "manifest_entry_present_before_transition": true },
+      "expected": { "verdict": "PASS", "reason_code": null }
+    },
+    {
+      "id": "V-EAP-006-N1",
+      "profile": "ATF-FEI-Compliant",
+      "invariant": "EAP-INV-006",
+      "kind": "negative",
+      "description": "Transition completed before manifest entry was recorded",
+      "rfc_ref": "RFC-ATF-3",
+      "input": { "manifest_entry_present_before_transition": false },
+      "expected": { "verdict": "FAIL", "reason_code": "MANIFEST_INCOMPLETE" }
+    },
+
+    {
+      "id": "V-EAP-007-P1",
+      "profile": "ATF-FEI-Compliant",
+      "invariant": "EAP-INV-007",
+      "kind": "positive",
+      "description": "Block ID is globally unique",
+      "rfc_ref": "RFC-ATF-3",
+      "input": { "block_id": "BLK-AABBCCDDEEFF0001", "duplicate_block_id": false },
+      "expected": { "verdict": "PASS", "reason_code": null }
+    },
+    {
+      "id": "V-EAP-007-N1",
+      "profile": "ATF-FEI-Compliant",
+      "invariant": "EAP-INV-007",
+      "kind": "negative",
+      "description": "Duplicate block ID detected",
+      "rfc_ref": "RFC-ATF-3",
+      "input": { "block_id": "BLK-AABBCCDDEEFF0001", "duplicate_block_id": true },
+      "expected": { "verdict": "FAIL", "reason_code": "BLOCK_ID_DUPLICATE" }
+    },
+
+    {
+      "id": "V-OEP-001-P1",
+      "profile": "ATF-FEI-Compliant",
+      "invariant": "OEP-INV-001",
+      "kind": "positive",
+      "description": "OEP bundle is self-contained: no external references",
+      "rfc_ref": "RFC-ATF-3",
+      "input": { "external_verification_references": [] },
+      "expected": { "verdict": "PASS", "reason_code": null }
+    },
+    {
+      "id": "V-OEP-001-N1",
+      "profile": "ATF-FEI-Compliant",
+      "invariant": "OEP-INV-001",
+      "kind": "negative",
+      "description": "OEP bundle references external API for verification",
+      "rfc_ref": "RFC-ATF-3",
+      "input": { "external_verification_references": ["https://api.omnixquantum.com/verify"] },
+      "expected": { "verdict": "FAIL", "reason_code": "OEP_EXTERNAL_DEPENDENCY" }
+    },
+
+    {
+      "id": "V-OEP-002-P1",
+      "profile": "ATF-FEI-Compliant",
+      "invariant": "OEP-INV-002",
+      "kind": "positive",
+      "description": "All bundle files listed in manifest.json",
+      "rfc_ref": "RFC-ATF-3",
+      "input": { "files_not_in_manifest": [] },
+      "expected": { "verdict": "PASS", "reason_code": null }
+    },
+    {
+      "id": "V-OEP-002-N1",
+      "profile": "ATF-FEI-Compliant",
+      "invariant": "OEP-INV-002",
+      "kind": "negative",
+      "description": "File in bundle not listed in manifest.json",
+      "rfc_ref": "RFC-ATF-3",
+      "input": { "files_not_in_manifest": ["BLOCKS/block-007.json"] },
+      "expected": { "verdict": "FAIL", "reason_code": "OEP_MANIFEST_INCOMPLETE" }
+    },
+
+    {
+      "id": "V-OEP-003-P1",
+      "profile": "ATF-FEI-Compliant",
+      "invariant": "OEP-INV-003",
+      "kind": "positive",
+      "description": "Two-phase PQC signature present",
+      "rfc_ref": "RFC-ATF-3",
+      "input": {
+        "package_signature_phase1": "sig-phase1-illustrative",
+        "package_signature_phase2": "sig-phase2-illustrative"
+      },
+      "expected": { "verdict": "PASS", "reason_code": null }
+    },
+    {
+      "id": "V-OEP-003-N1",
+      "profile": "ATF-FEI-Compliant",
+      "invariant": "OEP-INV-003",
+      "kind": "negative",
+      "description": "Phase 2 signature missing from OEP package",
+      "rfc_ref": "RFC-ATF-3",
+      "input": { "package_signature_phase1": "sig-phase1-illustrative" },
+      "expected": { "verdict": "FAIL", "reason_code": "OEP_SIGNATURE_PHASE2_MISSING" }
+    },
+
+    {
+      "id": "V-OEP-004-P1",
+      "profile": "ATF-FEI-Compliant",
+      "invariant": "OEP-INV-004",
+      "kind": "positive",
+      "description": "BLOCKS/ directory: no gaps in sequence",
+      "rfc_ref": "RFC-ATF-3",
+      "input": { "block_sequence_gap": false },
+      "expected": { "verdict": "PASS", "reason_code": null }
+    },
+    {
+      "id": "V-OEP-004-N1",
+      "profile": "ATF-FEI-Compliant",
+      "invariant": "OEP-INV-004",
+      "kind": "negative",
+      "description": "Gap detected in BLOCKS/ sequence",
+      "rfc_ref": "RFC-ATF-3",
+      "input": { "block_sequence_gap": true },
+      "expected": { "verdict": "FAIL", "reason_code": "OEP_CHAIN_GAP" }
+    },
+
+    {
+      "id": "V-OEP-005-P1",
+      "profile": "ATF-FEI-Compliant",
+      "invariant": "OEP-INV-005",
+      "kind": "positive",
+      "description": "Public key embedded in KEYS/ directory",
+      "rfc_ref": "RFC-ATF-3",
+      "input": { "public_key_embedded_in_bundle": true },
+      "expected": { "verdict": "PASS", "reason_code": null }
+    },
+    {
+      "id": "V-OEP-005-N1",
+      "profile": "ATF-FEI-Compliant",
+      "invariant": "OEP-INV-005",
+      "kind": "negative",
+      "description": "Public key referenced externally — defeats offline verifiability",
+      "rfc_ref": "RFC-ATF-3",
+      "input": {
+        "public_key_embedded_in_bundle": false,
+        "public_key_external_url": "https://keys.omnixquantum.com/pub"
+      },
+      "expected": { "verdict": "FAIL", "reason_code": "OEP_KEY_NOT_EMBEDDED" }
+    },
+
+    {
+      "id": "V-OEP-006-P1",
+      "profile": "ATF-FEI-Compliant",
+      "invariant": "OEP-INV-006",
+      "kind": "positive",
+      "description": "manifest_version is exactly 'oep-1.0'",
+      "rfc_ref": "RFC-ATF-3",
+      "input": { "manifest_version": "oep-1.0" },
+      "expected": { "verdict": "PASS", "reason_code": null }
+    },
+    {
+      "id": "V-OEP-006-N1",
+      "profile": "ATF-FEI-Compliant",
+      "invariant": "OEP-INV-006",
+      "kind": "negative",
+      "description": "manifest_version mismatch: 'oep-2.0' is not accepted",
+      "rfc_ref": "RFC-ATF-3",
+      "input": { "manifest_version": "oep-2.0" },
+      "expected": { "verdict": "FAIL", "reason_code": "OEP_VERSION_MISMATCH" }
+    },
+
+    {
+      "id": "V-FEA-001-P1",
+      "profile": "ATF-FEI-Compliant",
+      "invariant": "FEA-INV-001",
+      "kind": "positive",
+      "description": "Key isolation: private key not in HTTP request",
+      "rfc_ref": "RFC-ATF-3",
+      "input": { "private_key_in_http_request": false },
+      "expected": { "verdict": "PASS", "reason_code": null }
+    },
+    {
+      "id": "V-FEA-001-N1",
+      "profile": "ATF-FEI-Compliant",
+      "invariant": "FEA-INV-001",
+      "kind": "negative",
+      "description": "Key isolation violation: private key present in request body",
+      "rfc_ref": "RFC-ATF-3",
+      "input": { "private_key_in_http_request": true },
+      "expected": { "verdict": "FAIL", "reason_code": "KEY_ISOLATION_VIOLATION" }
+    },
+
+    {
+      "id": "V-FEA-002-P1",
+      "profile": "ATF-FEI-Compliant",
+      "invariant": "FEA-INV-002",
+      "kind": "positive",
+      "description": "Audit non-repudiation: export logged before package returned",
+      "rfc_ref": "RFC-ATF-3",
+      "input": { "export_logged_before_return": true },
+      "expected": { "verdict": "PASS", "reason_code": null }
+    },
+    {
+      "id": "V-FEA-002-N1",
+      "profile": "ATF-FEI-Compliant",
+      "invariant": "FEA-INV-002",
+      "kind": "negative",
+      "description": "Package returned before audit log entry written",
+      "rfc_ref": "RFC-ATF-3",
+      "input": { "export_logged_before_return": false },
+      "expected": { "verdict": "FAIL", "reason_code": "AUDIT_NON_REPUDIATION_FAILURE" }
+    },
+
+    {
+      "id": "V-FEA-003-P1",
+      "profile": "ATF-FEI-Compliant",
+      "invariant": "FEA-INV-003",
+      "kind": "positive",
+      "description": "Authentication required: 401 returned for unauthenticated request",
+      "rfc_ref": "RFC-ATF-3",
+      "input": { "authorization_header": null, "response_status_code": 401 },
+      "expected": { "verdict": "PASS", "reason_code": null }
+    },
+    {
+      "id": "V-FEA-003-N1",
+      "profile": "ATF-FEI-Compliant",
+      "invariant": "FEA-INV-003",
+      "kind": "negative",
+      "description": "Authentication bypass: unauthenticated request returns 200",
+      "rfc_ref": "RFC-ATF-3",
+      "input": { "authorization_header": null, "response_status_code": 200 },
+      "expected": { "verdict": "FAIL", "reason_code": "AUTHENTICATION_BYPASS" }
+    },
+
+    {
+      "id": "V-FEA-004-P1",
+      "profile": "ATF-FEI-Compliant",
+      "invariant": "FEA-INV-004",
+      "kind": "positive",
+      "description": "Fail-closed: 503 returned when signing key is missing",
+      "rfc_ref": "RFC-ATF-3",
+      "input": { "signing_key_configured": false, "response_status_code": 503 },
+      "expected": { "verdict": "PASS", "reason_code": null }
+    },
+    {
+      "id": "V-FEA-004-N1",
+      "profile": "ATF-FEI-Compliant",
+      "invariant": "FEA-INV-004",
+      "kind": "negative",
+      "description": "Fail-open violation: missing key but returns 200",
+      "rfc_ref": "RFC-ATF-3",
+      "input": { "signing_key_configured": false, "response_status_code": 200 },
+      "expected": { "verdict": "FAIL", "reason_code": "FAIL_OPEN_VIOLATION" }
+    },
+
+    {
+      "id": "V-FEA-005-P1",
+      "profile": "ATF-FEI-Compliant",
+      "invariant": "FEA-INV-005",
+      "kind": "positive",
+      "description": "Caller key prohibition: production env with flag disabled",
+      "rfc_ref": "RFC-ATF-3",
+      "input": {
+        "environment": "production",
+        "forensic_export_allow_caller_keys": false
+      },
+      "expected": { "verdict": "PASS", "reason_code": null }
+    },
+    {
+      "id": "V-FEA-005-N1",
+      "profile": "ATF-FEI-Compliant",
+      "invariant": "FEA-INV-005",
+      "kind": "negative",
+      "description": "Caller key enabled in production — critical security misconfiguration",
+      "rfc_ref": "RFC-ATF-3 + ADR-166",
+      "input": {
+        "environment": "production",
+        "forensic_export_allow_caller_keys": true
+      },
+      "expected": { "verdict": "FAIL", "reason_code": "CALLER_KEY_IN_PRODUCTION" }
+    },
+
+    {
+      "id": "V-FVP-007-P1",
+      "profile": "ATF-FEI-Compliant",
+      "invariant": "FVP-INV-007",
+      "kind": "positive",
+      "description": "Verify response includes key_identity fingerprint",
+      "rfc_ref": "RFC-ATF-3",
+      "input": {
+        "response_type": "verify",
+        "key_identity": "sha256:aabbccddeeff00112233445566778899aabbccddeeff00112233445566778899"
+      },
+      "expected": { "verdict": "PASS", "reason_code": null }
+    },
+    {
+      "id": "V-FVP-007-N1",
+      "profile": "ATF-FEI-Compliant",
+      "invariant": "FVP-INV-007",
+      "kind": "negative",
+      "description": "Verify response missing key_identity — oracle abuse possible",
+      "rfc_ref": "RFC-ATF-3",
+      "input": {
+        "response_type": "verify"
+      },
+      "expected": { "verdict": "FAIL", "reason_code": "KEY_IDENTITY_MISSING" }
+    }
+
+  ]
+}
