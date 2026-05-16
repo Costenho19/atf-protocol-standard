@@ -54,7 +54,7 @@ Abstract
        Challenges (RCs) requiring Tier-1 response.
 
    (4) Eight new invariants (RGC-INV-001 through RGC-INV-008) that are
-       formally model-checkable and extend the six invariants of
+       formally specified and extend the six invariants of
        RFC-ATF-1.
 
    An implementation that complies with both RFC-ATF-1 and RFC-ATF-2 is
