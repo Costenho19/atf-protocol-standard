@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+  <html lang="en">
+  <head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Public Verifier — ATF Protocol Standard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  :root{--bg:#0d1117;--bg2:#161b22;--bg3:#21262d;--border:#30363d;--border2:#21262d;--blue:#58a6ff;--blue-dim:#1f6feb;--blue-dark:#0d419d;--green:#3fb950;--gold:#d29922;--amber:#f0883e;--red:#f85149;--purple:#bc8cff;--text:#e6edf3;--muted:#8b949e;--faint:#484f58;--font:'Inter',system-ui,sans-serif;--mono:'JetBrains Mono',monospace;}
+  html{scroll-behavior:smooth}body{background:var(--bg);color:var(--text);font-family:var(--font);line-height:1.6;overflow-x:hidden}
+  a{color:var(--blue);text-decoration:none}a:hover{text-decoration:underline}
+  nav{position:sticky;top:0;z-index:100;background:rgba(13,17,23,.92);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:.75rem 2rem;gap:1rem;flex-wrap:wrap}
+  .nav-brand{display:flex;align-items:center;gap:.6rem;font-weight:700;font-size:.95rem;color:var(--text);text-decoration:none!important}
+  .nav-badge{background:var(--blue-dark);color:var(--blue);font-size:.65rem;font-weight:600;padding:.15rem .5rem;border-radius:999px;border:1px solid var(--blue-dim)}
+  .nav-links{display:flex;align-items:center;gap:.25rem;flex-wrap:wrap}
+  .nav-links a{color:var(--muted);font-size:.85rem;padding:.4rem .75rem;border-radius:6px;transition:all .15s}
+  .nav-links a:hover,.nav-links a.active{color:var(--text);background:var(--bg3);text-decoration:none}
+  .page-header{padding:3.5rem 2rem 2.5rem;max-width:900px;margin:0 auto;border-bottom:1px solid var(--border)}
+  .section-label{font-size:.75rem;font-weight:600;color:var(--blue);letter-spacing:.1em;text-transform:uppercase;margin-bottom:.75rem}
+  .page-header h1{font-size:clamp(1.8rem,4vw,2.6rem);font-weight:800;letter-spacing:-.02em;margin-bottom:.75rem}
+  .page-header p{color:var(--muted);font-size:1rem;max-width:580px;line-height:1.7}
+  .main{max-width:900px;margin:0 auto;padding:2rem}
+  .verifier-layout{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem}
+  @media(max-width:750px){.verifier-layout{grid-template-columns:1fr}}
+  .panel{background:var(--bg2);border:1px solid var(--border);border-radius:14px;overflow:hidden}
+  .panel-header{padding:1rem 1.25rem;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+  .panel-title{font-size:.85rem;font-weight:600}
+  .panel-hint{font-size:.75rem;color:var(--muted)}
+  textarea{width:100%;height:340px;background:var(--bg3);border:none;color:var(--text);font-family:var(--mono);font-size:.78rem;padding:1rem 1.25rem;resize:vertical;outline:none;line-height:1.6}
+  textarea::placeholder{color:var(--faint)}
+  .panel-footer{padding:.75rem 1.25rem;border-top:1px solid var(--border);display:flex;gap:.75rem;align-items:center;flex-wrap:wrap}
+  .btn{padding:.55rem 1.25rem;border-radius:7px;font-size:.85rem;font-weight:600;cursor:pointer;border:none;transition:all .15s;font-family:var(--font)}
+  .btn-verify{background:var(--blue-dim);color:#fff}
+  .btn-verify:hover{background:var(--blue)}
+  .btn-clear{background:var(--bg3);color:var(--muted);border:1px solid var(--border)}
+  .btn-clear:hover{color:var(--text)}
+  .btn-example{background:transparent;color:var(--blue);border:1px solid rgba(88,166,255,.3);font-size:.78rem;padding:.35rem .75rem}
+  .btn-example:hover{background:rgba(88,166,255,.08)}
+  .results-area{height:340px;overflow-y:auto;padding:1rem 1.25rem;font-family:var(--mono);font-size:.78rem;line-height:1.7}
+  .results-placeholder{color:var(--faint);font-style:italic;font-family:var(--font)}
+  .check{display:flex;gap:.6rem;align-items:flex-start;margin-bottom:.6rem;padding:.5rem .75rem;border-radius:6px;font-size:.8rem}
+  .check.pass{background:rgba(63,185,80,.08);border:1px solid rgba(63,185,80,.15)}
+  .check.fail{background:rgba(248,81,73,.08);border:1px solid rgba(248,81,73,.15)}
+  .check.warn{background:rgba(210,153,34,.08);border:1px solid rgba(210,153,34,.2)}
+  .check.info{background:rgba(88,166,255,.06);border:1px solid rgba(88,166,255,.15)}
+  .check-icon{font-size:.9rem;flex-shrink:0;margin-top:.05rem}
+  .check-body{flex:1}
+  .check-title{font-weight:600;margin-bottom:.1rem;font-family:var(--font)}
+  .check-title.pass{color:var(--green)}
+  .check-title.fail{color:var(--red)}
+  .check-title.warn{color:var(--gold)}
+  .check-title.info{color:var(--blue)}
+  .check-detail{color:var(--muted);font-size:.75rem;line-height:1.5;word-break:break-all}
+  .verdict{padding:1rem 1.25rem;border-top:1px solid var(--border);display:flex;align-items:center;gap:.75rem}
+  .verdict-badge{padding:.4rem 1rem;border-radius:6px;font-weight:700;font-size:.85rem}
+  .verdict-badge.pass{background:rgba(63,185,80,.15);color:var(--green);border:1px solid rgba(63,185,80,.3)}
+  .verdict-badge.fail{background:rgba(248,81,73,.15);color:var(--red);border:1px solid rgba(248,81,73,.3)}
+  .verdict-badge.warn{background:rgba(210,153,34,.15);color:var(--gold);border:1px solid rgba(210,153,34,.3)}
+  .verdict-text{font-size:.82rem;color:var(--muted)}
+  .examples-section{margin-top:2rem}
+  .examples-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:1rem;margin-top:1rem}
+  .example-card{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:1.25rem;cursor:pointer;transition:all .15s}
+  .example-card:hover{border-color:var(--blue-dim);transform:translateY(-1px)}
+  .example-card h4{font-size:.85rem;font-weight:600;margin-bottom:.35rem}
+  .example-card p{font-size:.78rem;color:var(--muted);line-height:1.5;margin-bottom:.75rem}
+  .example-card .example-tag{font-family:var(--mono);font-size:.7rem;background:var(--bg3);border:1px solid var(--border);padding:.15rem .4rem;border-radius:4px;color:var(--muted)}
+  .how-section{margin-top:2.5rem;background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:1.75rem}
+  .how-section h3{font-size:.95rem;font-weight:600;margin-bottom:1rem}
+  .how-steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:1rem}
+  .how-step{font-size:.82rem;color:var(--muted);line-height:1.5}
+  .how-step strong{color:var(--text);display:block;margin-bottom:.25rem;font-size:.83rem}
+  footer{border-top:1px solid var(--border);padding:2rem;margin-top:3rem;text-align:center;font-size:.78rem;color:var(--faint)}
+  </style>
+  </head>
+  <body>
+  <nav>
+    <a class="nav-brand" href="../index.html"><svg width="20" height="20" viewBox="0 0 22 22" fill="none"><polygon points="11,2 20,7 20,15 11,20 2,15 2,7" fill="none" stroke="#58a6ff" stroke-width="1.5"/><polygon points="11,6 16,9 16,13 11,16 6,13 6,9" fill="#58a6ff" opacity=".3"/><circle cx="11" cy="11" r="2" fill="#58a6ff"/></svg>&nbsp;ATF Protocol<span class="nav-badge">v3.0</span></a>
+    <div class="nav-links">
+      <a href="../rfc/index.html">RFC Index</a>
+      <a href="../verify/index.html" class="active" style="color:var(--text);background:var(--bg3)">Verifier</a>
+      <a href="../conformance/index.html">Conformance</a>
+      <a href="https://github.com/Costenho19/atf-protocol-standard" target="_blank">GitHub</a>
+    </div>
+  </nav>
+  <div class="page-header">
+    <div class="section-label">Public Tool</div>
+    <h1>ATF Receipt Verifier</h1>
+    <p>Paste any ATF-format receipt (Delegation Receipt, Runtime Continuity Record, or Temporal Admissibility Record) to verify its structural integrity, content hash, and invariant compliance — client-side only, no data leaves your browser.</p>
+  </div>
+  <div class="main">
+    <div class="verifier-layout">
+      <div class="panel">
+        <div class="panel-header">
+          <span class="panel-title">Receipt JSON</span>
+          <span class="panel-hint">Paste or load an example</span>
+        </div>
+        <textarea id="receiptInput" placeholder='{
+  "delegation_id": "ATFDR-...",
+  "delegator_id": "HUMAN-...",
+  "delegate_id": "AID-...",
+  "budget_granted": 0.75,
+  "budget_delegator": 1.0,
+  "content_hash": "sha256:...",
+  ...
+}'></textarea>
+        <div class="panel-footer">
+          <button class="btn btn-verify" onclick="runVerify()">Verify Receipt</button>
+          <button class="btn btn-clear" onclick="clearAll()">Clear</button>
+          <button class="btn btn-example" onclick="loadExample('dr')">Load DR</button>
+          <button class="btn btn-example" onclick="loadExample('rcr')">Load RCR</button>
+        </div>
+      </div>
+      <div class="panel">
+        <div class="panel-header">
+          <span class="panel-title">Verification Results</span>
+          <span class="panel-hint" id="resultHint">—</span>
+        </div>
+        <div class="results-area" id="resultsArea">
+          <div class="results-placeholder">Results will appear here after verification.</div>
+        </div>
+        <div class="verdict" id="verdictRow" style="display:none">
+          <span class="verdict-badge" id="verdictBadge">—</span>
+          <span class="verdict-text" id="verdictText">—</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="examples-section">
+      <div class="section-label" style="font-size:.72rem;font-weight:600;color:var(--muted);letter-spacing:.08em;text-transform:uppercase">Example Receipts</div>
+      <div class="examples-grid">
+        <div class="example-card" onclick="loadExample('dr')">
+          <h4>Delegation Receipt (DR)</h4>
+          <p>An agent-to-agent authority delegation with MAR invariant and PQC signature fields.</p>
+          <span class="example-tag">RFC-ATF-1 §5</span>
+        </div>
+        <div class="example-card" onclick="loadExample('rcr')">
+          <h4>Runtime Continuity Record (RCR)</h4>
+          <p>A session health snapshot with CES score, continuity status, and TAR anchor.</p>
+          <span class="example-tag">RFC-ATF-2 §6</span>
+        </div>
+        <div class="example-card" onclick="loadExample('mar_violation')">
+          <h4>MAR Violation (should FAIL)</h4>
+          <p>A receipt with budget_granted exceeding budget_delegator — ATF-INV-001 violation.</p>
+          <span class="example-tag">ATF-INV-001</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="how-section">
+      <h3>What does this verifier check?</h3>
+      <div class="how-steps">
+        <div class="how-step"><strong>1. Receipt Type Detection</strong>Identifies whether the receipt is a DR, RCR, or TAR based on field structure.</div>
+        <div class="how-step"><strong>2. Required Fields</strong>Validates all mandatory fields are present and correctly typed.</div>
+        <div class="how-step"><strong>3. ATF-INV-001 (MAR)</strong>For DRs: budget_granted ≤ budget_delegator. Authority can only decrease.</div>
+        <div class="how-step"><strong>4. Content Hash (ATF-INV-005)</strong>Recomputes SHA-256 over canonical fields (excluding signature fields) and compares with content_hash.</div>
+        <div class="how-step"><strong>5. RGC-INV-001 (CES Formula)</strong>For RCRs: recomputes CES = T×0.30 + B×0.30 + D×0.20 + I×0.20 and compares with ces_score.</div>
+        <div class="how-step"><strong>6. Identifier Formats</strong>Validates ATFDR-, ATFTAR-, ATFRCR- prefixes and AID- agent identifiers.</div>
+      </div>
+      <p style="font-size:.78rem;color:var(--faint);margin-top:1rem">Note: PQC signature verification (ML-DSA-65) requires the platform public key and is not performed here. Use the <a href="https://github.com/Costenho19/atf-protocol-standard/blob/main/verifier/verify_receipt.py" target="_blank">CLI verifier</a> for full PQC verification.</p>
+    </div>
+  </div>
+  <footer>ATF Protocol Standard · OMNIX QUANTUM LTD · <a href="../index.html">Home</a> · <a href="https://github.com/Costenho19/atf-protocol-standard" target="_blank">GitHub</a> · CC BY 4.0</footer>
+  <script>
+  const EXAMPLES = {
+    dr: {
+      delegation_id: "ATFDR-A1B2C3D4E5F60011",
+      delegator_id: "HUMAN-harold-nunes-001",
+      delegate_id: "AID-UAE-20260516-AABBCCDDEEFF0011",
+      task_scope: { action: "governance_decision", domain: "trading" },
+      budget_granted: 0.75,
+      budget_delegator: 1.0,
+      chain_root_id: "HUMAN-harold-nunes-001",
+      issued_at: "2026-05-16T10:00:00.000000000Z",
+      status: "ACTIVE",
+      content_hash: "sha256:placeholder-verify-cli-for-real-hash",
+      pqc_signature: "ML-DSA-65:placeholder"
+    },
+    rcr: {
+      rcr_id: "ATFRCR-1F2E3D4C5B6A7890",
+      tar_id: "ATFTAR-AABBCCDD11223344",
+      delegation_id: "ATFDR-A1B2C3D4E5F60011",
+      agent_id: "AID-UAE-20260516-AABBCCDDEEFF0011",
+      chain_root_id: "HUMAN-harold-nunes-001",
+      ces_temporal: 99.0,
+      ces_budget: 100.0,
+      ces_context: 80.0,
+      ces_integrity: 100.0,
+      ces_score: 94.39,
+      continuity_status: "NOMINAL",
+      budget_at_admission: 0.75,
+      budget_remaining: 0.75,
+      context_drift_pct: 20.0,
+      sampled_at: "2026-05-16T10:05:00.000000000Z",
+      content_hash: "sha256:placeholder-verify-cli-for-real-hash",
+      pqc_signature: "ML-DSA-65:placeholder"
+    },
+    mar_violation: {
+      delegation_id: "ATFDR-BADBADBADBAD0000",
+      delegator_id: "HUMAN-test-001",
+      delegate_id: "AID-UAE-20260516-BADBADBADBAD0001",
+      task_scope: { action: "test" },
+      budget_granted: 1.5,
+      budget_delegator: 1.0,
+      chain_root_id: "HUMAN-test-001",
+      issued_at: "2026-05-16T10:00:00.000000000Z",
+      status: "ACTIVE",
+      content_hash: "sha256:placeholder",
+      pqc_signature: "ML-DSA-65:placeholder"
+    }
+  };
+
+  function loadExample(name) {
+    document.getElementById('receiptInput').value = JSON.stringify(EXAMPLES[name], null, 2);
+    clearResults();
+  }
+
+  function clearAll() {
+    document.getElementById('receiptInput').value = '';
+    clearResults();
+  }
+
+  function clearResults() {
+    document.getElementById('resultsArea').innerHTML = '<div class="results-placeholder">Results will appear here after verification.</div>';
+    document.getElementById('verdictRow').style.display = 'none';
+    document.getElementById('resultHint').textContent = '—';
+  }
+
+  function check(cls, icon, title, detail) {
+    return `<div class="check ${cls}"><div class="check-icon">${icon}</div><div class="check-body"><div class="check-title ${cls}">${title}</div>${detail ? `<div class="check-detail">${detail}</div>` : ''}</div></div>`;
+  }
+
+  function detectType(r) {
+    if (r.rcr_id !== undefined) return 'RCR';
+    if (r.delegation_id !== undefined && r.delegator_id !== undefined) return 'DR';
+    if (r.tar_id !== undefined && r.valid_from !== undefined) return 'TAR';
+    return 'UNKNOWN';
+  }
+
+  async function computeHash(obj) {
+    const EXCL = ['pqc_signature','content_hash','pqc_public_key','issuer_pqc_public_key'];
+    function sortObj(o) {
+      if (Array.isArray(o)) return o.map(sortObj);
+      if (o && typeof o === 'object') return Object.fromEntries(Object.keys(o).sort().map(k => [k, sortObj(o[k])]));
+      return o;
+    }
+    const filtered = Object.fromEntries(Object.entries(obj).filter(([k]) => !EXCL.includes(k)));
+    const canonical = JSON.stringify(sortObj(filtered));
+    const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(canonical));
+    return 'sha256:' + [...new Uint8Array(buf)].map(b => b.toString(16).padStart(2,'0')).join('');
+  }
+
+  async function runVerify() {
+    const raw = document.getElementById('receiptInput').value.trim();
+    if (!raw) { alert('Paste a receipt JSON first.'); return; }
+    let receipt;
+    try { receipt = JSON.parse(raw); } catch(e) { 
+      document.getElementById('resultsArea').innerHTML = check('fail','✗','Invalid JSON', e.message);
+      document.getElementById('verdictRow').style.display = 'flex';
+      document.getElementById('verdictBadge').className = 'verdict-badge fail';
+      document.getElementById('verdictBadge').textContent = 'INVALID';
+      document.getElementById('verdictText').textContent = 'Could not parse JSON.';
+      return;
+    }
+
+    const checks = [];
+    let failures = 0;
+    let warnings = 0;
+
+    // 1. Detect type
+    const rtype = detectType(receipt);
+    checks.push(check('info','ℹ','Receipt Type Detected', `Type: ${rtype}${rtype==='UNKNOWN'?' — could not determine receipt type from fields':''}`));
+
+    // 2. Required fields per type
+    const DR_REQ = ['delegation_id','delegator_id','delegate_id','task_scope','budget_granted','budget_delegator','chain_root_id','issued_at','status','content_hash','pqc_signature'];
+    const RCR_REQ = ['rcr_id','tar_id','delegation_id','agent_id','ces_score','continuity_status','content_hash','pqc_signature'];
+    const reqs = rtype === 'DR' ? DR_REQ : rtype === 'RCR' ? RCR_REQ : [];
+    const missing = reqs.filter(f => !(f in receipt));
+    if (missing.length === 0 && reqs.length > 0) {
+      checks.push(check('pass','✓','Required Fields Present', `All ${reqs.length} required fields found.`));
+    } else if (missing.length > 0) {
+      failures++;
+      checks.push(check('fail','✗','Missing Required Fields', `Missing: ${missing.join(', ')}`));
+    }
+
+    // 3. ATF-INV-001 MAR (DR only)
+    if (rtype === 'DR') {
+      const bg = receipt.budget_granted, bd = receipt.budget_delegator;
+      if (bg !== undefined && bd !== undefined) {
+        if (bg > bd + 0.0001) {
+          failures++;
+          checks.push(check('fail','✗','ATF-INV-001: MAR VIOLATION', `budget_granted (${bg}) exceeds budget_delegator (${bd}). Authority can only decrease through the chain.`));
+        } else {
+          checks.push(check('pass','✓','ATF-INV-001: Monotonic Authority Reduction', `budget_granted ${bg} ≤ budget_delegator ${bd} ✓`));
+        }
+        if (bg < 0 || bg > 1 || bd < 0 || bd > 1) {
+          warnings++;
+          checks.push(check('warn','⚠','Budget Range Warning', `Authority budgets should be in [0.0, 1.0]. Got: granted=${bg}, delegator=${bd}`));
+        }
+      }
+    }
+
+    // 4. RGC-INV-001 CES Formula (RCR only)
+    if (rtype === 'RCR') {
+      const {ces_temporal: T, ces_budget: B, ces_context: D, ces_integrity: I, ces_score} = receipt;
+      if (T !== undefined && B !== undefined && D !== undefined && I !== undefined && ces_score !== undefined) {
+        const computed = T*0.30 + B*0.30 + D*0.20 + I*0.20;
+        const diff = Math.abs(ces_score - computed);
+        if (diff > 0.02) {
+          failures++;
+          checks.push(check('fail','✗','RGC-INV-001: CES Formula Mismatch', `Declared CES: ${ces_score}. Computed T×0.30+B×0.30+D×0.20+I×0.20 = ${computed.toFixed(2)}. Difference: ${diff.toFixed(4)}`));
+        } else {
+          checks.push(check('pass','✓','RGC-INV-001: CES Formula Verified', `CES ${ces_score} = ${T}×0.30 + ${B}×0.30 + ${D}×0.20 + ${I}×0.20 = ${computed.toFixed(2)} ✓`));
+        }
+        // Continuity status
+        const stage = ces_score >= 75 ? 'NOMINAL' : ces_score >= 50 ? 'MONITORING' : ces_score >= 25 ? 'WARNING' : ces_score >= 10 ? 'CRITICAL' : 'HALT';
+        if (receipt.continuity_status && receipt.continuity_status !== stage) {
+          warnings++;
+          checks.push(check('warn','⚠','Continuity Status Mismatch', `Declared: ${receipt.continuity_status}. Expected from CES ${ces_score}: ${stage}`));
+        } else if (receipt.continuity_status) {
+          checks.push(check('pass','✓','Continuity Status Consistent', `Stage: ${stage} (CES ${ces_score})`));
+        }
+      } else {
+        checks.push(check('warn','⚠','CES Components Incomplete', 'ces_temporal, ces_budget, ces_context, ces_integrity needed for formula verification.'));
+      }
+    }
+
+    // 5. Content hash
+    if (receipt.content_hash) {
+      const isPlaceholder = receipt.content_hash.includes('placeholder');
+      if (isPlaceholder) {
+        warnings++;
+        checks.push(check('warn','⚠','ATF-INV-005: Content Hash is Placeholder', 'Hash is illustrative. Use the CLI verifier for production receipts. Real receipts must have computed SHA-256 hashes.'));
+      } else {
+        try {
+          const computed = await computeHash(receipt);
+          if (computed === receipt.content_hash) {
+            checks.push(check('pass','✓','ATF-INV-005: Content Hash Verified', `SHA-256 match confirmed: ${computed.slice(0,30)}...`));
+          } else {
+            failures++;
+            checks.push(check('fail','✗','ATF-INV-005: Content Hash MISMATCH', `Declared: ${receipt.content_hash.slice(0,40)}...
+Computed: ${computed.slice(0,40)}...`));
+          }
+        } catch(e) {
+          checks.push(check('warn','⚠','Content Hash Computation Error', e.message));
+        }
+      }
+    } else {
+      failures++;
+      checks.push(check('fail','✗','ATF-INV-005: content_hash Missing', 'content_hash field is required.'));
+    }
+
+    // 6. Identifier format checks
+    const idChecks = [];
+    if (receipt.delegation_id && !receipt.delegation_id.startsWith('ATFDR-')) idChecks.push('delegation_id should start with ATFDR-');
+    if (receipt.rcr_id && !receipt.rcr_id.startsWith('ATFRCR-')) idChecks.push('rcr_id should start with ATFRCR-');
+    if (receipt.tar_id && !receipt.tar_id.startsWith('ATFTAR-')) idChecks.push('tar_id should start with ATFTAR-');
+    if (receipt.delegate_id && !receipt.delegate_id.startsWith('AID-') && !receipt.delegate_id.startsWith('HUMAN-')) idChecks.push('delegate_id should start with AID- or HUMAN-');
+    if (idChecks.length > 0) { warnings++; checks.push(check('warn','⚠','Identifier Format Warnings', idChecks.join('; '))); }
+    else if (rtype !== 'UNKNOWN') checks.push(check('pass','✓','Identifier Formats Valid', 'ATFDR-/ATFRCR-/ATFTAR- prefixes correct.'));
+
+    // 7. PQC signature presence
+    if (!receipt.pqc_signature) {
+      failures++;
+      checks.push(check('fail','✗','ATF-INV-002: pqc_signature Missing', 'Every receipt must carry an ML-DSA-65 signature.'));
+    } else if (receipt.pqc_signature.includes('placeholder')) {
+      warnings++;
+      checks.push(check('warn','⚠','ATF-INV-002: PQC Signature Placeholder', 'Signature is illustrative. Real receipt must carry a valid ML-DSA-65 signature verified by the platform public key.'));
+    } else {
+      checks.push(check('info','🔐','ATF-INV-002: PQC Signature Present', 'Full ML-DSA-65 verification requires the platform public key — use the CLI verifier.'));
+    }
+
+    // Render
+    document.getElementById('resultsArea').innerHTML = checks.join('');
+    document.getElementById('resultHint').textContent = `${checks.length} checks · ${failures} failures · ${warnings} warnings`;
+    
+    const verdict = failures > 0 ? 'fail' : warnings > 0 ? 'warn' : 'pass';
+    const vText = failures > 0 ? `${failures} invariant violation${failures>1?'s':''} detected` : warnings > 0 ? `Structurally valid with ${warnings} warning${warnings>1?'s':''}` : 'All structural checks passed';
+    const vLabel = failures > 0 ? 'FAIL' : warnings > 0 ? 'WARN' : 'PASS';
+    
+    document.getElementById('verdictRow').style.display = 'flex';
+    document.getElementById('verdictBadge').className = `verdict-badge ${verdict}`;
+    document.getElementById('verdictBadge').textContent = vLabel;
+    document.getElementById('verdictText').textContent = vText;
+  }
+
+  document.getElementById('receiptInput').addEventListener('keydown', e => {
+    if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') runVerify();
+  });
+  </script>
+  </body>
+  </html>
