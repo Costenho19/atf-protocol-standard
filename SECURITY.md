@@ -10,6 +10,11 @@
 
   All supported versions receive security advisories and errata. Older patch versions are superseded by the current release.
 
+    > **Full implementation-level threat model:** [THREAT_MODEL.md](./THREAT_MODEL.md)
+    > 13 attack vectors across 4 surfaces — receipt integrity, numeric edge cases,
+    > OEP archive, cross-language canonicalization. All findings have corresponding
+    > tests in `tests/test_threat_model.py`.
+
   ---
 
   ## Cryptographic Policy
@@ -44,6 +49,19 @@
   | TM-007 | Evidence archive tampering | Merkle-chained ARH + PQC signature — EAP-INV-001 |
   | TM-008 | Unauthorized forensic export | FEA-INV-001–005 — export authentication required |
   | TM-009 | Verifier non-determinism | FVP-INV-007 — same key + same evidence = same result |
+
+    **Implementation-level threats** (identified in v3.3.0 code audit — see [THREAT_MODEL.md](./THREAT_MODEL.md)):
+
+    | ID | Threat | Severity | Status |
+    |---|---|---|---|
+    | IMP-TM-001 | ATF-INV-004 bypass via content_hash suffix `"01"` | Critical | ✅ Fixed v3.3.0 |
+    | IMP-TM-002 | Hash + sig bypass via placeholder pqc_signature | High | ✅ Documented boundary |
+    | IMP-TM-003 | NaN bypasses MAR at receipt creation | High | ✅ Fixed v3.3.0 |
+    | IMP-TM-004 | Negative authority budgets pass MAR | Medium | ✅ Fixed v3.3.0 |
+    | IMP-TM-005 | CES components accept values > 100 | Medium | ✅ Fixed v3.3.0 |
+    | XL-TM-001 | Parser differential on missing authority_budget_delegator | High | 🔶 Schema-protected |
+    | OEP-TM-001 | ZIP bomb via spoofed header size | Medium | ✅ Guarded (512 MB) |
+    | OEP-TM-002 | Path traversal in ZIP entries | Medium | ✅ Guarded |
 
   ---
 
