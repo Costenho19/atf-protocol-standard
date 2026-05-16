@@ -27,7 +27,26 @@
 
   ---
 
-  ## 2. RFC Process
+  
+  ---
+
+  ## 2. Protocol Scope and Boundaries
+
+  ATF specifies what happens **after** an agent action is authorized and during/after execution:
+
+  | ATF Covers | ATF Does Not Cover |
+  |---|---|
+  | Cryptographic delegation receipts (who authorized what, with what budget) | Pre-execution authority resolution (whether an action *should* be authorized) |
+  | Runtime authority health monitoring (CES, HALT, escalation) | AI safety constraints or model selection |
+  | Evidence lifecycle, archive pipeline, forensic packages | Network transport or API wire protocols |
+  | Offline verification by regulators with no platform access | Real-time revocation notification (inter-session — see SECURITY.md §2) |
+  | Cross-runtime governance policy interoperability | Regulatory compliance (ATF is architecturally aligned with EU AI Act, NIST AI RMF, ISO/IEC 42001 traceability requirements — it does not constitute compliance) |
+
+  This boundary is intentional. ATF's design thesis is that authority evidence must be
+  structurally separate from authority policy — the former is cryptographically verifiable,
+  the latter is domain-specific and governance-defined.
+
+  ## 3. RFC Process
 
   ATF is specified through a series of RFCs. Each RFC follows this lifecycle:
 
@@ -49,7 +68,7 @@
   |---|---|---|---|
   | RFC-ATF-1 | Agent Trust Fabric Delegation Protocol | **PUBLISHED** | [DOI: 10.5281/zenodo.20155016](https://doi.org/10.5281/zenodo.20155016) · [SSRN: 6757339](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=6757339) |
   | RFC-ATF-2 | Runtime Governance Continuity Protocol | **PUBLISHED** | [SSRN: 6763978](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=6763978) |
-  | RFC-ATF-3 | Evidence Lifecycle, Policy Interoperability & Forensic Verification | **CANDIDATE** | Zenodo pending |
+  | RFC-ATF-3 | Evidence Lifecycle, Policy Interoperability & Forensic Verification | **PUBLISHED** | Zenodo pending · [SSRN pending] |
 
   ### Proposing a new RFC
 
@@ -61,7 +80,7 @@
 
   ---
 
-  ## 3. Versioning Policy
+  ## 4. Versioning Policy
 
   ATF follows **semantic versioning** with protocol-specific semantics:
 
@@ -80,7 +99,7 @@
 
   ---
 
-  ## 4. Conformance Claims
+  ## 5. Conformance Claims
 
   Conformance is self-claimed based on the conformance test suite.
   Three profiles exist:
@@ -102,7 +121,7 @@
 
   ---
 
-  ## 5. Implementation Registry
+  ## 6. Implementation Registry
 
   See `IMPLEMENTATIONS.md` for the list of known ATF-compliant implementations.
   The registry is informational — not exhaustive.
@@ -114,7 +133,7 @@
 
   ---
 
-  ## 6. Security Policy
+  ## 7. Security Policy
 
   See `SECURITY.md` for the full security policy.
 
@@ -126,7 +145,7 @@
 
   ---
 
-  ## 7. Deprecation Policy
+  ## 8. Deprecation Policy
 
   ATF does not deprecate ratified invariants. Once an invariant is published,
   it remains in the specification permanently (for backward compatibility).
@@ -141,7 +160,7 @@
 
   ---
 
-  ## 8. Editor
+  ## 9. Editor
 
   **Harold Nunes** — OMNIX QUANTUM LTD, UAE/UK.
 
@@ -156,7 +175,7 @@
 
   ---
 
-  ## 9. License
+  ## 10. License
 
   The ATF Protocol Standard is published under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/).
 
