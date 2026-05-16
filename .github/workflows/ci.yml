@@ -84,3 +84,28 @@ jobs:
           cd reference-implementation
           pip install -e .
           python smoke_test.py
+
+    typescript-port:
+      name: TypeScript Port — build + type-check
+      runs-on: ubuntu-latest
+      steps:
+        - uses: actions/checkout@v4
+        - name: Set up Node 20
+          uses: actions/setup-node@v4
+          with:
+            node-version: "20"
+        - name: Install dependencies
+          working-directory: ports/typescript
+          run: npm install
+        - name: Type-check
+          working-directory: ports/typescript
+          run: npx tsc --noEmit
+        - name: Run tests
+          working-directory: ports/typescript
+          run: npm test
+        - name: Verify CLI builds
+          working-directory: ports/typescript
+          run: |
+            npm run build
+            node dist/cli.js ../../examples/delegation_receipt.json || true
+  
