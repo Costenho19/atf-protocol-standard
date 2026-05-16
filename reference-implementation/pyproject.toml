@@ -1,20 +1,39 @@
 [build-system]
-  requires = ["setuptools>=61", "wheel"]
-  build-backend = "setuptools.build_meta"
+requires = ["setuptools>=61", "wheel"]
+build-backend = "setuptools.build_meta"
 
-  [project]
-  name = "atf-core"
-  version = "1.0.0"
-  description = "ATF Protocol Reference Implementation — RFC-ATF-1 / RFC-ATF-2"
-  readme = "README.md"
-  license = {text = "CC-BY-4.0"}
-  requires-python = ">=3.9"
-  dependencies = []
+[project]
+name = "atf-protocol"
+version = "3.2.0"
+description = "ATF Protocol Reference Implementation — RFC-ATF-1 / RFC-ATF-2 / RFC-ATF-3"
+readme = "README.md"
+license = {text = "CC-BY-4.0"}
+requires-python = ">=3.9"
+authors = [{name = "OMNIX QUANTUM LTD", email = "contact@omnixquantum.com"}]
+keywords = ["ai-governance", "atf-protocol", "agent-trust", "pqc", "delegation", "post-quantum"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Science/Research",
+    "Topic :: Security :: Cryptography",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+]
+dependencies = []
 
-  [project.optional-dependencies]
-  pqc = ["pypqc>=0.0.8"]
-  test = ["pytest>=7"]
+[project.optional-dependencies]
+pqc = ["pypqc>=0.0.8"]
+test = ["pytest>=7"]
 
-  [project.urls]
-  "Protocol Standard" = "https://github.com/Costenho19/atf-protocol-standard"
-  
+[project.scripts]
+atf-verify = "atf_core.cli:main"
+
+[project.urls]
+"Protocol Standard" = "https://github.com/Costenho19/atf-protocol-standard"
+"Homepage" = "https://costenho19.github.io/atf-protocol-standard/"
+"Documentation" = "https://costenho19.github.io/atf-protocol-standard/whitepaper.html"
+"Verifier" = "https://costenho19.github.io/atf-protocol-standard/verify/"
