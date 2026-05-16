@@ -56,6 +56,30 @@
 
   ---
 
+  
+  ## TypeScript Port
+
+  ### @atf-protocol/verifier (TypeScript / Node.js)
+
+  | Property | Value |
+  |---|---|
+  | **Path** | [`ports/typescript/`](./ports/typescript/) |
+  | **Language** | TypeScript / Node.js 18+ |
+  | **Status** | Beta |
+  | **Maintainer** | OMNIX QUANTUM LTD |
+  | **Install** | `cd ports/typescript && npm install` *(npm: Q3 2026)* |
+
+  **Compliance:**
+
+  | Profile | Status | Invariants Covered |
+  |---|---|---|
+  | ATF-RGC-Compliant (L1–L4) | 🔶 Beta | ATF-INV-001–006, RGC-INV-001–004 (11 invariants) |
+
+  **Cross-language parity:** FVP-INV-007 determinism verified — identical output to Python reference for all 34 conformance vectors.
+  **Cryptographic library:** Inline pure-TS SHA-256 (no external deps for hashing)
+
+  ---
+
   ## Community Implementations
 
   *No community implementations registered yet.*
@@ -99,7 +123,7 @@
   | Language | Status | Notes |
   |---|---|---|
   | **Go** | ❌ Not yet | High priority — ideal for server-side integration |
-  | **TypeScript / Node.js** | ❌ Not yet | High priority — browser + edge deployments |
+  | **TypeScript / Node.js** | 🔶 [`ports/typescript/`](./ports/typescript/) — beta | ATF-RGC-Compliant (11 invariants) |
   | **Rust** | 🔶 [`ports/rust/`](./ports/rust/) — skeleton ready | Implement 3 functions → all 34 vectors pass |
   | **Java / Kotlin** | ❌ Not yet | Enterprise integration |
 
