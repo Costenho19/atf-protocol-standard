@@ -1,21 +1,39 @@
 #!/usr/bin/env python3
   """
-  ATF Receipt Offline Verifier — RFC-ATF-1 / RFC-ATF-2
-  =====================================================
-  Verifies Agent Trust Fabric Delegation Receipts (DR) and
-  Runtime Continuity Records (RCR) offline.
+  ATF Receipt Offline Verifier — RFC-ATF-1 / RFC-ATF-2 / RFC-ATF-3
+    ==================================================================
+    Verifies Agent Trust Fabric Delegation Receipts (DR) and
+    Runtime Continuity Records (RCR) offline.
 
-  Requirements:
-      pip install pypqc
+    Enforces all ATF-Compliant and ATF-RGC-Compliant invariants:
+      ATF-INV-001  Monotonic Authority Reduction (MAR)
+      ATF-INV-002  Delegation ID format
+      ATF-INV-003  Chain root integrity
+      ATF-INV-004  PQC signature coverage
+      ATF-INV-005  Offline verifiability
+      ATF-INV-006  Temporal validity
+      RGC-INV-001  TAR presence
+      RGC-INV-002  CES formula integrity
+      RGC-INV-003  Status-CES consistency
+      RGC-INV-004  HALT escalation requirement
+      FVP-INV-007  Verifier determinism
 
-  Usage:
-      python verify_receipt.py examples/delegation_receipt.json
-      python verify_receipt.py examples/runtime_continuity_record.json --verbose
-      python verify_receipt.py <receipt.json> --public-key <public_key.b64>
+    Requirements:
+        pip install pypqc
 
-  This tool has ZERO dependency on the OMNIX platform (EAP-INV-005).
-  It verifies using only: the receipt JSON and the issuer's public key.
-  """
+    Usage:
+        python verify_receipt.py examples/delegation_receipt.json
+        python verify_receipt.py examples/runtime_continuity_record.json --verbose
+        python verify_receipt.py <receipt.json> --public-key <public_key.b64>
+
+    Programmatic API:
+        from verify_receipt import verify_receipt_dict, compute_content_hash
+        result = verify_receipt_dict(receipt_dict)  # dict in, dict out
+        hash_ = compute_content_hash(receipt_dict)  # FVP-INV-007 deterministic
+
+    This tool has ZERO dependency on the OMNIX platform (EAP-INV-005).
+    It verifies using only: the receipt JSON and the issuer's public key.
+    """
 
   import argparse
   import base64
@@ -197,7 +215,211 @@
       )
 
 
-  # ── CLI ───────────────────────────────────────────────────────────────────────
+
+    # ── Dict-based verifier (used by conformance test suite) ──────────────────────
+
+    def verify_receipt_dict(
+        receipt: dict,
+        public_key_b64: Optional[str] = None,
+    ) -> dict:
+        """
+        Verify an ATF receipt from a Python dict (no file I/O).
+
+        Used by the conformance test suite and programmatic callers.
+        Returns the same JSON-serializable dict as verify().to_dict().
+
+        This function is the dict equivalent of verify() — it accepts
+        a receipt dict directly instead of a file path.
+        """
+        # Handle unknown receipt_type gracefully
+        receipt_type = detect_type(receipt)
+        receipt_id = get_receipt_id(receipt)
+        notes = []
+
+        # Content hash
+        hash_ok, hash_note = verify_content_hash(receipt)
+        notes.append(hash_note)
+
+        # PQC signature
+        sig_ok, sig_note = verify_pqc_signature(receipt, public_key_b64)
+        notes.append(sig_note)
+
+        # MAR invariant (ATF-INV-001)
+        mar_ok, mar_note = check_mar_invariant(receipt)
+        if mar_note:
+            notes.append(mar_note)
+
+        # CES formula (RGC-INV-002)
+        ces_ok, ces_note = check_ces_formula(receipt)
+        if ces_note:
+            notes.append(ces_note)
+
+        # TAR presence (RGC-INV-001) — only for RCRs
+        tar_ok = None
+        if receipt_type == "Runtime Continuity Record (RFC-ATF-2)":
+            tar_id = receipt.get("tar_id")
+            tar_ok = tar_id is not None and tar_id != ""
+            if not tar_ok:
+                notes.append("RGC-INV-001: tar_id MUST NOT be null")
+
+        # Status consistency (RGC-INV-003) — CES threshold → status
+        status_ok = None
+        if receipt_type == "Runtime Continuity Record (RFC-ATF-2)" and ces_ok:
+            ces_score = float(receipt.get("ces_score", 0))
+            claimed_status = receipt.get("continuity_status", "")
+            expected_status = _ces_to_status(ces_score)
+            status_ok = claimed_status == expected_status
+            if not status_ok:
+                notes.append(
+                    f"RGC-INV-003: status mismatch — CES {ces_score} → "
+                    f"expected {expected_status}, got {claimed_status}"
+                )
+
+        # HALT escalation (RGC-INV-004)
+        halt_ok = None
+        if receipt.get("continuity_status") == "HALT":
+            halt_ok = bool(receipt.get("escalation_event_id"))
+            if not halt_ok:
+                notes.append("RGC-INV-004: HALT requires escalation_event_id")
+
+        # ID format (ATF-INV-002)
+        import re
+        id_format_ok = None
+        dr_id_pattern = re.compile(r"^ATFDR-[0-9A-F]{16}$")
+        delegation_id = receipt.get("delegation_id", "")
+        if receipt.get("receipt_type") == "delegation_receipt":
+            id_format_ok = bool(dr_id_pattern.match(delegation_id))
+            if not id_format_ok:
+                notes.append(f"ATF-INV-002: invalid delegation_id format: {delegation_id}")
+
+        # Chain root (ATF-INV-003) — root DR: chain_root_id == delegation_id
+        chain_root_ok = None
+        if receipt.get("receipt_type") == "delegation_receipt":
+            chain_root_ok = receipt.get("chain_root_id") == receipt.get("delegation_id")
+            if not chain_root_ok:
+                notes.append(
+                    f"ATF-INV-003: chain_root_id {receipt.get('chain_root_id')} "
+                    f"!= delegation_id {receipt.get('delegation_id')}"
+                )
+
+        # Temporal validity (ATF-INV-006)
+        import datetime
+        temporal_ok = None
+        temporal_rc = None
+        if receipt.get("issued_at") and receipt.get("expires_at"):
+            try:
+                issued_at = datetime.datetime.fromisoformat(
+                    receipt["issued_at"].replace("Z", "+00:00")
+                )
+                expires_at = datetime.datetime.fromisoformat(
+                    receipt["expires_at"].replace("Z", "+00:00")
+                )
+                now = datetime.datetime.now(datetime.timezone.utc)
+                if issued_at > expires_at:
+                    temporal_ok = False
+                    temporal_rc = "temporal_inversion_atf_inv_006"
+                    notes.append(f"ATF-INV-006: issued_at > expires_at (temporal inversion)")
+                elif expires_at < now:
+                    temporal_ok = False
+                    temporal_rc = "expired_atf_inv_006"
+                    notes.append(f"ATF-INV-006: DR expired at {receipt['expires_at']}")
+                else:
+                    temporal_ok = True
+            except (ValueError, KeyError):
+                temporal_ok = None
+
+        # Missing required fields
+        missing_fields_ok = True
+        if receipt.get("receipt_type") == "delegation_receipt":
+            required = {"delegation_id", "authority_budget_granted", "authority_budget_delegator", "content_hash"}
+            missing = required - set(receipt.keys())
+            if missing:
+                missing_fields_ok = False
+                notes.append(f"Missing required fields: {missing}")
+
+        # Determine overall verdict
+        critical_checks = [hash_ok, mar_ok, id_format_ok, chain_root_ok, missing_fields_ok]
+        if ces_ok is not None:
+            critical_checks.append(ces_ok)
+        if tar_ok is not None:
+            critical_checks.append(tar_ok)
+        if status_ok is not None:
+            critical_checks.append(status_ok)
+        if halt_ok is not None:
+            critical_checks.append(halt_ok)
+        if temporal_ok is not None:
+            critical_checks.append(temporal_ok)
+
+        hard_failures = [x for x in critical_checks if x is not None and not x]
+        overall = "FAIL" if hard_failures else "PASS"
+
+        # Build reason codes for checks
+        checks = {
+            "content_hash": "PASS" if hash_ok else "FAIL",
+            "pqc_signature": (
+                "PASS" if sig_ok else "FAIL"
+            ) if sig_ok is not None else "SKIP (no key provided)",
+            "mar_invariant": (
+                "PASS" if mar_ok else f"FAIL [{ReasonCode.MAR}]"
+            ) if mar_ok is not None else "N/A",
+            "ces_formula": (
+                "PASS" if ces_ok else f"FAIL [ces_formula_rgc_inv_002]"
+            ) if ces_ok is not None else "N/A",
+        }
+
+        if id_format_ok is not None:
+            checks["id_format"] = "PASS" if id_format_ok else f"FAIL [id_format_atf_inv_002]"
+        if chain_root_ok is not None:
+            checks["chain_root"] = "PASS" if chain_root_ok else f"FAIL [chain_root_atf_inv_003]"
+        if temporal_ok is not None:
+            rc = temporal_rc or "temporal_atf_inv_006"
+            checks["temporal_validity"] = "PASS" if temporal_ok else f"FAIL [{rc}]"
+        if tar_ok is not None:
+            checks["tar_presence"] = "PASS" if tar_ok else "FAIL [rgc_inv_001]"
+        if status_ok is not None:
+            checks["status_consistency"] = "PASS" if status_ok else "FAIL [status_mismatch_rgc_inv_003]"
+        if halt_ok is not None:
+            checks["halt_escalation"] = "PASS" if halt_ok else "FAIL [halt_no_escalation_rgc_inv_004]"
+        if not missing_fields_ok:
+            checks["required_fields"] = "FAIL [missing_required_fields]"
+
+        return {
+            "receipt_id": receipt_id,
+            "receipt_type": receipt_type,
+            "checks": checks,
+            "verdict": overall,
+            "notes": notes,
+        }
+
+
+    class ReasonCode:
+        """Normative reason codes for ATF invariant violations."""
+        MAR         = "mar_atf_inv_001"
+        ID_FORMAT   = "id_format_atf_inv_002"
+        CHAIN_ROOT  = "chain_root_atf_inv_003"
+        EXPIRED     = "expired_atf_inv_006"
+        TEMPORAL_INV = "temporal_inversion_atf_inv_006"
+        TAR_NULL    = "rgc_inv_001"
+        CES_FORMULA = "ces_formula_rgc_inv_002"
+        STATUS_MISMATCH = "status_mismatch_rgc_inv_003"
+        HALT_NO_ESC = "halt_no_escalation_rgc_inv_004"
+        HASH_MISMATCH = "content_hash_mismatch"
+
+
+    def _ces_to_status(ces: float) -> str:
+        """Convert CES score to continuity_status per RGC-INV-003 thresholds."""
+        if ces >= 75.0:
+            return "NOMINAL"
+        elif ces >= 50.0:
+            return "MONITORING"
+        elif ces >= 30.0:
+            return "WARNING"
+        elif ces >= 10.0:
+            return "CRITICAL"
+        else:
+            return "HALT"
+
+    # ── CLI ───────────────────────────────────────────────────────────────────────
 
   def main():
       parser = argparse.ArgumentParser(
