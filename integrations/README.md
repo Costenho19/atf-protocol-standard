@@ -1,12 +1,12 @@
 # ATF Protocol — Integration Ecosystem
 
-  Official ATF Protocol integrations for popular AI frameworks.
+  ATF Protocol integrations for popular AI frameworks.
 
   | Integration | Framework | Badge | Install |
   |---|---|---|---|
-  | **atf-langchain** | LangChain / LCEL | ATF-RGC-Compliant | `pip install atf-langchain` |
-  | **atf-fastapi** | FastAPI / Starlette | ATF-Compliant | `pip install atf-fastapi` |
-  | **atf-openai-agents** | OpenAI Agents SDK | ATF-Compliant | `pip install atf-openai-agents` |
+  | **atf-langchain** | LangChain / LCEL | ATF-RGC-Compliant | `pip install -e ./integrations/langchain` *(PyPI: Q3 2026)* |
+  | **atf-fastapi** | FastAPI / Starlette | ATF-Compliant | `pip install -e ./integrations/fastapi` *(PyPI: Q3 2026)* |
+  | **atf-openai-agents** | OpenAI Agents SDK | ATF-Compliant | `pip install -e ./integrations/openai-agents` *(PyPI: Q3 2026)* |
 
   All integrations enforce:
   - **ATF-INV-001** — Monotonic Authority Reduction (MAR): budget_granted ≤ budget_delegator
