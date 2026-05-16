@@ -12,6 +12,7 @@
 [![License](https://img.shields.io/badge/License-CC%20BY%204.0-lightgrey?style=flat-square)](https://creativecommons.org/licenses/by/4.0/)
   [![CI](https://github.com/Costenho19/atf-protocol-standard/actions/workflows/ci.yml/badge.svg)](https://github.com/Costenho19/atf-protocol-standard/actions/workflows/ci.yml)
   [![Threat Model](https://img.shields.io/badge/Threat%20Model-Published-red?style=flat-square)](./THREAT_MODEL.md)
+[![Conformance Suite](https://img.shields.io/badge/Conformance%20Suite-92%20vectors%20%C2%B7%2040%20invariants-brightgreen?style=flat-square)](./atf-conformance-suite/)
 [![Website](https://img.shields.io/badge/Website-costenho19.github.io%2Fatf--protocol--standard-58a6ff?style=flat-square)](https://costenho19.github.io/atf-protocol-standard/)
 
   > **[📖 Browse the Protocol Website →](https://costenho19.github.io/atf-protocol-standard/)** — RFC Index · Public Verifier · Conformance Program
@@ -114,6 +115,45 @@ Adds Layer 5 — Forensic Evidence Infrastructure: policy interoperability acros
 
 
   ---
+
+---
+
+## ATF Conformance Suite
+
+The **ATF Conformance Suite** (`atf-conformance-suite/`) is the standalone,
+platform-independent verification harness for all 40 ATF invariants
+across RFC-ATF-1, RFC-ATF-2, and RFC-ATF-3.
+
+- **92 test vectors** — positive and negative cases for every invariant
+- **3 profiles** — `BASE` (6 invariants) · `RGC` (14) · `ALL` (40)
+- **Zero dependencies** — Python 3.8+ stdlib only
+- **Tamper-detectable results** — every run produces an `ATFCR-*` artifact with SHA-256 integrity
+
+```bash
+git clone https://github.com/Costenho19/atf-protocol-standard
+cd atf-protocol-standard/atf-conformance-suite
+python run_conformance.py --profile ALL --output result.json
+```
+
+```
+ATF Conformance Suite 1.0.0
+Profile:   ATF-FEI-Compliant
+Run:       2026-05-16T21:40:35Z
+Result ID: ATFCR-FE46C0F921F6EFE4
+
+  ✓ ATF-INV-001--006     16/16 vectors
+  ✓ RGC-INV-001--008     20/20 vectors
+  ✓ GPIL / ELR / EAP / OEP   42/42 vectors
+  ✓ FEA / FVP            12/12 vectors
+
+Verdict:   PASS  (86/86)
+Hash:      sha256:fe6f17e8287f562093018245430b0a4e7055065775f62ea2d3df11a0af719d3d
+```
+
+Full documentation: [`atf-conformance-suite/README.md`](./atf-conformance-suite/README.md)
+Conformance program: [`CONFORMANCE.md`](./CONFORMANCE.md)
+
+---
 
   ## Why ATF? — Comparison with Alternatives
 
