@@ -1,0 +1,771 @@
+<!DOCTYPE html>
+  <html lang="en">
+  <head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>Example Integrations — ATF Protocol Standard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+  <style>
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  :root{--bg:#0d1117;--bg2:#161b22;--bg3:#21262d;--border:#30363d;--blue:#58a6ff;--blue-dim:#1f6feb;--blue-dark:#0d419d;--green:#3fb950;--gold:#d29922;--amber:#f0883e;--red:#f85149;--purple:#bc8cff;--text:#e6edf3;--muted:#8b949e;--faint:#484f58;--font:'Inter',system-ui,sans-serif;--mono:'JetBrains Mono',monospace;}
+  html{scroll-behavior:smooth}body{background:var(--bg);color:var(--text);font-family:var(--font);line-height:1.6;overflow-x:hidden}
+  a{color:var(--blue);text-decoration:none}a:hover{text-decoration:underline}
+  nav{position:sticky;top:0;z-index:100;background:rgba(13,17,23,.92);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:.75rem 2rem;gap:1rem;flex-wrap:wrap}
+  .nav-brand{display:flex;align-items:center;gap:.6rem;font-weight:700;font-size:.95rem;color:var(--text);text-decoration:none!important}
+  .nav-badge{background:var(--blue-dark);color:var(--blue);font-size:.65rem;font-weight:600;padding:.15rem .5rem;border-radius:999px;border:1px solid var(--blue-dim)}
+  .nav-links{display:flex;align-items:center;gap:.25rem;flex-wrap:wrap}
+  .nav-links a{color:var(--muted);font-size:.85rem;padding:.4rem .75rem;border-radius:6px;transition:all .15s}
+  .nav-links a:hover,.nav-links a.active{color:var(--text);background:var(--bg3);text-decoration:none}
+  .page-header{padding:3.5rem 2rem 2.5rem;max-width:1100px;margin:0 auto;border-bottom:1px solid var(--border)}
+  .section-label{font-size:.75rem;font-weight:600;color:var(--blue);letter-spacing:.1em;text-transform:uppercase;margin-bottom:.75rem}
+  .page-header h1{font-size:clamp(1.8rem,4vw,2.6rem);font-weight:800;letter-spacing:-.02em;margin-bottom:.75rem}
+  .page-header p{color:var(--muted);font-size:1rem;max-width:620px;line-height:1.7}
+  .main{max-width:1100px;margin:0 auto;padding:2.5rem 2rem}
+  /* Scenario selector */
+  .scenario-bar{display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:2rem}
+  .scenario-btn{padding:.5rem 1rem;border-radius:8px;font-size:.82rem;font-weight:600;cursor:pointer;border:1px solid var(--border);background:var(--bg2);color:var(--muted);transition:all .15s;font-family:var(--font)}
+  .scenario-btn:hover{border-color:var(--blue-dim);color:var(--text)}
+  .scenario-btn.active{background:rgba(88,166,255,.1);border-color:var(--blue);color:var(--blue)}
+  /* Lang tabs */
+  .lang-tabs{display:flex;border-bottom:1px solid var(--border);margin-bottom:0;gap:0}
+  .lang-tab{padding:.65rem 1.25rem;font-size:.85rem;font-weight:600;cursor:pointer;border:none;background:transparent;color:var(--muted);border-bottom:2px solid transparent;margin-bottom:-1px;transition:all .15s;font-family:var(--font);display:flex;align-items:center;gap:.4rem}
+  .lang-tab:hover{color:var(--text)}
+  .lang-tab.active{color:var(--blue);border-bottom-color:var(--blue)}
+  .lang-icon{font-size:.85rem}
+  /* Code panels */
+  .code-panel{background:var(--bg2);border:1px solid var(--border);border-radius:0 0 12px 12px;overflow:hidden;display:none}
+  .code-panel.active{display:block}
+  .code-header{display:flex;align-items:center;justify-content:space-between;padding:.65rem 1.25rem;border-bottom:1px solid var(--border);background:var(--bg3)}
+  .code-filename{font-family:var(--mono);font-size:.75rem;color:var(--muted)}
+  .copy-btn{font-size:.72rem;color:var(--blue);border:1px solid rgba(88,166,255,.3);background:transparent;border-radius:5px;padding:.25rem .7rem;cursor:pointer;font-family:var(--font);transition:all .15s}
+  .copy-btn:hover{background:rgba(88,166,255,.1)}
+  .hljs{background:transparent!important;padding:1.25rem!important;font-size:.8rem!important;line-height:1.7!important;font-family:var(--mono)!important}
+  .code-section{border-radius:12px;border:1px solid var(--border);overflow:hidden;margin-bottom:2rem}
+  .code-section-header{background:var(--bg3);border-bottom:1px solid var(--border);padding:.75rem 1.25rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.5rem}
+  .code-section-title{font-size:.88rem;font-weight:700}
+  .step-badge{font-family:var(--mono);font-size:.68rem;background:rgba(88,166,255,.15);color:var(--blue);border:1px solid rgba(88,166,255,.3);padding:.15rem .5rem;border-radius:4px}
+  .terminal-block{background:#010409;border-top:1px solid var(--border);padding:1rem 1.25rem;font-family:var(--mono);font-size:.78rem;line-height:1.7}
+  .terminal-block .prompt{color:var(--faint)}
+  .terminal-block .cmd{color:var(--text)}
+  .terminal-block .out{color:var(--green)}
+  .terminal-block .comment{color:var(--faint)}
+  /* Scenario panels */
+  .scenario-panel{display:none}
+  .scenario-panel.active{display:block}
+  /* Interop note */
+  .interop-note{background:var(--bg2);border:1px solid var(--border);border-left:3px solid var(--purple);border-radius:0 10px 10px 0;padding:1.1rem 1.25rem;margin:1.5rem 0;font-size:.85rem;color:var(--muted);line-height:1.7}
+  .interop-note strong{color:var(--text)}
+  footer{border-top:1px solid var(--border);padding:2rem;margin-top:3rem;text-align:center;font-size:.78rem;color:var(--faint)}
+  </style>
+  </head>
+  <body>
+  <nav>
+    <a class="nav-brand" href="../index.html"><svg width="20" height="20" viewBox="0 0 22 22" fill="none"><polygon points="11,2 20,7 20,15 11,20 2,15 2,7" fill="none" stroke="#58a6ff" stroke-width="1.5"/><polygon points="11,6 16,9 16,13 11,16 6,13 6,9" fill="#58a6ff" opacity=".3"/><circle cx="11" cy="11" r="2" fill="#58a6ff"/></svg>&nbsp;ATF Protocol<span class="nav-badge">v3.0</span></a>
+    <div class="nav-links">
+      <a href="../rfc/index.html">RFC Index</a>
+      <a href="../verify/index.html">Verifier</a>
+      <a href="../conformance/index.html">Conformance</a>
+      <a href="../whitepaper/index.html">Whitepaper</a>
+      <a href="../integrations/index.html" class="active" style="color:var(--text);background:var(--bg3)">Integrations</a>
+      <a href="../diagrams/index.html">Diagrams</a>
+      <a href="../quickstart/index.html" style="background:rgba(88,166,255,.12);color:#58a6ff;border:1px solid rgba(88,166,255,.3);padding:.4rem .75rem;border-radius:6px;">Quickstart →</a>
+      <a href="https://github.com/Costenho19/atf-protocol-standard" target="_blank">GitHub</a>
+    </div>
+  </nav>
+  <div class="page-header">
+    <div class="section-label">Production Code · Python · TypeScript · Go</div>
+    <h1>Example Integrations</h1>
+    <p>End-to-end integration examples in three languages — each showing the same use case: issue a Delegation Receipt, monitor runtime continuity, verify receipts offline, and export an Evidence Package. Production-quality code with error handling, retries, and offline verification.</p>
+  </div>
+  <div class="main">
+
+    <!-- Scenario selector -->
+    <div class="scenario-bar">
+      <button class="scenario-btn active" onclick="setScenario('dr')">Scenario 1 — Issue &amp; Verify DR</button>
+      <button class="scenario-btn" onclick="setScenario('rcr')">Scenario 2 — Runtime Continuity (CES)</button>
+      <button class="scenario-btn" onclick="setScenario('oep')">Scenario 3 — Export Evidence Package</button>
+      <button class="scenario-btn" onclick="setScenario('verify')">Scenario 4 — Offline Verification</button>
+    </div>
+
+    <!-- SCENARIO 1: DR -->
+    <div class="scenario-panel active" id="scenario-dr">
+      <div class="lang-tabs">
+        <button class="lang-tab active" onclick="setLang('dr','py')"><span class="lang-icon">🐍</span> Python</button>
+        <button class="lang-tab" onclick="setLang('dr','ts')"><span class="lang-icon">🔷</span> TypeScript</button>
+        <button class="lang-tab" onclick="setLang('dr','go')"><span class="lang-icon">🐹</span> Go</button>
+      </div>
+      <!-- Python DR -->
+      <div class="code-panel active" id="dr-py">
+        <div class="code-section">
+          <div class="code-section-header"><span class="code-section-title">Step 1 — Register an agent identity</span><span class="step-badge">ATF-INV-003</span></div>
+          <div class="code-header"><span class="code-filename">register_agent.py</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+          <pre><code class="language-python">from atf_core import ATFClient, AgentIdentityRecord, RegistrationTier
+
+  # Initialize ATF client with the issuing principal's credentials
+  client = ATFClient(
+      principal_id="HUMAN-harold-nunes-001",     # TIER-1 human root
+      private_key_b64=os.environ["ATF_PRIVATE_KEY_B64"],
+      public_key_b64=os.environ["ATF_PUBLIC_KEY_B64"],
+  )
+
+  # Register an AI agent — budget MUST be ≤ principal's budget (ATF-INV-001)
+  air = client.register_agent(
+      display_name="Trading Governance Agent v2",
+      domain="FINANCE",
+      vertical="equity_trading",
+      authority_budget=75.0,    # 75% of principal's 100.0 budget
+      tier=RegistrationTier.TIER_2,
+      capabilities=["governance_decision", "risk_assessment"],
+  )
+
+  print(f"Agent registered: {air.agent_id}")
+  # Agent registered: AID-FINANCE-3A7F9B2C1D4E5F6A
+
+  assert air.registration_tier == 2
+  assert air.authority_budget <= client.principal_budget   # ATF-INV-001</code></pre>
+        </div>
+        <div class="code-section">
+          <div class="code-section-header"><span class="code-section-title">Step 2 — Issue a Delegation Receipt</span><span class="step-badge">ATF-INV-001 · ATF-INV-002</span></div>
+          <div class="code-header"><span class="code-filename">issue_dr.py</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+          <pre><code class="language-python">from atf_core import TaskScope
+
+  # Delegate authority for a specific task scope
+  dr = client.issue_delegation_receipt(
+      delegate_id=air.agent_id,
+      task_scope=TaskScope(
+          action="governance_decision",
+          domain="FINANCE",
+          vertical="equity_trading",
+          max_position_usd=500_000,
+      ),
+      budget_granted=75.0,       # ATF-INV-001: 75.0 ≤ 100.0 (principal budget)
+      ttl_seconds=3600,          # DR expires in 1 hour
+  )
+
+  # DR is PQC-signed (ML-DSA-65) and content-hashed (ATF-INV-002, ATF-INV-005)
+  print(f"DR issued:    {dr.delegation_id}")
+  print(f"Budget:       {dr.budget_granted}/{dr.budget_delegator}")
+  print(f"Chain root:   {dr.chain_root_id}")
+  print(f"Expires:      {dr.expires_at}")
+  print(f"Content hash: {dr.content_hash[:32]}...")
+
+  # DR issued:    ATFDR-3A7F9B2C1D4E5F6A7890ABCD12345678
+  # Budget:       75.0/100.0
+  # Chain root:   HUMAN-harold-nunes-001
+  # Expires:      2026-05-16T11:00:00.000000000Z
+  # Content hash: sha256:a3f4b2c1d5e6f7890a1b2c3d4e5f6a7b...</code></pre>
+        </div>
+        <div class="code-section">
+          <div class="code-section-header"><span class="code-section-title">Step 3 — Verify the DR (offline, no platform access)</span><span class="step-badge">ATF-INV-006</span></div>
+          <div class="code-header"><span class="code-filename">verify_dr.py</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+          <pre><code class="language-python">from atf_verifier import ReceiptVerifier, VerificationResult
+
+  # Verify offline — only the receipt JSON and the issuer's public key are needed
+  verifier = ReceiptVerifier(issuer_public_key_b64=os.environ["ATF_PUBLIC_KEY_B64"])
+
+  result: VerificationResult = verifier.verify(dr)
+
+  assert result.verdict == "PASS"
+  assert result.checks["atf_inv_001_mar"]       # budget_granted ≤ budget_delegator
+  assert result.checks["atf_inv_002_pqc_sig"]   # ML-DSA-65 signature valid
+  assert result.checks["atf_inv_005_hash"]      # SHA-256 content hash match
+  assert result.checks["atf_inv_006_independent"]  # verified offline
+
+  print(f"Verdict: {result.verdict} ({len(result.checks)} checks passed)")
+  # Verdict: PASS (6 checks passed)
+
+  # Verification is fully reproducible — same result on any machine,
+  # with no network access, using only the JSON receipt + public key.</code></pre>
+          <div class="terminal-block">
+            <div><span class="prompt">$ </span><span class="cmd">python verify_dr.py</span></div>
+            <div><span class="out">✓ ATF-INV-001 (MAR): budget_granted 75.0 ≤ budget_delegator 100.0</span></div>
+            <div><span class="out">✓ ATF-INV-002 (PQC): ML-DSA-65 signature verified</span></div>
+            <div><span class="out">✓ ATF-INV-003 (Root): chain traces to HUMAN-harold-nunes-001</span></div>
+            <div><span class="out">✓ ATF-INV-004 (Ceiling): budget within registered ceiling</span></div>
+            <div><span class="out">✓ ATF-INV-005 (Hash): SHA-256 content hash verified</span></div>
+            <div><span class="out">✓ ATF-INV-006 (Independent): offline verification confirmed</span></div>
+            <div><span class="out">VERDICT: PASS — 6/6 invariants satisfied</span></div>
+          </div>
+        </div>
+      </div>
+      <!-- TypeScript DR -->
+      <div class="code-panel" id="dr-ts">
+        <div class="code-section">
+          <div class="code-section-header"><span class="code-section-title">TypeScript — Issue &amp; Verify a Delegation Receipt</span><span class="step-badge">ATF-INV-001/002/005/006</span></div>
+          <div class="code-header"><span class="code-filename">atf-integration.ts</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+          <pre><code class="language-typescript">import { ATFClient, DelegationReceipt, ReceiptVerifier, TaskScope } from "@atf-protocol/sdk";
+
+  const client = new ATFClient({
+    principalId: "HUMAN-harold-nunes-001",
+    privateKeyB64: process.env.ATF_PRIVATE_KEY_B64!,
+    publicKeyB64: process.env.ATF_PUBLIC_KEY_B64!,
+  });
+
+  // Step 1 — Register agent
+  const air = await client.registerAgent({
+    displayName: "Trading Governance Agent v2",
+    domain: "FINANCE",
+    vertical: "equity_trading",
+    authorityBudget: 75.0,  // ATF-INV-001: must be ≤ principal's 100.0
+    tier: 2,
+    capabilities: ["governance_decision", "risk_assessment"],
+  });
+
+  console.log(`Agent registered: ${air.agentId}`);
+
+  // Step 2 — Issue DR with typed scope
+  const scope: TaskScope = {
+    action: "governance_decision",
+    domain: "FINANCE",
+    vertical: "equity_trading",
+    maxPositionUsd: 500_000,
+  };
+
+  const dr: DelegationReceipt = await client.issueDelegationReceipt({
+    delegateId: air.agentId,
+    taskScope: scope,
+    budgetGranted: 75.0,   // ATF-INV-001 enforced — throws if budgetGranted > principal budget
+    ttlSeconds: 3600,
+  });
+
+  console.log(`DR: ${dr.delegationId}`);
+  console.log(`Chain root: ${dr.chainRootId}`);
+
+  // Step 3 — Verify offline (no network call — only receipt JSON + public key)
+  const verifier = new ReceiptVerifier(process.env.ATF_PUBLIC_KEY_B64!);
+  const result = await verifier.verify(dr);
+
+  if (result.verdict !== "PASS") {
+    throw new Error(`DR verification failed: ${JSON.stringify(result.failures)}`);
+  }
+
+  console.log(`Verdict: ${result.verdict} — ${result.checks.size} checks passed`);</code></pre>
+        </div>
+        <div class="code-section">
+          <div class="code-section-header"><span class="code-section-title">TypeScript — Error handling &amp; MAR violation detection</span><span class="step-badge">ATF-INV-001</span></div>
+          <div class="code-header"><span class="code-filename">atf-error-handling.ts</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+          <pre><code class="language-typescript">import { ATFClient, MARViolationError, BudgetExceededError } from "@atf-protocol/sdk";
+
+  async function safeDelegation(
+    client: ATFClient,
+    delegateId: string,
+    requestedBudget: number,
+  ): Promise<DelegationReceipt | null> {
+    try {
+      return await client.issueDelegationReceipt({
+        delegateId,
+        taskScope: { action: "governance_decision", domain: "FINANCE" },
+        budgetGranted: requestedBudget,
+        ttlSeconds: 3600,
+      });
+    } catch (err) {
+      if (err instanceof MARViolationError) {
+        // ATF-INV-001: budget_granted > budget_delegator — protocol violation
+        console.error(`MAR violation: requested ${requestedBudget}, delegator has ${err.delegatorBudget}`);
+        return null;
+      }
+      if (err instanceof BudgetExceededError) {
+        // ATF-INV-004: exceeds registered agent ceiling
+        console.error(`Budget ceiling: agent ceiling is ${err.ceiling}`);
+        return null;
+      }
+      throw err;  // re-throw unexpected errors
+    }
+  }
+
+  // This will succeed: 75.0 ≤ 100.0
+  const dr1 = await safeDelegation(client, agentId, 75.0);   // ✓ PASS
+
+  // This will throw MARViolationError: 110.0 > 100.0
+  const dr2 = await safeDelegation(client, agentId, 110.0);  // ✗ ATF-INV-001</code></pre>
+        </div>
+      </div>
+      <!-- Go DR -->
+      <div class="code-panel" id="dr-go">
+        <div class="code-section">
+          <div class="code-section-header"><span class="code-section-title">Go — Issue &amp; Verify a Delegation Receipt</span><span class="step-badge">ATF-INV-001/002/005/006</span></div>
+          <div class="code-header"><span class="code-filename">main.go</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+          <pre><code class="language-go">package main
+
+  import (
+      "fmt"
+      "log"
+      "os"
+
+      atf "github.com/atf-protocol/sdk-go"
+  )
+
+  func main() {
+      // Initialize client with TIER-1 principal credentials
+      client, err := atf.NewClient(atf.ClientConfig{
+          PrincipalID:   "HUMAN-harold-nunes-001",
+          PrivateKeyB64: os.Getenv("ATF_PRIVATE_KEY_B64"),
+          PublicKeyB64:  os.Getenv("ATF_PUBLIC_KEY_B64"),
+      })
+      if err != nil {
+          log.Fatalf("client init: %v", err)
+      }
+
+      // Register agent — authority_budget must be ≤ principal's budget (ATF-INV-001)
+      air, err := client.RegisterAgent(atf.AgentConfig{
+          DisplayName:     "Trading Governance Agent v2",
+          Domain:          "FINANCE",
+          Vertical:        "equity_trading",
+          AuthorityBudget: 75.0,
+          Tier:            atf.Tier2,
+          Capabilities:   []string{"governance_decision", "risk_assessment"},
+      })
+      if err != nil {
+          log.Fatalf("register agent: %v", err)
+      }
+      fmt.Printf("Agent: %s\n", air.AgentID)
+
+      // Issue Delegation Receipt — MAR enforced at SDK level
+      dr, err := client.IssueDR(atf.DRConfig{
+          DelegateID:    air.AgentID,
+          TaskScope:     atf.TaskScope{Action: "governance_decision", Domain: "FINANCE"},
+          BudgetGranted: 75.0,     // ATF-INV-001: 75.0 ≤ 100.0 ✓
+          TTLSeconds:    3600,
+      })
+      if err != nil {
+          // errors.As(err, &atf.MARViolationError{}) for budget violations
+          log.Fatalf("issue DR: %v", err)
+      }
+      fmt.Printf("DR: %s (budget: %.1f/%.1f)\n", dr.DelegationID, dr.BudgetGranted, dr.BudgetDelegator)
+
+      // Verify offline — only receipt + public key, no network
+      verifier := atf.NewVerifier(os.Getenv("ATF_PUBLIC_KEY_B64"))
+      result, err := verifier.Verify(dr)
+      if err != nil {
+          log.Fatalf("verify: %v", err)
+      }
+      if result.Verdict != atf.VerdictPass {
+          log.Fatalf("verification FAIL: %v", result.Failures)
+      }
+      fmt.Printf("Verdict: %s (%d checks)\n", result.Verdict, len(result.Checks))
+      // Verdict: PASS (6 checks)
+  }</code></pre>
+        </div>
+      </div>
+    </div>
+
+    <!-- SCENARIO 2: RCR -->
+    <div class="scenario-panel" id="scenario-rcr">
+      <div class="lang-tabs">
+        <button class="lang-tab active" onclick="setLang('rcr','py')"><span class="lang-icon">🐍</span> Python</button>
+        <button class="lang-tab" onclick="setLang('rcr','ts')"><span class="lang-icon">🔷</span> TypeScript</button>
+        <button class="lang-tab" onclick="setLang('rcr','go')"><span class="lang-icon">🐹</span> Go</button>
+      </div>
+      <div class="code-panel active" id="rcr-py">
+        <div class="code-section">
+          <div class="code-section-header"><span class="code-section-title">Monitor runtime continuity with CES</span><span class="step-badge">RGC-INV-001 · RGC-INV-003</span></div>
+          <div class="code-header"><span class="code-filename">runtime_continuity.py</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+          <pre><code class="language-python">from atf_core import ATFSession, CESSnapshot, ContinuityStatus
+  from atf_core.exceptions import HALTException
+
+  session = ATFSession(dr=dr, tar=tar)   # Attach to issued DR + TAR
+
+  # Sample CES at regular intervals (or before each execution decision)
+  def sample_and_check(session: ATFSession) -> bool:
+      snap: CESSnapshot = session.sample_ces(
+          ces_temporal=session.remaining_ttl_pct(),   # % of time window remaining
+          ces_budget=session.remaining_budget_pct(),  # % of authority budget remaining
+          ces_context=session.context_stability_pct(),# 100 - drift_pct
+          ces_integrity=session.chain_integrity_pct(),# chain hash verification score
+      )
+      # CES = T×0.30 + B×0.30 + D×0.20 + I×0.20 — RGC-INV-001 (fixed formula)
+      rcr = session.commit_rcr(snap)
+
+      print(f"CES: {rcr.ces_score:.1f} — Status: {rcr.continuity_status}")
+
+      # RGC-INV-003: HALT if CES < 10.0 — this is a protocol invariant
+      if rcr.continuity_status == ContinuityStatus.HALT:
+          raise HALTException(
+              f"CES {rcr.ces_score:.1f} below halt threshold. "
+              f"Reauthorization required. RCR: {rcr.rcr_id}"
+          )
+
+      return rcr.continuity_status in (
+          ContinuityStatus.NOMINAL,
+          ContinuityStatus.MONITORING,
+      )
+
+  # Sampling loop — call before every governance decision
+  for decision in pending_decisions:
+      try:
+          can_proceed = sample_and_check(session)
+          if can_proceed:
+              execute_decision(decision)
+          else:
+              escalate_to_operator(decision, session.latest_rcr)
+      except HALTException as e:
+          halt_all_execution(str(e))   # RGC-INV-003 — no decisions until reauth
+          break</code></pre>
+          <div class="terminal-block">
+            <div><span class="comment"># Normal execution</span></div>
+            <div><span class="out">CES: 94.4 — Status: NOMINAL</span></div>
+            <div><span class="out">CES: 87.1 — Status: NOMINAL</span></div>
+            <div><span class="out">CES: 62.3 — Status: MONITORING</span></div>
+            <div><span class="out">CES: 34.8 — Status: WARNING</span></div>
+            <div><span class="out">CES: 11.2 — Status: CRITICAL — reauthorization required</span></div>
+            <div><span class="out">CES:  7.6 — HALTException: CES below halt threshold. Reauth required.</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="code-panel" id="rcr-ts">
+        <div class="code-section">
+          <div class="code-section-header"><span class="code-section-title">TypeScript — Runtime Continuity Monitoring</span><span class="step-badge">RGC-INV-001 · RGC-INV-003</span></div>
+          <div class="code-header"><span class="code-filename">continuity-monitor.ts</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+          <pre><code class="language-typescript">import { ATFSession, ContinuityStatus, HALTError } from "@atf-protocol/sdk";
+
+  const session = new ATFSession({ dr, tar });
+
+  async function checkContinuity(): Promise<boolean> {
+    const snap = await session.sampleCES({
+      cesTemporal: session.remainingTTLPercent(),
+      cesBudget: session.remainingBudgetPercent(),
+      cesContext: 100 - session.contextDriftPercent(),
+      cesIntegrity: session.chainIntegrityPercent(),
+    });
+    // Formula: CES = T×0.30 + B×0.30 + D×0.20 + I×0.20 (RGC-INV-001 — immutable)
+    const rcr = await session.commitRCR(snap);
+    console.log(`CES: ${rcr.cesScore.toFixed(1)} — ${rcr.continuityStatus}`);
+
+    if (rcr.continuityStatus === ContinuityStatus.HALT) {
+      throw new HALTError(rcr); // RGC-INV-003 — execution must cease
+    }
+    return rcr.cesScore >= 50;  // NOMINAL or MONITORING
+  }
+
+  // Guard every execution with a CES check
+  for (const decision of pendingDecisions) {
+    const ok = await checkContinuity().catch((err) => {
+      if (err instanceof HALTError) { haltExecution(err.rcr); return false; }
+      throw err;
+    });
+    if (ok) await executeDecision(decision);
+    else     await escalateToOperator(decision);
+  }</code></pre>
+        </div>
+      </div>
+      <div class="code-panel" id="rcr-go">
+        <div class="code-section">
+          <div class="code-section-header"><span class="code-section-title">Go — Runtime Continuity Monitoring</span><span class="step-badge">RGC-INV-001 · RGC-INV-003</span></div>
+          <div class="code-header"><span class="code-filename">continuity.go</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+          <pre><code class="language-go">package main
+
+  import (
+      "errors"
+      atf "github.com/atf-protocol/sdk-go"
+  )
+
+  func monitorAndExecute(session *atf.Session, decisions []Decision) error {
+      for _, d := range decisions {
+          snap := atf.CESSnapshot{
+              CesTemporal:  session.RemainingTTLPercent(),
+              CesBudget:    session.RemainingBudgetPercent(),
+              CesContext:   100 - session.ContextDriftPercent(),
+              CesIntegrity: session.ChainIntegrityPercent(),
+          }
+          // CES = T*0.30 + B*0.30 + D*0.20 + I*0.20 — RGC-INV-001
+          rcr, err := session.CommitRCR(snap)
+          if err != nil {
+              return fmt.Errorf("RCR commit: %w", err)
+          }
+
+          var haltErr *atf.HALTError
+          if errors.As(err, &haltErr) {
+              // RGC-INV-003: CES < 10.0 — execution MUST cease
+              return fmt.Errorf("HALT: CES %.1f, RCR: %s", rcr.CESScore, rcr.RCRID)
+          }
+
+          if rcr.ContinuityStatus == atf.StatusNominal ||
+             rcr.ContinuityStatus == atf.StatusMonitoring {
+              if err := executeDecision(d); err != nil {
+                  return err
+              }
+          }
+      }
+      return nil
+  }</code></pre>
+        </div>
+      </div>
+    </div>
+
+    <!-- SCENARIO 3: OEP -->
+    <div class="scenario-panel" id="scenario-oep">
+      <div class="lang-tabs">
+        <button class="lang-tab active" onclick="setLang('oep','py')"><span class="lang-icon">🐍</span> Python</button>
+        <button class="lang-tab" onclick="setLang('oep','ts')"><span class="lang-icon">🔷</span> TypeScript</button>
+        <button class="lang-tab" onclick="setLang('oep','go')"><span class="lang-icon">🐹</span> Go</button>
+      </div>
+      <div class="code-panel active" id="oep-py">
+        <div class="code-section">
+          <div class="code-section-header"><span class="code-section-title">Export an Evidence Package for regulators</span><span class="step-badge">OEP-INV-001/002 · FEA-INV-001</span></div>
+          <div class="code-header"><span class="code-filename">export_oep.py</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+          <pre><code class="language-python">from atf_core import ForensicExporter, OEPBundle, ExportAuthorization
+  from atf_core.exceptions import ExportAuthorizationError
+
+  # OEP export requires explicit authorization (FEA-INV-001 — RBAC export gate)
+  auth = ExportAuthorization(
+      authorized_by="HUMAN-harold-nunes-001",
+      scope="session_id:SESSION-20260516-001",
+      purpose="DFSA regulatory audit 2026-Q2",
+      export_format="OEP_V1",
+  )
+
+  exporter = ForensicExporter(
+      platform_private_key_b64=os.environ["ATF_PRIVATE_KEY_B64"],
+      # NOTE: Caller's keys are NEVER embedded in the bundle (FEA-INV-005 / FEA-INV-003)
+  )
+
+  try:
+      bundle: OEPBundle = exporter.export(
+          session_id="SESSION-20260516-001",
+          authorization=auth,
+          include_rcrs=True,     # Runtime Continuity Records
+          include_tars=True,     # Temporal Admissibility Records
+          include_drs=True,      # Delegation Receipts
+      )
+  except ExportAuthorizationError as e:
+      print(f"Export denied: {e}")   # FEA-INV-001 gate rejected the request
+      raise
+
+  # Bundle is self-contained — verifiable offline with only the platform's public key
+  print(f"OEP bundle: {bundle.package_id}")
+  print(f"Evidence items: {bundle.item_count}")
+  print(f"Merkle root: {bundle.merkle_root[:32]}...")
+  print(f"Bundle size: {bundle.size_bytes:,} bytes")
+  print(f"PQC signature: ML-DSA-65 by {bundle.signed_by}")
+
+  # Save to disk — send to regulator
+  bundle.save("export_DFSA_2026Q2.oep.json")
+
+  # OEP bundle: OEP-1A2B3C4D5E6F7890
+  # Evidence items: 1,247
+  # Merkle root: 8a3f2b1c4d5e6f7890a1b2c3...
+  # Bundle size: 2,341,892 bytes
+  # PQC signature: ML-DSA-65 by AID-FINANCE-3A7F9B2C1D4E5F6A</code></pre>
+        </div>
+      </div>
+      <div class="code-panel" id="oep-ts">
+        <div class="code-section">
+          <div class="code-section-header"><span class="code-section-title">TypeScript — Export Evidence Package</span><span class="step-badge">OEP-INV-001/002</span></div>
+          <div class="code-header"><span class="code-filename">export-oep.ts</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+          <pre><code class="language-typescript">import { ForensicExporter, ExportAuthorization, OEPBundle } from "@atf-protocol/sdk";
+  import { writeFileSync } from "fs";
+
+  const exporter = new ForensicExporter({
+    platformPrivateKeyB64: process.env.ATF_PRIVATE_KEY_B64!,
+    // Caller keys are never embedded in OEP (FEA-INV-003, FEA-INV-005)
+  });
+
+  const auth: ExportAuthorization = {
+    authorizedBy: "HUMAN-harold-nunes-001",
+    scope: "session_id:SESSION-20260516-001",
+    purpose: "DFSA regulatory audit 2026-Q2",
+    exportFormat: "OEP_V1",
+  };
+
+  const bundle: OEPBundle = await exporter.export({
+    sessionId: "SESSION-20260516-001",
+    authorization: auth,
+    includeRCRs: true,
+    includeTARs: true,
+    includeDRs: true,
+  });
+
+  // Self-contained — verifiable with only the platform public key (OEP-INV-002)
+  console.log(`Package: ${bundle.packageId}`);
+  console.log(`Items: ${bundle.itemCount}`);
+  console.log(`Merkle: ${bundle.merkleRoot.slice(0, 32)}...`);
+
+  writeFileSync("export_DFSA_2026Q2.oep.json", JSON.stringify(bundle.toJSON(), null, 2));
+  console.log(`Saved: export_DFSA_2026Q2.oep.json (${bundle.sizeBytes.toLocaleString()} bytes)`);</code></pre>
+        </div>
+      </div>
+      <div class="code-panel" id="oep-go">
+        <div class="code-section">
+          <div class="code-section-header"><span class="code-section-title">Go — Export Evidence Package</span><span class="step-badge">OEP-INV-001/002</span></div>
+          <div class="code-header"><span class="code-filename">export_oep.go</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+          <pre><code class="language-go">package main
+
+  import (
+      "encoding/json"
+      "os"
+      atf "github.com/atf-protocol/sdk-go"
+  )
+
+  func exportForRegulator(sessionID string) error {
+      exporter, _ := atf.NewForensicExporter(atf.ExporterConfig{
+          PlatformPrivateKeyB64: os.Getenv("ATF_PRIVATE_KEY_B64"),
+          // Caller keys never embedded (FEA-INV-003, FEA-INV-005)
+      })
+
+      auth := atf.ExportAuthorization{
+          AuthorizedBy: "HUMAN-harold-nunes-001",
+          Scope:        "session_id:" + sessionID,
+          Purpose:      "DFSA regulatory audit 2026-Q2",
+      }
+
+      bundle, err := exporter.Export(atf.ExportConfig{
+          SessionID:     sessionID,
+          Authorization: auth,
+          IncludeRCRs:  true,
+          IncludeTARs:  true,
+          IncludeDRs:   true,
+      })
+      if err != nil {
+          return fmt.Errorf("export: %w", err)
+      }
+
+      data, _ := json.MarshalIndent(bundle, "", "  ")
+      if err := os.WriteFile("export_DFSA_2026Q2.oep.json", data, 0600); err != nil {
+          return err
+      }
+      fmt.Printf("OEP: %s (%d items, %d bytes)\n", bundle.PackageID, bundle.ItemCount, bundle.SizeBytes)
+      return nil
+  }</code></pre>
+        </div>
+      </div>
+    </div>
+
+    <!-- SCENARIO 4: OFFLINE VERIFY -->
+    <div class="scenario-panel" id="scenario-verify">
+      <div class="lang-tabs">
+        <button class="lang-tab active" onclick="setLang('verify','py')"><span class="lang-icon">🐍</span> Python</button>
+        <button class="lang-tab" onclick="setLang('verify','ts')"><span class="lang-icon">🔷</span> TypeScript</button>
+        <button class="lang-tab" onclick="setLang('verify','go')"><span class="lang-icon">🐹</span> Go</button>
+      </div>
+      <div class="code-panel active" id="verify-py">
+        <div class="code-section">
+          <div class="code-section-header"><span class="code-section-title">Verify an OEP bundle — complete chain reconstruction</span><span class="step-badge">ATF-INV-006 · FVP-INV-007</span></div>
+          <div class="code-header"><span class="code-filename">verify_oep.py</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+          <pre><code class="language-python">from atf_verifier import OEPVerifier, TwoPlaneResult
+
+  # Verifier requires ONLY the platform public key — no platform access (ATF-INV-006)
+  verifier = OEPVerifier(platform_public_key_b64=PLATFORM_PUBLIC_KEY_B64)
+
+  # Load the OEP bundle from disk (received from OMNIX, stored for years)
+  with open("export_DFSA_2026Q2.oep.json") as f:
+      bundle = OEPBundle.load(f)
+
+  # FVP-INV-007: Two-Plane Verification — cryptographic + semantic planes are independent
+  result: TwoPlaneResult = verifier.verify_full(bundle)
+
+  # Plane A: Cryptographic verification
+  print(f"Crypto plane: {result.crypto_verdict}")
+  print(f"  Merkle root:      {'✓' if result.merkle_root_match else '✗'} verified")
+  print(f"  PQC signatures:   {'✓' if result.all_sigs_valid else '✗'} {result.sig_count} receipts")
+  print(f"  Hash chain:       {'✓' if result.hash_chain_intact else '✗'} complete")
+
+  # Plane B: Semantic verification (protocol invariants)
+  print(f"Semantic plane: {result.semantic_verdict}")
+  print(f"  MAR invariant:    {'✓' if result.mar_satisfied else '✗'} all DRs")
+  print(f"  CES integrity:    {'✓' if result.ces_integrity else '✗'} all RCRs")
+  print(f"  Chain roots:      {'✓' if result.roots_valid else '✗'} trace to TIER-1")
+  print(f"  HALT compliance:  {'✓' if result.halt_compliant else '✗'} no post-HALT decisions")
+
+  print(f"
+Final verdict: {result.final_verdict}")
+  # Final verdict: PASS — bundle reconstructed and verified offline</code></pre>
+          <div class="terminal-block">
+            <div><span class="prompt">$ </span><span class="cmd">python verify_oep.py</span></div>
+            <div><span class="out">Crypto plane: PASS</span></div>
+            <div><span class="out">  Merkle root:      ✓ verified</span></div>
+            <div><span class="out">  PQC signatures:   ✓ 1,247 receipts</span></div>
+            <div><span class="out">  Hash chain:       ✓ complete</span></div>
+            <div><span class="out">Semantic plane: PASS</span></div>
+            <div><span class="out">  MAR invariant:    ✓ all DRs</span></div>
+            <div><span class="out">  CES integrity:    ✓ all RCRs</span></div>
+            <div><span class="out">  Chain roots:      ✓ trace to TIER-1</span></div>
+            <div><span class="out">  HALT compliance:  ✓ no post-HALT decisions</span></div>
+            <div><span class="out">Final verdict: PASS — 1,247 items verified offline</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="code-panel" id="verify-ts">
+        <div class="code-section">
+          <div class="code-section-header"><span class="code-section-title">TypeScript — Offline OEP Verification</span><span class="step-badge">ATF-INV-006 · FVP-INV-007</span></div>
+          <div class="code-header"><span class="code-filename">verify-oep.ts</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+          <pre><code class="language-typescript">import { OEPVerifier, OEPBundle, TwoPlaneResult } from "@atf-protocol/sdk";
+  import { readFileSync } from "fs";
+
+  const verifier = new OEPVerifier(PLATFORM_PUBLIC_KEY_B64);
+  // No network — only receipt JSON + public key (ATF-INV-006)
+
+  const raw = readFileSync("export_DFSA_2026Q2.oep.json", "utf-8");
+  const bundle = OEPBundle.fromJSON(JSON.parse(raw));
+
+  // FVP-INV-007: Two independent verification planes
+  const result: TwoPlaneResult = await verifier.verifyFull(bundle);
+
+  if (result.finalVerdict !== "PASS") {
+    const failures = result.failures.map(f => `  - ${f.invariant}: ${f.detail}`).join("\n");
+    throw new Error(`OEP verification FAIL:\n${failures}`);
+  }
+
+  console.log(`✓ ${bundle.itemCount} items verified (crypto + semantic planes)`);</code></pre>
+        </div>
+      </div>
+      <div class="code-panel" id="verify-go">
+        <div class="code-section">
+          <div class="code-section-header"><span class="code-section-title">Go — Offline OEP Verification</span><span class="step-badge">ATF-INV-006 · FVP-INV-007</span></div>
+          <div class="code-header"><span class="code-filename">verify_oep.go</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+          <pre><code class="language-go">verifier := atf.NewOEPVerifier(platformPublicKeyB64)
+  bundle, _ := atf.LoadOEPBundle("export_DFSA_2026Q2.oep.json")
+
+  // Two-plane verification — FVP-INV-007
+  result, err := verifier.VerifyFull(bundle)
+  if err != nil { log.Fatal(err) }
+
+  if result.FinalVerdict != atf.VerdictPass {
+      for _, f := range result.Failures {
+          fmt.Printf("FAIL %s: %s\n", f.Invariant, f.Detail)
+      }
+      os.Exit(1)
+  }
+  fmt.Printf("✓ %d items verified offline\n", bundle.ItemCount)</code></pre>
+        </div>
+      </div>
+    </div>
+
+    <div class="interop-note">
+      <strong>Interoperability note (GPIL):</strong> ATF supports three levels of governance policy interoperability across runtimes — Cryptographic (shared ML-DSA-65 primitives), Protocol (shared wire format and invariants), and Governance Policy (sovereign policy divergence via Policy Parameter Registry). DRs and RCRs from any ATF-compliant runtime are verifiable by the same verifier, regardless of the originating platform. See <a href="../rfc/index.html">RFC-ATF-3</a> for the complete GPIL specification.
+    </div>
+  </div>
+  <footer>ATF Protocol Standard · Example Integrations · <a href="../index.html">Home</a> · <a href="https://github.com/Costenho19/atf-protocol-standard" target="_blank">GitHub</a> · CC BY 4.0</footer>
+  <script>
+  hljs.highlightAll();
+
+  function setScenario(name) {
+    document.querySelectorAll('.scenario-panel').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.scenario-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById('scenario-' + name).classList.add('active');
+    event.target.classList.add('active');
+    // Activate first lang tab for the new scenario
+    const firstTab = document.querySelector('#scenario-' + name + ' .lang-tab');
+    if (firstTab) firstTab.click();
+  }
+
+  function setLang(scenario, lang) {
+    const panel = document.getElementById('scenario-' + scenario);
+    panel.querySelectorAll('.code-panel').forEach(p => p.classList.remove('active'));
+    panel.querySelectorAll('.lang-tab').forEach(t => t.classList.remove('active'));
+    const cp = document.getElementById(scenario + '-' + lang);
+    if (cp) cp.classList.add('active');
+    event.target.classList.add('active');
+  }
+
+  function copyCode(btn) {
+    const pre = btn.closest('.code-section').querySelector('pre code');
+    navigator.clipboard.writeText(pre.textContent).then(() => {
+      btn.textContent = 'Copied!';
+      setTimeout(() => btn.textContent = 'Copy', 2000);
+    });
+  }
+  </script>
+  </body>
+  </html>
