@@ -226,6 +226,45 @@ See [CONTRIBUTING.md](./CONTRIBUTING.md). We welcome language ports (Go, TypeScr
 
   See [CHANGELOG.md](./CHANGELOG.md) for the full history.
 
+  ## Verifier Tools
+
+  | Tool | Path | Description |
+  |---|---|---|
+  | Receipt Verifier | [`verifier/verify_receipt.py`](./verifier/verify_receipt.py) | DR + RCR offline verifier — ATF-INV-001–006, RGC-INV-001–004 |
+  | OEP Archive Verifier | [`verifier/verify_oep_package.py`](./verifier/verify_oep_package.py) | Forensic ZIP archive verifier — OEP-INV-001–006, EAP-INV-001–007 |
+
+  Both tools have zero dependency on the OMNIX platform (EAP-INV-005).
+
+  ```bash
+  pip install pypqc
+
+  # Verify a delegation receipt
+  python verifier/verify_receipt.py examples/delegation_receipt.json
+
+  # Verify a full forensic evidence package
+  python verifier/verify_oep_package.py evidence_package.zip --public-key issuer.b64
+  ```
+
+  ## Conformance Program
+
+  The official ATF Conformance Program provides test vectors for each profile.
+  See [CONFORMANCE.md](./CONFORMANCE.md) for the full program.
+
+  | Profile | Invariants | Test Vectors | Badge |
+  |---|---|---|---|
+  | `ATF-Compliant` | 6 (L1–L3) | 15 (8 positive, 7 negative) | `[![ATF-Compliant](https://img.shields.io/badge/ATF--Compliant-RFC--ATF--1-blue?style=flat-square)]` |
+  | `ATF-RGC-Compliant` | 14 (L1–L4) | 26 (14 positive, 12 negative) | `[![ATF-RGC-Compliant](https://img.shields.io/badge/ATF--RGC--Compliant-RFC--ATF--2-blue?style=flat-square)]` |
+  | `ATF-FEI-Compliant` | 40 (L1–L5) | 34 (18 positive, 16 negative) | `[![ATF-FEI-Compliant](https://img.shields.io/badge/ATF--FEI--Compliant-RFC--ATF--3-blue?style=flat-square)]` |
+
+  ## Language Ports
+
+  | Language | Package | Status | Invariants |
+  |---|---|---|---|
+  | **Python** (reference) | [`reference-implementation/`](./reference-implementation/) | ✅ Stable | ATF-Compliant + ATF-RGC-Compliant |
+  | **TypeScript** | [`ports/typescript/`](./ports/typescript/) | 🔶 Beta | ATF-RGC-Compliant (11 invariants) |
+  | Go | — | ❌ Wanted | [Contribute](./CONTRIBUTING.md) |
+  | Rust | — | ❌ Wanted | [Contribute](./CONTRIBUTING.md) |
+
 ---
 
 ## Contact
