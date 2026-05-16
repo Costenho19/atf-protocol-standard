@@ -100,12 +100,34 @@
   |---|---|---|
   | **Go** | ❌ Not yet | High priority — ideal for server-side integration |
   | **TypeScript / Node.js** | ❌ Not yet | High priority — browser + edge deployments |
-  | **Rust** | ❌ Not yet | Recommended for embedded / WASM |
+  | **Rust** | 🔶 [`ports/rust/`](./ports/rust/) — skeleton ready | Implement 3 functions → all 34 vectors pass |
   | **Java / Kotlin** | ❌ Not yet | Enterprise integration |
 
   Port requirements: See [CONTRIBUTING.md](./CONTRIBUTING.md#language-ports)
 
   ---
 
-  *OMNIX QUANTUM LTD · standards@omnixquantum.com · CC BY 4.0*
+  ## Rust Port Skeleton
+
+| Property | Value |
+|---|---|
+| **Path** | [`ports/rust/`](./ports/rust/) |
+| **Language** | Rust (edition 2021) |
+| **Status** | Skeleton — implementation contributions welcome |
+| **Maintainer** | OMNIX QUANTUM LTD (skeleton) |
+
+**Compliance target:** `ATF-RGC-Compliant` (14 invariants across ATF-INV-001–006 + RGC-INV-001–004)
+
+What is complete: all type definitions, reason codes, CES helpers, CLI binary,
+and conformance harness loading all 34 official vectors.
+
+What needs implementation: `compute_content_hash()`, `verify_delegation_receipt()`,
+`verify_runtime_continuity_record()` — three functions total.
+
+Getting started: `cargo test` — make all 34 vectors pass.
+See [`ports/rust/README.md`](./ports/rust/README.md) and
+[`ports/rust/PORTING_GUIDE.md`](./ports/rust/PORTING_GUIDE.md).
+
+---
+*OMNIX QUANTUM LTD · standards@omnixquantum.com · CC BY 4.0*
   
