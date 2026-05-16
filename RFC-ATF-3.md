@@ -1,5 +1,5 @@
 ```
-Internet-Draft                                         OMNIX QUANTUM LTD
+Published Standard                                     OMNIX QUANTUM LTD
 Category: Standards Track                                    H. Nunes, Ed.
 ISSN: pending                                                    May 2026
 
@@ -82,7 +82,7 @@ Status of This Memo
    Committee.
 
    Published: May 2026
-   DOI: pending (Zenodo submission in progress)
+   DOI: 10.5281/zenodo.20247342
    SSRN: pending
 
 
