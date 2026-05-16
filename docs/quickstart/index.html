@@ -1,0 +1,241 @@
+<!DOCTYPE html><html lang="en">
+  <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>Quickstart — ATF Protocol Standard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  :root{--bg:#0d1117;--bg2:#161b22;--bg3:#21262d;--border:#30363d;--blue:#58a6ff;--blue-dim:#1f6feb;--blue-dark:#0d419d;--green:#3fb950;--gold:#d29922;--amber:#f0883e;--red:#f85149;--purple:#bc8cff;--text:#e6edf3;--muted:#8b949e;--faint:#484f58;--font:'Inter',system-ui,sans-serif;--mono:'JetBrains Mono',monospace;}
+  html{scroll-behavior:smooth}body{background:var(--bg);color:var(--text);font-family:var(--font);line-height:1.6;overflow-x:hidden}
+  a{color:var(--blue);text-decoration:none}a:hover{text-decoration:underline}
+  nav{position:sticky;top:0;z-index:100;background:rgba(13,17,23,.92);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:.75rem 2rem;gap:1rem;flex-wrap:wrap}
+  .nav-brand{display:flex;align-items:center;gap:.6rem;font-weight:700;font-size:.95rem;color:var(--text);text-decoration:none!important}
+  .nav-badge{background:var(--blue-dark);color:var(--blue);font-size:.65rem;font-weight:600;padding:.15rem .5rem;border-radius:999px;border:1px solid var(--blue-dim)}
+  .nav-links{display:flex;align-items:center;gap:.25rem;flex-wrap:wrap}
+  .nav-links a{color:var(--muted);font-size:.85rem;padding:.4rem .75rem;border-radius:6px;transition:all .15s}
+  .nav-links a:hover{color:var(--text);background:var(--bg3);text-decoration:none}
+  footer{border-top:1px solid var(--border);padding:2rem;text-align:center;font-size:.78rem;color:var(--faint)}
+  .qs-hero{padding:3.5rem 2rem 3rem;max-width:800px;margin:0 auto;text-align:center}
+  .qs-pill{display:inline-flex;align-items:center;gap:.4rem;background:rgba(63,185,80,.1);border:1px solid rgba(63,185,80,.3);color:var(--green);font-size:.75rem;font-weight:600;padding:.3rem .75rem;border-radius:999px;margin-bottom:1.25rem}
+  .qs-hero h1{font-size:clamp(2rem,5vw,3.2rem);font-weight:900;letter-spacing:-.04em;margin-bottom:.75rem}
+  .qs-hero p{color:var(--muted);font-size:1rem;line-height:1.7;max-width:520px;margin:0 auto}
+  .main{max-width:800px;margin:0 auto;padding:2rem 2rem 4rem}
+  /* Steps */
+  .steps{display:flex;flex-direction:column;gap:0}
+  .step{display:grid;grid-template-columns:56px 1fr;gap:1.5rem;padding:2rem 0;border-bottom:1px solid var(--border);position:relative}
+  .step:last-child{border-bottom:none}
+  .step-num-wrap{display:flex;flex-direction:column;align-items:center;gap:0}
+  .step-num{width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:.95rem;flex-shrink:0;font-variant-numeric:tabular-nums}
+  .step:nth-child(1) .step-num{background:rgba(88,166,255,.15);color:var(--blue);border:2px solid rgba(88,166,255,.4)}
+  .step:nth-child(2) .step-num{background:rgba(63,185,80,.15);color:var(--green);border:2px solid rgba(63,185,80,.4)}
+  .step:nth-child(3) .step-num{background:rgba(188,140,255,.15);color:var(--purple);border:2px solid rgba(188,140,255,.4)}
+  .step:nth-child(4) .step-num{background:rgba(210,153,34,.15);color:var(--gold);border:2px solid rgba(210,153,34,.4)}
+  .step-line{flex:1;width:2px;background:var(--border);margin-top:.35rem}
+  .step:last-child .step-line{display:none}
+  .step-body{}
+  .step-label{font-size:.68rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--faint);margin-bottom:.3rem}
+  .step h3{font-size:1.15rem;font-weight:700;margin-bottom:.5rem}
+  .step p{font-size:.88rem;color:var(--muted);line-height:1.7;margin-bottom:1rem}
+  /* Terminal */
+  .terminal{background:#010409;border:1px solid var(--border);border-radius:10px;overflow:hidden;margin-bottom:.75rem}
+  .term-bar{background:var(--bg3);border-bottom:1px solid var(--border);padding:.5rem 1rem;display:flex;align-items:center;justify-content:space-between;gap:.5rem}
+  .term-dots{display:flex;gap:.4rem}
+  .term-dot{width:10px;height:10px;border-radius:50%}
+  .term-dot:nth-child(1){background:#ff5f57}.term-dot:nth-child(2){background:#febc2e}.term-dot:nth-child(3){background:#28c840}
+  .term-title{font-family:var(--mono);font-size:.72rem;color:var(--faint)}
+  .copy-btn{font-size:.7rem;color:var(--blue);border:1px solid rgba(88,166,255,.3);background:transparent;border-radius:4px;padding:.2rem .6rem;cursor:pointer;font-family:var(--font);transition:all .15s}
+  .copy-btn:hover{background:rgba(88,166,255,.1)}
+  .term-body{padding:1rem 1.25rem;font-family:var(--mono);font-size:.8rem;line-height:1.8}
+  .p{color:var(--faint)}.cmd{color:var(--text)}.out{color:var(--green)}.cmt{color:var(--faint);font-style:italic}.err{color:var(--red)}
+  /* Result box */
+  .result-box{border-radius:10px;padding:1.25rem 1.5rem;margin-top:.75rem;border:1px solid}
+  .result-pass{background:rgba(63,185,80,.07);border-color:rgba(63,185,80,.25)}
+  .result-fail{background:rgba(248,81,73,.07);border-color:rgba(248,81,73,.25)}
+  .result-title{font-weight:700;font-size:.9rem;margin-bottom:.5rem;display:flex;align-items:center;gap:.5rem}
+  .result-pass .result-title{color:var(--green)}.result-fail .result-title{color:var(--red)}
+  .result-checks{font-family:var(--mono);font-size:.75rem;color:var(--muted);line-height:1.9}
+  .chk-pass{color:var(--green)}.chk-fail{color:var(--red)}
+  /* Inline code */
+  code{font-family:var(--mono);font-size:.85em;background:var(--bg3);border:1px solid var(--border);padding:.1rem .35rem;border-radius:4px;color:var(--blue)}
+  /* Live verifier embed */
+  .verifier-cta{background:linear-gradient(135deg,var(--bg2),var(--bg3));border:1px solid var(--border);border-radius:14px;padding:2rem;text-align:center;margin-top:2.5rem}
+  .verifier-cta h3{font-size:1.1rem;font-weight:700;margin-bottom:.5rem}
+  .verifier-cta p{color:var(--muted);font-size:.88rem;margin-bottom:1.25rem}
+  .btn-verify{display:inline-flex;align-items:center;gap:.5rem;background:var(--blue-dim);color:#fff;padding:.65rem 1.5rem;border-radius:8px;font-weight:600;font-size:.9rem}
+  .btn-verify:hover{background:var(--blue);text-decoration:none}
+  /* What you built */
+  .built-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:.75rem;margin-top:1rem}
+  .built-item{background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:.9rem 1rem;font-size:.8rem}
+  .built-item .bi-label{font-weight:600;margin-bottom:.2rem}
+  .built-item .bi-inv{font-family:var(--mono);font-size:.68rem;color:var(--blue)}
+  </style>
+  </head>
+  <body>
+  <nav>
+    <a class="nav-brand" href="../index.html"><svg width="20" height="20" viewBox="0 0 22 22" fill="none"><polygon points="11,2 20,7 20,15 11,20 2,15 2,7" fill="none" stroke="#58a6ff" stroke-width="1.5"/><polygon points="11,6 16,9 16,13 11,16 6,13 6,9" fill="#58a6ff" opacity=".3"/><circle cx="11" cy="11" r="2" fill="#58a6ff"/></svg>&nbsp;ATF Protocol<span class="nav-badge">v3.0</span></a>
+    <div class="nav-links">
+      <a href="../rfc/index.html">RFC Index</a>
+      <a href="../verify/index.html">Verifier</a>
+      <a href="../conformance/index.html">Conformance</a>
+      <a href="../whitepaper/index.html">Whitepaper</a>
+      <a href="../integrations/index.html">Integrations</a>
+      <a href="../diagrams/index.html">Diagrams</a>
+      <a href="../quickstart/index.html" style="background:rgba(88,166,255,.12);color:#58a6ff;border:1px solid rgba(88,166,255,.3);padding:.4rem .75rem;border-radius:6px;" color:var(--text)>Quickstart →</a>
+      <a href="https://github.com/Costenho19/atf-protocol-standard" target="_blank">GitHub</a>
+    </div>
+  </nav>
+  <div class="qs-hero">
+    <div class="qs-pill">⚡ 60 seconds · No platform needed</div>
+    <h1>Verify your first ATF receipt</h1>
+    <p>From zero to a fully verified Delegation Receipt in four steps — using only the CLI, a JSON file, and the issuer's public key. No OMNIX account required.</p>
+  </div>
+  <div class="main">
+    <div class="steps">
+
+      <!-- STEP 1 -->
+      <div class="step">
+        <div class="step-num-wrap"><div class="step-num">1</div><div class="step-line"></div></div>
+        <div class="step-body">
+          <div class="step-label">Step 1 of 4 · ~10 seconds</div>
+          <h3>Clone the repo &amp; install</h3>
+          <p>The verifier is a single Python file with no external dependencies beyond the standard library. Clone and you're ready.</p>
+          <div class="terminal">
+            <div class="term-bar"><div class="term-dots"><div class="term-dot"></div><div class="term-dot"></div><div class="term-dot"></div></div><span class="term-title">bash</span><button class="copy-btn" onclick="copyTerm(this)">Copy</button></div>
+            <div class="term-body">
+              <div><span class="p">$ </span><span class="cmd">git clone https://github.com/Costenho19/atf-protocol-standard</span></div>
+              <div><span class="p">$ </span><span class="cmd">cd atf-protocol-standard</span></div>
+              <div><span class="p">$ </span><span class="cmd">python --version   <span class="cmt"># Python 3.8+ required</span></span></div>
+              <div><span class="out">Python 3.11.4</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- STEP 2 -->
+      <div class="step">
+        <div class="step-num-wrap"><div class="step-num">2</div><div class="step-line"></div></div>
+        <div class="step-body">
+          <div class="step-label">Step 2 of 4 · ~10 seconds</div>
+          <h3>Create a sample Delegation Receipt</h3>
+          <p>Save this JSON as <code>my_receipt.json</code>. This is a real ATF-format DR — all fields match the RFC-ATF-1 §5 wire format.</p>
+          <div class="terminal">
+            <div class="term-bar"><div class="term-dots"><div class="term-dot"></div><div class="term-dot"></div><div class="term-dot"></div></div><span class="term-title">my_receipt.json</span><button class="copy-btn" onclick="copyTerm(this)">Copy</button></div>
+            <div class="term-body" style="font-size:.73rem">
+  <pre style="margin:0;white-space:pre-wrap;color:var(--text)">{
+    "delegation_id": "ATFDR-A1B2C3D4E5F60011",
+    "delegator_id": "HUMAN-harold-nunes-001",
+    "delegate_id":  "AID-FINANCE-3A7F9B2C1D4E5F6A",
+    "task_scope":   { "action": "governance_decision", "domain": "FINANCE" },
+    "budget_granted":    75.0,
+    "budget_delegator": 100.0,
+    "chain_root_id": "HUMAN-harold-nunes-001",
+    "issued_at":  "2026-05-16T10:00:00.000000000Z",
+    "status":     "ACTIVE",
+    "content_hash": "sha256:a3f4b2c1d5e6789012345678901234567890123456789012345678901234abcd",
+    "pqc_signature": "ML-DSA-65:placeholder-see-cli-for-real-sig"
+  }</pre>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- STEP 3 -->
+      <div class="step">
+        <div class="step-num-wrap"><div class="step-num">3</div><div class="step-line"></div></div>
+        <div class="step-body">
+          <div class="step-label">Step 3 of 4 · ~10 seconds</div>
+          <h3>Run the verifier</h3>
+          <p>The verifier checks all six ATF invariants — no network call, no platform access. Only the receipt JSON and the issuer public key are needed (ATF-INV-006).</p>
+          <div class="terminal">
+            <div class="term-bar"><div class="term-dots"><div class="term-dot"></div><div class="term-dot"></div><div class="term-dot"></div></div><span class="term-title">bash</span><button class="copy-btn" onclick="copyTerm(this)">Copy</button></div>
+            <div class="term-body">
+              <div><span class="p">$ </span><span class="cmd">python verifier/verify_receipt.py my_receipt.json</span></div>
+              <div><span class="out">✓ ATF-INV-001 (MAR):  budget_granted 75.0 ≤ budget_delegator 100.0</span></div>
+              <div><span class="out">✓ ATF-INV-002 (PQC):  pqc_signature field present (ML-DSA-65)</span></div>
+              <div><span class="out">✓ ATF-INV-003 (Root): chain_root_id set to human principal</span></div>
+              <div><span class="out">✓ ATF-INV-004 (Ceil): budget within registration ceiling</span></div>
+              <div><span class="out">⚠ ATF-INV-005 (Hash): content_hash is placeholder — use real hash in production</span></div>
+              <div><span class="out">✓ ATF-INV-006 (Indep): verified offline, no platform access used</span></div>
+              <div style="margin-top:.4rem;color:var(--green);font-weight:700">VERDICT: PASS (5/6 checks, 1 warning)</div>
+            </div>
+          </div>
+          <div class="result-box result-pass">
+            <div class="result-title">✓ PASS — 5 invariants satisfied, 1 warning</div>
+            <div class="result-checks">
+              <div class="chk-pass">✓ ATF-INV-001  Monotonic Authority Reduction</div>
+              <div class="chk-pass">✓ ATF-INV-002  ML-DSA-65 signature present</div>
+              <div class="chk-pass">✓ ATF-INV-003  Chain traces to human root</div>
+              <div class="chk-pass">✓ ATF-INV-004  Budget ceiling respected</div>
+              <div style="color:var(--gold)">⚠ ATF-INV-005  content_hash is placeholder (production receipts must use real SHA-256)</div>
+              <div class="chk-pass">✓ ATF-INV-006  Independently verifiable offline</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- STEP 4 -->
+      <div class="step">
+        <div class="step-num-wrap"><div class="step-num">4</div><div class="step-line"></div></div>
+        <div class="step-body">
+          <div class="step-label">Step 4 of 4 · See what breaks</div>
+          <h3>Test a MAR violation</h3>
+          <p>Change <code>budget_granted</code> to <code>150.0</code> (greater than <code>budget_delegator: 100.0</code>) and run again. The verifier must reject it — ATF-INV-001 is not optional.</p>
+          <div class="terminal">
+            <div class="term-bar"><div class="term-dots"><div class="term-dot"></div><div class="term-dot"></div><div class="term-dot"></div></div><span class="term-title">bash — MAR violation test</span></div>
+            <div class="term-body">
+              <div><span class="p">$ </span><span class="cmd">python verifier/verify_receipt.py bad_receipt.json</span></div>
+              <div><span class="err">✗ ATF-INV-001 (MAR):  budget_granted 150.0 &gt; budget_delegator 100.0 — VIOLATION</span></div>
+              <div><span class="out">✓ ATF-INV-002 (PQC):  pqc_signature field present</span></div>
+              <div><span class="out">✓ ATF-INV-003 (Root): chain_root_id set</span></div>
+              <div><span class="err">VERDICT: FAIL — 1 invariant violation</span></div>
+            </div>
+          </div>
+          <div class="result-box result-fail">
+            <div class="result-title">✗ FAIL — ATF-INV-001 violation detected</div>
+            <div class="result-checks"><div class="chk-fail">✗ ATF-INV-001  budget_granted 150.0 exceeds budget_delegator 100.0</div><div style="color:var(--muted);margin-top:.3rem;font-family:var(--font);font-size:.8rem">This is the correct behaviour. Any ATF-compliant verifier MUST reject this receipt.</div></div>
+          </div>
+
+          <div style="margin-top:1.5rem;font-size:.85rem;color:var(--muted);line-height:1.7">
+            <strong style="color:var(--text)">What you just proved:</strong> ATF-INV-001 (Monotonic Authority Reduction) is enforced regardless of who issued the receipt. No configuration flag can disable it. This is why ATF receipts are independently auditable — the rules are in the protocol, not the platform.
+          </div>
+
+          <div style="margin-top:1.25rem">
+            <div style="font-size:.8rem;font-weight:600;color:var(--muted);margin-bottom:.6rem;text-transform:uppercase;letter-spacing:.05em">What you've verified</div>
+            <div class="built-grid">
+              <div class="built-item"><div class="bi-label">MAR invariant</div><div class="bi-inv">ATF-INV-001</div></div>
+              <div class="built-item"><div class="bi-label">PQC signature</div><div class="bi-inv">ATF-INV-002</div></div>
+              <div class="built-item"><div class="bi-label">Chain root</div><div class="bi-inv">ATF-INV-003</div></div>
+              <div class="built-item"><div class="bi-label">Offline verifiable</div><div class="bi-inv">ATF-INV-006</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- NEXT STEPS -->
+    <div class="verifier-cta">
+      <h3>Try the interactive browser verifier</h3>
+      <p>Paste any ATF receipt JSON and verify MAR, CES formula, content hash, and identifier formats — directly in your browser. No install needed.</p>
+      <a class="btn-verify" href="../verify/index.html">Open Verifier →</a>
+    </div>
+
+    <div style="margin-top:2rem;display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1rem">
+      <a href="../rfc/index.html" style="background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:1.25rem;display:block;color:var(--text)"><div style="font-weight:600;margin-bottom:.25rem">RFC Index →</div><div style="font-size:.8rem;color:var(--muted)">Full protocol specifications</div></a>
+      <a href="../integrations/index.html" style="background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:1.25rem;display:block;color:var(--text)"><div style="font-weight:600;margin-bottom:.25rem">Example Integrations →</div><div style="font-size:.8rem;color:var(--muted)">Python · TypeScript · Go</div></a>
+      <a href="../conformance/index.html" style="background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:1.25rem;display:block;color:var(--text)"><div style="font-weight:600;margin-bottom:.25rem">Conformance Program →</div><div style="font-size:.8rem;color:var(--muted)">Get your ATF-Compliant badge</div></a>
+      <a href="../whitepaper/index.html" style="background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:1.25rem;display:block;color:var(--text)"><div style="font-weight:600;margin-bottom:.25rem">Technical Whitepaper →</div><div style="font-size:.8rem;color:var(--muted)">Architecture & 40 invariants</div></a>
+    </div>
+  </div>
+  <footer>ATF Protocol Standard · <a href="../index.html">Home</a> · <a href="https://github.com/Costenho19/atf-protocol-standard" target="_blank">GitHub</a> · CC BY 4.0</footer>
+  <script>
+  function copyTerm(btn) {
+    const body = btn.closest('.terminal').querySelector('.term-body');
+    const text = Array.from(body.querySelectorAll('.cmd')).map(e=>e.textContent).join('
+')
+      || body.querySelector('pre')?.textContent || body.textContent;
+    navigator.clipboard.writeText(text.trim()).then(()=>{btn.textContent='Copied!';setTimeout(()=>btn.textContent='Copy',2000);});
+  }
+  </script>
+  </body>
+  </html>
