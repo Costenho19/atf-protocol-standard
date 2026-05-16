@@ -82,7 +82,62 @@
   <div class="main">
 
     <!-- Scenario selector -->
-    <div class="scenario-bar">
+    
+    <div style="background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:1.75rem;margin-bottom:2rem">
+      <div style="display:flex;align-items:center;gap:.75rem;margin-bottom:1.25rem">
+        <div style="font-size:1.1rem">📦</div>
+        <div>
+          <div style="font-size:.75rem;font-weight:600;color:var(--blue);letter-spacing:.08em;text-transform:uppercase">Production Packages</div>
+          <div style="font-size:1rem;font-weight:700;margin-top:.1rem">Official ATF Framework Integrations</div>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:1rem">
+        <div style="background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:1.25rem">
+          <div style="display:flex;align-items:center;gap:.6rem;margin-bottom:.75rem">
+            <div style="width:32px;height:32px;background:linear-gradient(135deg,#1e7a3c,#2d9957);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:.9rem">🦜</div>
+            <div><div style="font-weight:700;font-size:.9rem">atf-langchain</div><div style="font-size:.72rem;color:var(--muted)">ATF-RGC-Compliant</div></div>
+            <code style="margin-left:auto;font-family:var(--mono);font-size:.7rem;background:var(--bg2);padding:.2rem .5rem;border-radius:4px;color:var(--muted)">pip install atf-langchain</code>
+          </div>
+          <p style="font-size:.8rem;color:var(--muted);line-height:1.6;margin-bottom:.75rem">ATFCallbackHandler intercepts every LLM call and tool invocation. Verifies ATF-INV-001–006, samples CES, enforces HALT (RGC-INV-003 — CES &lt; 10.0 → ATFHaltError). LCEL-compatible via ATFGovernedRunnable.</p>
+          <div style="display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:.75rem">
+            <span style="font-size:.7rem;background:rgba(63,185,80,.12);color:var(--green);border:1px solid rgba(63,185,80,.3);padding:.1rem .5rem;border-radius:4px">ATFCallbackHandler</span>
+            <span style="font-size:.7rem;background:rgba(63,185,80,.12);color:var(--green);border:1px solid rgba(63,185,80,.3);padding:.1rem .5rem;border-radius:4px">ATFGovernedRunnable</span>
+            <span style="font-size:.7rem;background:rgba(63,185,80,.12);color:var(--green);border:1px solid rgba(63,185,80,.3);padding:.1rem .5rem;border-radius:4px">ATFVerifierTool</span>
+          </div>
+          <a href="https://github.com/Costenho19/atf-protocol-standard/tree/main/integrations/langchain" target="_blank" style="font-size:.78rem;color:var(--blue)">View source →</a>
+        </div>
+        <div style="background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:1.25rem">
+          <div style="display:flex;align-items:center;gap:.6rem;margin-bottom:.75rem">
+            <div style="width:32px;height:32px;background:linear-gradient(135deg,#009485,#00c4a7);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:.9rem">⚡</div>
+            <div><div style="font-weight:700;font-size:.9rem">atf-fastapi</div><div style="font-size:.72rem;color:var(--muted)">ATF-Compliant</div></div>
+            <code style="margin-left:auto;font-family:var(--mono);font-size:.7rem;background:var(--bg2);padding:.2rem .5rem;border-radius:4px;color:var(--muted)">pip install atf-fastapi</code>
+          </div>
+          <p style="font-size:.8rem;color:var(--muted);line-height:1.6;margin-bottom:.75rem">Starlette middleware + FastAPI dependency. Validates DR from Authorization header. HALT → HTTP 503. Adds X-ATF-RCR-ID, X-ATF-CES-Score, X-ATF-Status audit headers to every response.</p>
+          <div style="display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:.75rem">
+            <span style="font-size:.7rem;background:rgba(88,166,255,.1);color:var(--blue);border:1px solid rgba(88,166,255,.3);padding:.1rem .5rem;border-radius:4px">ATFMiddleware</span>
+            <span style="font-size:.7rem;background:rgba(88,166,255,.1);color:var(--blue);border:1px solid rgba(88,166,255,.3);padding:.1rem .5rem;border-radius:4px">require_atf()</span>
+            <span style="font-size:.7rem;background:rgba(88,166,255,.1);color:var(--blue);border:1px solid rgba(88,166,255,.3);padding:.1rem .5rem;border-radius:4px">X-ATF-* headers</span>
+          </div>
+          <a href="https://github.com/Costenho19/atf-protocol-standard/tree/main/integrations/fastapi" target="_blank" style="font-size:.78rem;color:var(--blue)">View source →</a>
+        </div>
+        <div style="background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:1.25rem">
+          <div style="display:flex;align-items:center;gap:.6rem;margin-bottom:.75rem">
+            <div style="width:32px;height:32px;background:linear-gradient(135deg,#1a1a2e,#30363d);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:.9rem;border:1px solid #484f58">🤖</div>
+            <div><div style="font-weight:700;font-size:.9rem">atf-openai-agents</div><div style="font-size:.72rem;color:var(--muted)">ATF-Compliant</div></div>
+            <code style="margin-left:auto;font-family:var(--mono);font-size:.7rem;background:var(--bg2);padding:.2rem .5rem;border-radius:4px;color:var(--muted)">pip install atf-openai-agents</code>
+          </div>
+          <p style="font-size:.8rem;color:var(--muted);line-height:1.6;margin-bottom:.75rem">ATFAgentGuard wraps OpenAI Agents SDK runs. ATFHandoffGuard validates sub-delegations before handoffs (ATF-INV-001 MAR). ATFRunHooks implements the native RunHooks interface for inline governance.</p>
+          <div style="display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:.75rem">
+            <span style="font-size:.7rem;background:rgba(188,140,255,.1);color:var(--purple);border:1px solid rgba(188,140,255,.3);padding:.1rem .5rem;border-radius:4px">ATFAgentGuard</span>
+            <span style="font-size:.7rem;background:rgba(188,140,255,.1);color:var(--purple);border:1px solid rgba(188,140,255,.3);padding:.1rem .5rem;border-radius:4px">ATFHandoffGuard</span>
+            <span style="font-size:.7rem;background:rgba(188,140,255,.1);color:var(--purple);border:1px solid rgba(188,140,255,.3);padding:.1rem .5rem;border-radius:4px">ATFRunHooks</span>
+          </div>
+          <a href="https://github.com/Costenho19/atf-protocol-standard/tree/main/integrations/openai-agents" target="_blank" style="font-size:.78rem;color:var(--blue)">View source →</a>
+        </div>
+      </div>
+    </div>
+  
+  <div class="scenario-bar">
       <button class="scenario-btn active" onclick="setScenario('dr')">Scenario 1 — Issue &amp; Verify DR</button>
       <button class="scenario-btn" onclick="setScenario('rcr')">Scenario 2 — Runtime Continuity (CES)</button>
       <button class="scenario-btn" onclick="setScenario('oep')">Scenario 3 — Export Evidence Package</button>
