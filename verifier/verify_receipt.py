@@ -97,7 +97,7 @@ def verify_content_hash(receipt: dict) -> tuple[bool, str]:
     # Conformance vectors use "sha256:placeholder" as indicative — skip hard check.
     # Real-but-wrong hashes (e.g. "sha256:ORIGINAL_HASH_BEFORE_TAMPERING") are NOT
     # skipped so negative vectors can test content integrity violations.
-    if "placeholder" in stored or stored.endswith("01"):
+    if "placeholder" in stored:
         return True, f"Illustrative receipt — content hash is indicative (noted). Computed: {computed}"
     return False, f"CONTENT HASH MISMATCH [content_hash_mismatch]. Stored: {stored} | Computed: {computed}"
 
@@ -137,8 +137,13 @@ def check_mar_invariant(receipt: dict) -> tuple[Optional[bool], str]:
         return None, "Not a Delegation Receipt — MAR check not applicable."
     granted = receipt["authority_budget_granted"]
     delegator = receipt["authority_budget_delegator"]
+    import math as _m
+    if not _m.isfinite(granted) or not _m.isfinite(delegator):
+        return False, f"ATF-INV-001 VIOLATED: budgets must be finite numbers (granted={granted}, delegator={delegator})"
+    if granted < 0.0 or delegator < 0.0:
+        return False, f"ATF-INV-001 VIOLATED: budgets must be \u2265 0 (granted={granted}, delegator={delegator})"
     if granted <= delegator:
-        return True, f"ATF-INV-001 (MAR): granted={granted} <= delegator={delegator} ✓"
+        return True, f"ATF-INV-001 (MAR): granted={granted} <= delegator={delegator} \u2713"
     return False, f"ATF-INV-001 VIOLATED: granted={granted} > delegator={delegator}"
 
 
@@ -152,6 +157,9 @@ def check_ces_formula(receipt: dict) -> tuple[Optional[bool], str]:
     B = receipt.get("ces_budget", 0.0)
     D = receipt.get("ces_context", 0.0)
     I = receipt.get("ces_integrity", 0.0)
+    for _n, _v in [("ces_temporal", T), ("ces_budget", B), ("ces_context", D), ("ces_integrity", I)]:
+        if not (0.0 <= _v <= 100.0):
+            return False, f"RGC-INV-002 VIOLATED: {_n}={_v} outside valid range [0.0, 100.0]"
     expected = round(T * 0.30 + B * 0.30 + D * 0.20 + I * 0.20, 2)
     stored = round(receipt["ces_score"], 2)
     if abs(expected - stored) < 0.1:
