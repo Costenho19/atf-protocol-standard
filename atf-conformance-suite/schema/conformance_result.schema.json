@@ -1,0 +1,84 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://github.com/Costenho19/atf-protocol-standard/atf-conformance-suite/schema/conformance_result.schema.json",
+  "title": "ATF Conformance Result",
+  "description": "Schema for ATF Conformance Suite results. A result with verdict=PASS and zero failures is the prerequisite for declaring conformance.",
+  "type": "object",
+  "required": ["result_id", "suite_version", "profile", "rfc_coverage", "run_timestamp", "summary", "verdict", "result_hash"],
+  "properties": {
+    "result_id": {
+      "type": "string",
+      "pattern": "^ATFCR-[0-9A-F]{16}$",
+      "description": "Unique result identifier in ATFCR-{16HEX} format"
+    },
+    "suite_version": {
+      "type": "string",
+      "description": "Version of the ATF Conformance Suite that produced this result"
+    },
+    "profile": {
+      "type": "string",
+      "enum": ["ATF-Compliant", "ATF-RGC-Compliant", "ATF-FEI-Compliant"],
+      "description": "Conformance profile designation"
+    },
+    "profile_key": {
+      "type": "string",
+      "enum": ["BASE", "RGC", "FEI", "ALL"]
+    },
+    "rfc_coverage": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "RFC documents covered by this result"
+    },
+    "run_timestamp": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ISO 8601 timestamp of the conformance run"
+    },
+    "summary": {
+      "type": "object",
+      "required": ["total", "passed", "failed", "skipped"],
+      "properties": {
+        "total": { "type": "integer", "minimum": 0 },
+        "passed": { "type": "integer", "minimum": 0 },
+        "failed": { "type": "integer", "minimum": 0 },
+        "skipped": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "verdict": {
+      "type": "string",
+      "enum": ["PASS", "FAIL"],
+      "description": "Overall conformance verdict. PASS requires failed=0 and passed>0."
+    },
+    "vectors": {
+      "type": "array",
+      "description": "Per-vector execution results",
+      "items": {
+        "type": "object",
+        "required": ["id", "invariant", "actual_verdict", "expected_verdict", "outcome"],
+        "properties": {
+          "id": { "type": "string" },
+          "invariant": { "type": "string" },
+          "kind": { "type": "string", "enum": ["positive", "negative"] },
+          "description": { "type": "string" },
+          "rfc_ref": { "type": "string" },
+          "actual_verdict": { "type": "string", "enum": ["PASS", "FAIL"] },
+          "actual_reason_code": { "type": ["string", "null"] },
+          "actual_detail": { "type": ["string", "null"] },
+          "expected_verdict": { "type": "string", "enum": ["PASS", "FAIL"] },
+          "expected_reason_code": { "type": ["string", "null"] },
+          "outcome": { "type": "string", "enum": ["PASS", "FAIL", "SKIP"] }
+        }
+      }
+    },
+    "result_hash": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$",
+      "description": "SHA-256 hash of the result document (excluding this field). Enables tamper detection."
+    },
+    "pqc_signature": {
+      "type": "string",
+      "description": "Optional ML-DSA-65 signature over result_hash. Present when --sign flag is used."
+    }
+  },
+  "additionalProperties": false
+}
