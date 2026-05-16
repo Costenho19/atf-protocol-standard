@@ -1,0 +1,36 @@
+[package]
+name = "atf-verifier"
+version = "0.1.0"
+edition = "2021"
+description = "ATF Protocol Offline Verifier — Rust port skeleton"
+license = "CC-BY-4.0"
+repository = "https://github.com/Costenho19/atf-protocol-standard"
+keywords = ["atf-protocol", "ai-governance", "pqc", "ml-dsa", "offline-verifier"]
+
+[lib]
+name = "atf_verifier"
+path = "src/lib.rs"
+
+[[bin]]
+name = "verify_receipt"
+path = "src/main.rs"
+
+[dependencies]
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+sha2 = "0.10"
+hex = "0.4"
+base64 = "0.22"
+thiserror = "1"
+chrono = { version = "0.4", features = ["serde"] }
+regex = "1"
+
+# Optional: ML-DSA-65 PQC signature verification (feature-gated)
+# pqcrypto-dilithium = { version = "0.5", optional = true }
+
+[features]
+default = []
+pqc = []
+
+[dev-dependencies]
+serde_json = "1"
