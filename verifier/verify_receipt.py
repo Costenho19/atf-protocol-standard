@@ -95,10 +95,10 @@ def verify_content_hash(receipt: dict) -> tuple[bool, str]:
         return True, f"Content hash verified: {computed}"
     # Illustrative example receipts have placeholder hashes — note but don't hard-fail
     # Conformance vectors use "sha256:placeholder" as indicative — skip hard check.
-      # Real-but-wrong hashes (e.g. "sha256:ORIGINAL_HASH_BEFORE_TAMPERING") are NOT
-      # skipped so negative vectors can test content integrity violations.
-      if "placeholder" in stored or stored.endswith("01"):
-          return True, f"Illustrative receipt — content hash is indicative (noted). Computed: {computed}"
+    # Real-but-wrong hashes (e.g. "sha256:ORIGINAL_HASH_BEFORE_TAMPERING") are NOT
+    # skipped so negative vectors can test content integrity violations.
+    if "placeholder" in stored or stored.endswith("01"):
+        return True, f"Illustrative receipt — content hash is indicative (noted). Computed: {computed}"
     return False, f"CONTENT HASH MISMATCH. Stored: {stored} | Computed: {computed}"
 
 
