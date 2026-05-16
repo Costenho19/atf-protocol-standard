@@ -140,5 +140,5 @@ pub struct VerifyOptions {
     /// ML-DSA-65 public key base64. If None, PQC check is skipped.
     pub public_key_b64: Option<String>,
     /// Override "now" for temporal checks (useful in tests).
-    pub now: Option<chrono::DateTime<chrono::Utc>>,
+    pub now_override: Option<chrono::DateTime<chrono::Utc>>,
 }
