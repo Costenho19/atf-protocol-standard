@@ -102,7 +102,7 @@ pub struct RuntimeContinuityRecord {
 // ── Verification result types ─────────────────────────────────────────────────
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-pub enum Verdict { Pass, Fail, Warn }
+pub enum Verdict { Pass, Fail }
 
 /// Per-check result — field names match TypeScript/Python ports (FVP-INV-007).
 #[derive(Debug, Clone, Serialize, Deserialize)]
