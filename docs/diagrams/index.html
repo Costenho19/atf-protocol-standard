@@ -1,0 +1,256 @@
+<!DOCTYPE html><html lang="en">
+  <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>Diagrams — ATF Protocol Standard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  :root{--bg:#0d1117;--bg2:#161b22;--bg3:#21262d;--border:#30363d;--blue:#58a6ff;--blue-dim:#1f6feb;--blue-dark:#0d419d;--green:#3fb950;--gold:#d29922;--amber:#f0883e;--red:#f85149;--purple:#bc8cff;--text:#e6edf3;--muted:#8b949e;--faint:#484f58;--font:'Inter',system-ui,sans-serif;--mono:'JetBrains Mono',monospace;}
+  html{scroll-behavior:smooth}body{background:var(--bg);color:var(--text);font-family:var(--font);line-height:1.6;overflow-x:hidden}
+  a{color:var(--blue);text-decoration:none}a:hover{text-decoration:underline}
+  nav{position:sticky;top:0;z-index:100;background:rgba(13,17,23,.92);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:.75rem 2rem;gap:1rem;flex-wrap:wrap}
+  .nav-brand{display:flex;align-items:center;gap:.6rem;font-weight:700;font-size:.95rem;color:var(--text);text-decoration:none!important}
+  .nav-badge{background:var(--blue-dark);color:var(--blue);font-size:.65rem;font-weight:600;padding:.15rem .5rem;border-radius:999px;border:1px solid var(--blue-dim)}
+  .nav-links{display:flex;align-items:center;gap:.25rem;flex-wrap:wrap}
+  .nav-links a{color:var(--muted);font-size:.85rem;padding:.4rem .75rem;border-radius:6px;transition:all .15s}
+  .nav-links a:hover{color:var(--text);background:var(--bg3);text-decoration:none}
+  footer{border-top:1px solid var(--border);padding:2rem;text-align:center;font-size:.78rem;color:var(--faint)}
+  .page-header{padding:3.5rem 2rem 2.5rem;max-width:1100px;margin:0 auto;border-bottom:1px solid var(--border)}
+  .section-label{font-size:.75rem;font-weight:600;color:var(--blue);letter-spacing:.1em;text-transform:uppercase;margin-bottom:.75rem}
+  .page-header h1{font-size:clamp(1.8rem,4vw,2.6rem);font-weight:800;letter-spacing:-.02em;margin-bottom:.75rem}
+  .page-header p{color:var(--muted);font-size:1rem;max-width:600px;line-height:1.7}
+  .main{max-width:1100px;margin:0 auto;padding:2.5rem 2rem}
+  .diagram-section{margin-bottom:4rem;scroll-margin-top:80px}
+  .diagram-title{font-size:1.4rem;font-weight:700;letter-spacing:-.01em;margin-bottom:.4rem}
+  .diagram-sub{color:var(--muted);font-size:.88rem;margin-bottom:1.75rem}
+  /* ── L0-L5 STACK ── */
+  .stack-wrap{display:grid;grid-template-columns:1fr 320px;gap:2rem;align-items:start}
+  @media(max-width:800px){.stack-wrap{grid-template-columns:1fr}}
+  .stack{display:flex;flex-direction:column;gap:.4rem}
+  .stack-layer{display:flex;align-items:stretch;border-radius:10px;border:1px solid var(--border);overflow:hidden;cursor:pointer;transition:all .2s;position:relative}
+  .stack-layer:hover,.stack-layer.active{transform:translateX(6px);box-shadow:0 0 0 1px var(--layer-color)}
+  .stack-layer.l0{--layer-color:var(--red)}.stack-layer.l1{--layer-color:var(--amber)}.stack-layer.l2{--layer-color:var(--gold)}.stack-layer.l3{--layer-color:var(--green)}.stack-layer.l4{--layer-color:var(--blue)}.stack-layer.l5{--layer-color:var(--purple)}
+  .sl-num{width:52px;display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-weight:700;font-size:1.1rem;flex-shrink:0}
+  .l0 .sl-num{background:rgba(248,81,73,.12);color:var(--red)}.l1 .sl-num{background:rgba(240,136,62,.12);color:var(--amber)}.l2 .sl-num{background:rgba(210,153,34,.12);color:var(--gold)}.l3 .sl-num{background:rgba(63,185,80,.12);color:var(--green)}.l4 .sl-num{background:rgba(88,166,255,.12);color:var(--blue)}.l5 .sl-num{background:rgba(188,140,255,.12);color:var(--purple)}
+  .sl-body{flex:1;padding:.85rem 1rem;background:var(--bg2)}
+  .sl-name{font-weight:700;font-size:.88rem;margin-bottom:.15rem}
+  .sl-desc{font-size:.75rem;color:var(--muted);line-height:1.5}
+  .sl-tags{display:flex;gap:.3rem;flex-wrap:wrap;margin-top:.4rem}
+  .sl-tag{font-family:var(--mono);font-size:.62rem;padding:.1rem .35rem;border-radius:3px}
+  .l0 .sl-tag{background:rgba(248,81,73,.15);color:var(--red)}.l1 .sl-tag{background:rgba(240,136,62,.15);color:var(--amber)}.l2 .sl-tag{background:rgba(210,153,34,.15);color:var(--gold)}.l3 .sl-tag{background:rgba(63,185,80,.15);color:var(--green)}.l4 .sl-tag{background:rgba(88,166,255,.15);color:var(--blue)}.l5 .sl-tag{background:rgba(188,140,255,.15);color:var(--purple)}
+  .stack-detail{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:1.5rem;position:sticky;top:80px}
+  .sd-layer-badge{font-size:.68rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;margin-bottom:.4rem}
+  .sd-title{font-size:1.05rem;font-weight:700;margin-bottom:.75rem}
+  .sd-items{display:flex;flex-direction:column;gap:.6rem}
+  .sd-item{font-size:.82rem;display:flex;gap:.6rem;align-items:flex-start;color:var(--muted);line-height:1.5}
+  .sd-item::before{content:'→';flex-shrink:0;color:var(--faint)}
+  .sd-item strong{color:var(--text)}
+  .sd-inv{margin-top:.75rem;background:var(--bg3);border-radius:8px;padding:.75rem;font-size:.78rem}
+  .sd-inv .inv-title{font-weight:600;color:var(--muted);font-size:.72rem;text-transform:uppercase;letter-spacing:.05em;margin-bottom:.35rem}
+  .sd-inv .inv-item{font-family:var(--mono);font-size:.72rem;color:var(--blue);margin:.15rem 0}
+  /* ── RCR STATE MACHINE ── */
+  .state-machine{position:relative;overflow:hidden;border:1px solid var(--border);border-radius:14px;background:var(--bg2);padding:2rem}
+  .states-row{display:flex;align-items:center;justify-content:center;gap:0;flex-wrap:wrap}
+  .state-node{position:relative;text-align:center;padding:1.25rem 1rem;border-radius:10px;border:2px solid transparent;min-width:110px;cursor:pointer;transition:all .2s}
+  .state-node:hover,.state-node.active{transform:translateY(-3px);box-shadow:0 8px 24px rgba(0,0,0,.4)}
+  .state-arrow{color:var(--faint);font-size:1.2rem;padding:0 .25rem;align-self:center;flex-shrink:0}
+  .sn-nominal{background:rgba(63,185,80,.08);border-color:rgba(63,185,80,.3)}.sn-nominal:hover,.sn-nominal.active{border-color:var(--green);background:rgba(63,185,80,.15)}
+  .sn-monitoring{background:rgba(88,166,255,.08);border-color:rgba(88,166,255,.3)}.sn-monitoring:hover,.sn-monitoring.active{border-color:var(--blue);background:rgba(88,166,255,.15)}
+  .sn-warning{background:rgba(210,153,34,.08);border-color:rgba(210,153,34,.3)}.sn-warning:hover,.sn-warning.active{border-color:var(--gold);background:rgba(210,153,34,.15)}
+  .sn-critical{background:rgba(240,136,62,.08);border-color:rgba(240,136,62,.3)}.sn-critical:hover,.sn-critical.active{border-color:var(--amber);background:rgba(240,136,62,.15)}
+  .sn-halt{background:rgba(248,81,73,.08);border-color:rgba(248,81,73,.3)}.sn-halt:hover,.sn-halt.active{border-color:var(--red);background:rgba(248,81,73,.15)}
+  .sn-label{font-weight:700;font-size:.83rem;margin-bottom:.2rem}
+  .sn-nominal .sn-label{color:var(--green)}.sn-monitoring .sn-label{color:var(--blue)}.sn-warning .sn-label{color:var(--gold)}.sn-critical .sn-label{color:var(--amber)}.sn-halt .sn-label{color:var(--red)}
+  .sn-range{font-family:var(--mono);font-size:.68rem;color:var(--faint)}
+  .sn-action{font-size:.7rem;color:var(--muted);margin-top:.3rem;line-height:1.4}
+  .state-detail{margin-top:1.5rem;background:var(--bg3);border-radius:10px;padding:1.25rem;min-height:90px;transition:all .2s}
+  .state-detail h4{font-size:.88rem;font-weight:700;margin-bottom:.5rem}
+  .state-detail p{font-size:.8rem;color:var(--muted);line-height:1.6}
+  /* ── EAP FLOW ── */
+  .eap-diagram{display:grid;grid-template-columns:repeat(4,1fr);gap:0;border:1px solid var(--border);border-radius:14px;overflow:hidden;background:var(--bg2)}
+  @media(max-width:700px){.eap-diagram{grid-template-columns:1fr 1fr}}
+  .eap-block{padding:1.5rem 1rem;text-align:center;border-right:1px solid var(--border);cursor:pointer;transition:all .2s}
+  .eap-block:last-child{border-right:none}
+  .eap-block:hover{background:var(--bg3)}
+  .eap-hot{border-top:3px solid var(--red)}.eap-warm{border-top:3px solid var(--gold)}.eap-cold{border-top:3px solid var(--blue)}.eap-archive{border-top:3px solid var(--purple)}
+  .eap-name{font-weight:700;font-size:.95rem;margin-bottom:.35rem}
+  .eap-hot .eap-name{color:var(--red)}.eap-warm .eap-name{color:var(--gold)}.eap-cold .eap-name{color:var(--blue)}.eap-archive .eap-name{color:var(--purple)}
+  .eap-retention{font-family:var(--mono);font-size:.7rem;color:var(--faint);margin-bottom:.6rem}
+  .eap-items{font-size:.75rem;color:var(--muted);line-height:1.7;text-align:left}
+  .eap-arrow-row{display:flex;align-items:center;justify-content:center;gap:.5rem;padding:1rem;background:var(--bg3);font-size:.75rem;color:var(--muted);border-top:1px solid var(--border)}
+  .eap-trigger{font-family:var(--mono);font-size:.7rem;background:var(--bg);border:1px solid var(--border);border-radius:4px;padding:.15rem .4rem;color:var(--faint)}
+  /* ── MAR CHAIN ── */
+  .mar-chain{display:flex;flex-direction:column;gap:.5rem;padding:1.5rem;background:var(--bg2);border:1px solid var(--border);border-radius:14px}
+  .mar-node{display:flex;gap:1rem;align-items:center}
+  .mar-connector{width:2px;height:28px;background:var(--border);margin-left:1.4rem}
+  .mar-box{display:flex;align-items:center;gap.75rem;background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:.75rem 1rem;flex:1;gap:.75rem}
+  .mar-tier{font-family:var(--mono);font-size:.7rem;font-weight:700;padding:.2rem .5rem;border-radius:4px;white-space:nowrap}
+  .t1 .mar-tier{background:rgba(248,81,73,.2);color:var(--red)}.t2 .mar-tier{background:rgba(240,136,62,.2);color:var(--amber)}.t3 .mar-tier{background:rgba(210,153,34,.2);color:var(--gold)}.t4 .mar-tier{background:rgba(63,185,80,.2);color:var(--green)}
+  .mar-id{font-family:var(--mono);font-size:.72rem;color:var(--blue);flex:1}
+  .mar-budget{font-family:var(--mono);font-size:.8rem;font-weight:700;white-space:nowrap}
+  .t1 .mar-budget{color:var(--red)}.t2 .mar-budget{color:var(--amber)}.t3 .mar-budget{color:var(--gold)}.t4 .mar-budget{color:var(--green)}
+  .mar-arrow{color:var(--faint);font-size:.75rem;white-space:nowrap}
+  .mar-inv-badge{font-size:.65rem;background:rgba(88,166,255,.12);border:1px solid rgba(88,166,255,.25);color:var(--blue);border-radius:4px;padding:.1rem .35rem;font-family:var(--mono)}
+  </style>
+  </head>
+  <body>
+  <nav>
+    <a class="nav-brand" href="../index.html"><svg width="20" height="20" viewBox="0 0 22 22" fill="none"><polygon points="11,2 20,7 20,15 11,20 2,15 2,7" fill="none" stroke="#58a6ff" stroke-width="1.5"/><polygon points="11,6 16,9 16,13 11,16 6,13 6,9" fill="#58a6ff" opacity=".3"/><circle cx="11" cy="11" r="2" fill="#58a6ff"/></svg>&nbsp;ATF Protocol<span class="nav-badge">v3.0</span></a>
+    <div class="nav-links">
+      <a href="../rfc/index.html">RFC Index</a>
+      <a href="../verify/index.html">Verifier</a>
+      <a href="../conformance/index.html">Conformance</a>
+      <a href="../whitepaper/index.html">Whitepaper</a>
+      <a href="../integrations/index.html">Integrations</a>
+      <a href="../diagrams/index.html" style="color:var(--text);background:var(--bg3)">Diagrams</a>
+      <a href="../quickstart/index.html" style="background:rgba(88,166,255,.12);color:#58a6ff;border:1px solid rgba(88,166,255,.3);padding:.4rem .75rem;border-radius:6px;">Quickstart →</a>
+      <a href="https://github.com/Costenho19/atf-protocol-standard" target="_blank">GitHub</a>
+    </div>
+  </nav>
+  <div class="page-header">
+    <div class="section-label">Visual Reference</div>
+    <h1>Interactive Diagrams</h1>
+    <p>Click any layer or state to explore the ATF protocol stack in detail — the L0→L5 authority chain, RCR lifecycle state machine, evidence archive pipeline, and MAR chain visualization.</p>
+  </div>
+  <div class="main">
+
+    <!-- DIAGRAM 1: L0-L5 STACK -->
+    <div class="diagram-section" id="stack">
+      <div class="diagram-title">L0→L5 Authority &amp; Evidence Stack</div>
+      <div class="diagram-sub">Authority propagates downward from L0 (human root). Evidence flows upward, PQC-signed at every layer. Click a layer.</div>
+      <div class="stack-wrap">
+        <div class="stack">
+          <div class="stack-layer l5" onclick="showLayer(5)"><div class="sl-num">L5</div><div class="sl-body"><div class="sl-name">Immutable Evidence</div><div class="sl-desc">COLD archive · OEP bundles · Forensic verification</div><div class="sl-tags"><span class="sl-tag">OEP</span><span class="sl-tag">EAP</span><span class="sl-tag">FVP</span><span class="sl-tag">26 invariants</span></div></div></div>
+          <div class="stack-layer l4" onclick="showLayer(4)"><div class="sl-num">L4</div><div class="sl-body"><div class="sl-name">Execution Gate</div><div class="sl-desc">Governance Receipt · Adaptive Veto Machine · ATF compliance check</div><div class="sl-tags"><span class="sl-tag">GRC</span><span class="sl-tag">AVM</span><span class="sl-tag">EIL</span></div></div></div>
+          <div class="stack-layer l3" onclick="showLayer(3)"><div class="sl-num">L3</div><div class="sl-body"><div class="sl-name">Runtime Continuity</div><div class="sl-desc">RCR · CES scoring · HALT protocol · 8 RGC invariants</div><div class="sl-tags"><span class="sl-tag">RCR</span><span class="sl-tag">CES</span><span class="sl-tag">HALT</span><span class="sl-tag">RFC-ATF-2</span></div></div></div>
+          <div class="stack-layer l2" onclick="showLayer(2)"><div class="sl-num">L2</div><div class="sl-body"><div class="sl-name">Temporal Admissibility</div><div class="sl-desc">TAR · Session bounds · TTL enforcement · nanosecond precision</div><div class="sl-tags"><span class="sl-tag">TAR</span><span class="sl-tag">TTL</span><span class="sl-tag">Window</span></div></div></div>
+          <div class="stack-layer l1" onclick="showLayer(1)"><div class="sl-num">L1</div><div class="sl-body"><div class="sl-name">Delegation</div><div class="sl-desc">Delegation Receipt · Scope · MAR enforcement · Trust Lattice</div><div class="sl-tags"><span class="sl-tag">DR</span><span class="sl-tag">MAR</span><span class="sl-tag">Lattice</span><span class="sl-tag">RFC-ATF-1</span></div></div></div>
+          <div class="stack-layer l0 active" onclick="showLayer(0)"><div class="sl-num">L0</div><div class="sl-body"><div class="sl-name">Human Authority Root</div><div class="sl-desc">Agent Identity Receipt · TIER-1 registration · budget = 100.0</div><div class="sl-tags"><span class="sl-tag">AIR</span><span class="sl-tag">AID</span><span class="sl-tag">Root</span><span class="sl-tag">TIER-1</span></div></div></div>
+        </div>
+        <div class="stack-detail" id="stack-detail">
+          <div class="sd-layer-badge" id="sd-badge" style="color:var(--red)">L0 — Human Authority Root</div>
+          <div class="sd-title" id="sd-title">TIER-1 Human Principal</div>
+          <div class="sd-items" id="sd-items">
+            <div class="sd-item"><div><strong>Agent Identity Receipt (AIR)</strong> — PQC-signed binding of AID to authority budget and ML-DSA-65 public key</div></div>
+            <div class="sd-item"><div><strong>authority_budget = 100.0</strong> — maximum authority; this is the chain root</div></div>
+            <div class="sd-item"><div><strong>chain_root_id</strong> — every DR in the lattice carries this identifier, tracing back here</div></div>
+            <div class="sd-item"><div><strong>TIER-1 registration</strong> — only Tier-1 principals may be chain roots (ATF-INV-003)</div></div>
+          </div>
+          <div class="sd-inv">
+            <div class="inv-title">Key invariants at this layer</div>
+            <div class="inv-item">ATF-INV-003 — chain traces to TIER-1 human root</div>
+            <div class="inv-item">ATF-INV-002 — AIR signed with ML-DSA-65</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- DIAGRAM 2: RCR STATE MACHINE -->
+    <div class="diagram-section" id="rcr">
+      <div class="diagram-title">RCR Continuity Lifecycle</div>
+      <div class="diagram-sub">CES determines the continuity status at every runtime snapshot. HALT is a protocol invariant — not a configuration option. Click a state.</div>
+      <div class="state-machine">
+        <div class="states-row">
+          <div class="state-node sn-nominal" onclick="showState('nominal')"><div class="sn-label">NOMINAL</div><div class="sn-range">CES ≥ 75</div><div class="sn-action">Normal execution</div></div>
+          <div class="state-arrow">→</div>
+          <div class="state-node sn-monitoring" onclick="showState('monitoring')"><div class="sn-label">MONITORING</div><div class="sn-range">50–74</div><div class="sn-action">Increased sampling</div></div>
+          <div class="state-arrow">→</div>
+          <div class="state-node sn-warning" onclick="showState('warning')"><div class="sn-label">WARNING</div><div class="sn-range">25–49</div><div class="sn-action">Alert operator</div></div>
+          <div class="state-arrow">→</div>
+          <div class="state-node sn-critical" onclick="showState('critical')"><div class="sn-label">CRITICAL</div><div class="sn-range">10–24</div><div class="sn-action">Reauth required</div></div>
+          <div class="state-arrow">→</div>
+          <div class="state-node sn-halt" onclick="showState('halt')"><div class="sn-label">HALT</div><div class="sn-range">CES &lt; 10</div><div class="sn-action">Execution ceases</div></div>
+        </div>
+        <div class="state-detail" id="state-detail">
+          <h4 style="color:var(--green)">NOMINAL — CES ≥ 75</h4>
+          <p>Session health is strong. All four CES components (temporal, budget, context, integrity) are collectively above the nominal threshold. Normal execution proceeds. RCR is committed and signed. Next sample at standard interval.</p>
+        </div>
+      </div>
+      <div style="margin-top:1rem;font-size:.78rem;color:var(--faint);padding:.75rem 1rem;background:var(--bg2);border:1px solid var(--border);border-radius:8px">
+        CES formula: <span style="font-family:var(--mono);color:var(--blue)">T×0.30 + B×0.30 + D×0.20 + I×0.20</span> — fixed by <span style="font-family:var(--mono)">RGC-INV-001</span>. Not runtime-configurable. HALT threshold fixed at 10.0 by <span style="font-family:var(--mono)">RGC-INV-003</span>.
+      </div>
+    </div>
+
+    <!-- DIAGRAM 3: EAP FLOW -->
+    <div class="diagram-section" id="eap">
+      <div class="diagram-title">Evidence Archive Pipeline (EAP)</div>
+      <div class="diagram-sub">Evidence moves HOT→WARM→COLD→ARCHIVE. Tier transitions are one-directional (ELR-INV-002). Every transition requires cryptographic proof (ELR-INV-004).</div>
+      <div class="eap-diagram">
+        <div class="eap-block eap-hot"><div class="eap-name">HOT</div><div class="eap-retention">≤ 90 days</div><div class="eap-items">Active executions<br>Real-time access<br>Redis + DB<br>Full query support</div></div>
+        <div class="eap-block eap-warm"><div class="eap-name">WARM</div><div class="eap-retention">90 days – 1 year</div><div class="eap-items">Recent evidence<br>Compressed store<br>Hours latency<br>Merkle-indexed</div></div>
+        <div class="eap-block eap-cold"><div class="eap-name">COLD</div><div class="eap-retention">1 – 7 years</div><div class="eap-items">Archived evidence<br>Merkle-chained blocks<br>Days latency<br>OEP-exportable</div></div>
+        <div class="eap-block eap-archive"><div class="eap-name">ARCHIVE</div><div class="eap-retention">Indefinite</div><div class="eap-items">OEP bundles<br>Regulator delivery<br>Self-contained<br>No platform needed</div></div>
+      </div>
+      <div class="eap-arrow-row">
+        <span style="color:var(--red)">HOT</span>
+        <span class="eap-trigger">TTL expired · volume threshold</span>→
+        <span style="color:var(--gold)">WARM</span>
+        <span class="eap-trigger">retention window</span>→
+        <span style="color:var(--blue)">COLD</span>
+        <span class="eap-trigger">regulatory export request</span>→
+        <span style="color:var(--purple)">ARCHIVE</span>
+      </div>
+      <div style="margin-top:1rem;font-size:.75rem;color:var(--faint);padding:.75rem 1rem;background:var(--bg2);border:1px solid var(--border);border-radius:8px">
+        EAP invariants: <span style="font-family:var(--mono);color:var(--blue)">EAP-INV-001</span> (append-only) · <span style="font-family:var(--mono);color:var(--blue)">EAP-INV-005</span> (Merkle completeness) · <span style="font-family:var(--mono);color:var(--blue)">ELR-INV-002</span> (tier ordering) · <span style="font-family:var(--mono);color:var(--blue)">EAP-INV-003</span> (block signing)
+      </div>
+    </div>
+
+    <!-- DIAGRAM 4: MAR CHAIN -->
+    <div class="diagram-section" id="mar">
+      <div class="diagram-title">MAR Delegation Chain</div>
+      <div class="diagram-sub">Authority budget can only decrease through the chain (ATF-INV-001). Every node is PQC-signed. Any party can verify the chain offline with only the root public key.</div>
+      <div class="mar-chain">
+        <div class="mar-node t1"><div class="mar-box"><span class="mar-tier">TIER-1</span><span class="mar-id">HUMAN-harold-nunes-001</span><span class="mar-budget">100.0</span><span class="mar-arrow">chain root</span></div></div>
+        <div class="mar-connector"></div>
+        <div class="mar-node t2"><div class="mar-box"><span class="mar-tier">TIER-2</span><span class="mar-id">AID-FINANCE-3A7F9B2C1D4E5F6A</span><span class="mar-budget">75.0</span><span class="mar-arrow">≤ 100.0 ✓ <span class="mar-inv-badge">ATF-INV-001</span></span></div></div>
+        <div class="mar-connector"></div>
+        <div class="mar-node t3"><div class="mar-box"><span class="mar-tier">TIER-3</span><span class="mar-id">AID-FINANCE-7B8C9D0E1F2A3B4C</span><span class="mar-budget">50.0</span><span class="mar-arrow">≤ 75.0 ✓ <span class="mar-inv-badge">ATF-INV-001</span></span></div></div>
+        <div class="mar-connector"></div>
+        <div class="mar-node t4"><div class="mar-box"><span class="mar-tier">TIER-4</span><span class="mar-id">AID-FINANCE-2C3D4E5F6A7B8C9D</span><span class="mar-budget">20.0</span><span class="mar-arrow">≤ 50.0 ✓ <span class="mar-inv-badge">ATF-INV-001</span></span></div></div>
+      </div>
+      <div style="margin-top:1rem;font-size:.78rem;color:var(--faint);padding:.75rem 1rem;background:var(--bg2);border:1px solid var(--border);border-radius:8px">
+        Every DR in the chain carries <span style="font-family:var(--mono);color:var(--blue)">chain_root_id = HUMAN-harold-nunes-001</span>. A regulator can verify the full chain starting from any DR, working backwards to the root — no platform access required (<span style="font-family:var(--mono)">ATF-INV-006</span>).
+      </div>
+    </div>
+
+  </div>
+  <footer>ATF Protocol Standard · Visual Diagrams · <a href="../index.html">Home</a> · <a href="https://github.com/Costenho19/atf-protocol-standard" target="_blank">GitHub</a> · CC BY 4.0</footer>
+  <script>
+  const LAYERS = {
+    0:{badge:'L0 — Human Authority Root',color:'var(--red)',title:'TIER-1 Human Principal',items:['<strong>Agent Identity Receipt (AIR)</strong> — PQC-signed binding of AID to authority budget and ML-DSA-65 public key','<strong>authority_budget = 100.0</strong> — maximum authority; this is the chain root','<strong>chain_root_id</strong> — every DR in the lattice carries this identifier, tracing back here','<strong>TIER-1 registration</strong> — only Tier-1 principals may be chain roots (ATF-INV-003)'],inv:['ATF-INV-003 — chain traces to TIER-1 human root','ATF-INV-002 — AIR signed with ML-DSA-65']},
+    1:{badge:'L1 — Delegation',color:'var(--amber)',title:'Delegation Receipt (DR)',items:['<strong>budget_granted ≤ budget_delegator</strong> — MAR invariant (ATF-INV-001), enforced at issuance','<strong>task_scope</strong> — explicit action, domain, vertical and constraints','<strong>Trust Lattice (DAG)</strong> — DRs form a directed acyclic graph traceable to L0','<strong>parent_delegation_id</strong> — links each DR to its parent in the chain'],inv:['ATF-INV-001 — Monotonic Authority Reduction','ATF-INV-002 — receipt signed with ML-DSA-65','ATF-INV-005 — SHA-256 content hash']},
+    2:{badge:'L2 — Temporal Admissibility',color:'var(--gold)',title:'Temporal Admissibility Record (TAR)',items:['<strong>valid_from / valid_to</strong> — nanosecond-precise session window','<strong>admission_timestamp</strong> — the exact moment the TAR was issued','<strong>TTL enforcement</strong> — DR cannot be used outside the TAR window','<strong>TAR is signed</strong> — timestamped PQC signature prevents backdating'],inv:['ATF-INV-002 — TAR signed with ML-DSA-65','RGC-INV-008 — every RCR anchored to admission TAR']},
+    3:{badge:'L3 — Runtime Continuity',color:'var(--green)',title:'Runtime Continuity Record (RCR) + CES',items:['<strong>CES = T×0.30 + B×0.30 + D×0.20 + I×0.20</strong> — formula fixed by RGC-INV-001','<strong>Continuous scoring</strong> — sampled before every execution decision','<strong>HALT at CES &lt; 10.0</strong> — RGC-INV-003, not configurable','<strong>Predecessor linkage</strong> — RCR chain integrity (RGC-INV-002)'],inv:['RGC-INV-001 — CES formula fixed','RGC-INV-002 — RCR chain integrity','RGC-INV-003 — HALT protocol']},
+    4:{badge:'L4 — Execution Gate',color:'var(--blue)',title:'Governance Receipt + AVM',items:['<strong>ATF compliance check</strong> — DR, TAR, RCR must be valid before decision executes','<strong>AVM approval gate</strong> — Adaptive Veto Machine evaluates cumulative drift','<strong>Governance Receipt</strong> — every approved decision produces a PQC-signed receipt','<strong>EIL (Execution Integrity Layer)</strong> — ensures execution only within authorized scope'],inv:['ATF-INV-006 — governance receipts independently verifiable','RGC-INV-003 — HALT state blocks execution gate']},
+    5:{badge:'L5 — Immutable Evidence',color:'var(--purple)',title:'Evidence Archive Pipeline (EAP) + OEP',items:['<strong>HOT→WARM→COLD→ARCHIVE</strong> — one-directional tier lifecycle (ELR-INV-002)','<strong>Merkle-chained archive blocks</strong> — EAP-INV-005, every block hashes previous','<strong>OEP bundles</strong> — self-contained, platform-independent forensic packages (OEP-INV-002)','<strong>Two-plane verification</strong> — crypto + semantic planes independent (FVP-INV-007)'],inv:['EAP-INV-001 — append-only','EAP-INV-005 — Merkle completeness','OEP-INV-002 — self-containment','FVP-INV-007 — two-plane independence']}
+  };
+  const STATES = {
+    nominal:{color:'var(--green)',title:'NOMINAL — CES ≥ 75',desc:'Session health is strong. All four CES components are collectively above the nominal threshold. Normal execution proceeds. RCR committed and PQC-signed. Next sample at standard interval.'},
+    monitoring:{color:'var(--blue)',title:'MONITORING — CES 50–74',desc:'Session health is declining. Sampling frequency is increased. Execution continues but all decisions are flagged for operator visibility. Recovery is possible by refreshing the delegation or reducing scope.'},
+    warning:{color:'var(--gold)',title:'WARNING — CES 25–49',desc:'Session health is significantly degraded. Operator alert is triggered. New high-impact decisions are suspended pending operator acknowledgement. Low-impact decisions may continue with elevated logging.'},
+    critical:{color:'var(--amber)',title:'CRITICAL — CES 10–24',desc:'Session is near-illegitimate. Reauthorization challenge is issued (RGC-INV-006). All decisions require explicit operator confirmation. The agent cannot execute autonomously until reauthorized.'},
+    halt:{color:'var(--red)',title:'HALT — CES < 10 (RGC-INV-003)',desc:'Execution has ceased immediately — this is a protocol invariant, not a configuration option. The session cannot be resumed without full reauthorization from the chain root. All pending decisions are abandoned. An escalation event is logged to the EAP (RGC-INV-004).'}
+  };
+  function showLayer(n) {
+    document.querySelectorAll('.stack-layer').forEach(l => l.classList.remove('active'));
+    event.currentTarget.classList.add('active');
+    const d = LAYERS[n];
+    document.getElementById('sd-badge').textContent = d.badge;
+    document.getElementById('sd-badge').style.color = d.color;
+    document.getElementById('sd-title').textContent = d.title;
+    document.getElementById('sd-items').innerHTML = d.items.map(i => `<div class="sd-item"><div>${i}</div></div>`).join('');
+    document.querySelector('.sd-inv .inv-title').nextElementSibling && document.querySelectorAll('.sd-inv .inv-item').forEach(e=>e.remove());
+    const inv = document.querySelector('.sd-inv');
+    inv.querySelectorAll('.inv-item').forEach(e=>e.remove());
+    d.inv.forEach(i=>{const e=document.createElement('div');e.className='inv-item';e.textContent=i;inv.appendChild(e);});
+  }
+  function showState(s) {
+    document.querySelectorAll('.state-node').forEach(n => n.classList.remove('active'));
+    event.currentTarget.classList.add('active');
+    const d = STATES[s];
+    const det = document.getElementById('state-detail');
+    det.innerHTML = `<h4 style="color:${d.color}">${d.title}</h4><p>${d.desc}</p>`;
+  }
+  </script>
+  </body>
+  </html>
