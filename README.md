@@ -79,6 +79,7 @@
   ## Standards
 
   ### RFC-ATF-1 — Verifiable AI Agent Authority Delegation
+
   Defines the cryptographic foundation: Agent Identity Records, Delegation Receipts, Trust Lattice, Monotonic Authority Reduction (MAR), and the six core invariants (ATF-INV-001–006).
 
   - **Status:** Published
@@ -87,6 +88,7 @@
   - **Specification:** [RFC-ATF-1.md](./RFC-ATF-1.md)
 
   ### RFC-ATF-2 — Runtime Governance Continuity
+
   Extends RFC-ATF-1 for long-running executions: Continuity Eligibility Score (CES), Authority Fragmentation Guard (AFG), Escalation Protocol, and Reauthorization Challenge (RC).
 
   - **Status:** Published
@@ -95,7 +97,8 @@
   - **Specification:** [RFC-ATF-2.md](./RFC-ATF-2.md)
 
   ### RFC-ATF-3 — Governance Policy Interoperability, Evidence Lifecycle & Forensic Verification
-  Adds Layer 5: policy interoperability across sovereign runtimes (GPIL), evidence lifecycle with HOT/WARM/COLD tiers (ELR), immutable Merkle archive pipeline (EAP), self-contained forensic packages (OEP), and key identity verification (FVP).
+
+  Adds Layer 5 — Forensic Evidence Infrastructure: policy interoperability across sovereign runtimes (GPIL), evidence lifecycle classification with HOT/WARM/COLD tiers (ELR), immutable Merkle archive pipeline (EAP), self-contained forensic packages (OEP), and key identity verification protocol (FVP).
 
   - **Status:** Published — May 2026
   - **Extends:** RFC-ATF-1 + RFC-ATF-2
@@ -155,9 +158,9 @@
 
   ```
   atf-protocol-standard/
-  ├── RFC-ATF-1.md                    ← Delegation protocol (6 invariants)
-  ├── RFC-ATF-2.md                    ← Runtime continuity (8 invariants)
-  ├── RFC-ATF-3.md                    ← Evidence lifecycle & forensic (26 invariants)
+  ├── RFC-ATF-1.md                         ← Delegation protocol (6 invariants)
+  ├── RFC-ATF-2.md                         ← Runtime continuity (8 invariants)
+  ├── RFC-ATF-3.md                         ← Evidence lifecycle & forensic (26 invariants)
   ├── examples/
   │   ├── delegation_receipt.json
   │   ├── temporal_authority_record.json
@@ -166,16 +169,16 @@
   │   ├── delegation_receipt.schema.json
   │   └── runtime_continuity_record.schema.json
   ├── verifier/
-  │   └── verify_receipt.py           ← Standalone offline verifier (pypqc only)
+  │   └── verify_receipt.py                ← Standalone offline verifier (pypqc only)
   ├── tests/
-  │   └── test_atf_receipts.py        ← Conformance tests (MAR, CES, tamper detection)
+  │   └── test_atf_receipts.py             ← Conformance tests (MAR, CES, tamper)
   ├── reference-implementation/
   │   ├── README.md
   │   ├── pyproject.toml
   │   └── atf_core/
   │       ├── __init__.py
-  │       ├── receipts.py             ← DR + RCR creation with invariant enforcement
-  │       └── verifier.py             ← Invariant verification
+  │       ├── receipts.py                  ← DR + RCR creation with invariant enforcement
+  │       └── verifier.py                  ← Invariant verification
   └── CONTRIBUTING.md
   ```
 
@@ -210,7 +213,7 @@
 
   ## Contributing
 
-  See [CONTRIBUTING.md](./CONTRIBUTING.md). We welcome language ports (Go, TypeScript, Rust), conformance test contributions, and feedback on invariant completeness.
+  See [CONTRIBUTING.md](./CONTRIBUTING.md). We welcome language ports (Go, TypeScript, Rust), conformance test contributions, and feedback on invariant completeness via Issues.
 
   ---
 
