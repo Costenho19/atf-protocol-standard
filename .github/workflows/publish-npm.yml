@@ -1,39 +1,38 @@
 name: Publish to npm
 
-  on:
-    release:
-      types: [published]
-    workflow_dispatch:
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
 
-  jobs:
-    build-and-publish:
-      name: Build and publish @atf-protocol/verifier
-      runs-on: ubuntu-latest
+jobs:
+  build-and-publish:
+    name: Build and publish @atf-protocol/verifier
+    runs-on: ubuntu-latest
 
-      steps:
-        - uses: actions/checkout@v4
+    steps:
+      - uses: actions/checkout@v4
 
-        - name: Set up Node.js 20
-          uses: actions/setup-node@v4
-          with:
-            node-version: '20'
-            registry-url: 'https://registry.npmjs.org'
+      - name: Set up Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          registry-url: 'https://registry.npmjs.org'
 
-        - name: Install dependencies
-          working-directory: ports/typescript
-          run: npm ci
+      - name: Install dependencies
+        working-directory: ports/typescript
+        run: npm ci
 
-        - name: Build TypeScript
-          working-directory: ports/typescript
-          run: npm run build
+      - name: Build TypeScript
+        working-directory: ports/typescript
+        run: npm run build
 
-        - name: Run tests
-          working-directory: ports/typescript
-          run: npm test
+      - name: Run tests
+        working-directory: ports/typescript
+        run: npm test
 
-        - name: Publish to npm
-          working-directory: ports/typescript
-          run: npm publish --access public
-          env:
-            NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-  
+      - name: Publish to npm
+        working-directory: ports/typescript
+        run: npm publish --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
