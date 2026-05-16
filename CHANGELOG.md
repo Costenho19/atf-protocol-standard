@@ -6,6 +6,43 @@
 
   ---
 
+  ## [v3.1.0] — 2026-05-16
+
+  ### Added — Verifiers, Conformance Program, TypeScript Port
+
+  #### OEP Archive Verifier (`verifier/verify_oep_package.py`)
+  New standalone tool for offline verification of complete forensic evidence packages.
+  Covers OEP-INV-001–006 + EAP-INV-001–007. ZIP bomb protection, path traversal guard,
+  three-plane verification (structure → cryptographic integrity → semantic chain).
+  Generates reproducible evidence transcript (FVP-INV-007).
+
+  #### ATF Conformance Program v1 (`CONFORMANCE.md` + `conformance/conformance_vectors.json`)
+  Official conformance program with 34 test vectors across 3 profiles:
+  - ATF-Compliant: 15 vectors (8 positive, 7 negative) — ATF-INV-001–006
+  - ATF-RGC-Compliant: 26 vectors — + RGC-INV-001–006
+  - ATF-FEI-Compliant: 34 vectors — all 40 invariants
+  Badge usage, implementation report template, determinism requirement (FVP-INV-007).
+
+  #### TypeScript Port (`ports/typescript/` — `@atf-protocol/verifier`)
+  First official TypeScript port of the ATF verifier. Ships with:
+  - Inline pure-TS SHA-256 (no crypto API dependency — EAP-INV-005)
+  - `bigint` for `execution_ns` (nanosecond precision — avoids JS float precision loss)
+  - Stable normative reason codes across all invariants
+  - Optional `@noble/post-quantum` for ML-DSA-65 PQC signature verification
+  - Targets: ATF-RGC-Compliant (11 invariants)
+
+  #### Verifier API Extension (`verifier/verify_receipt.py`)
+  Added `verify_receipt_dict(receipt: dict) -> dict` programmatic API.
+  Added `ReasonCode` class with normative reason codes.
+  Extended coverage: ATF-INV-002, ATF-INV-003, ATF-INV-006, RGC-INV-001–004.
+
+  #### Infrastructure
+  - `tests/test_conformance_vectors.py`: Conformance vector test suite
+  - Updated CI to run conformance vectors on every push
+  - Updated README with verifier tools table, conformance program, language ports
+
+  ---
+
   ## [v3.0.0] — 2026-05-15
 
   ### Added — RFC-ATF-3: Governance Policy Interoperability, Evidence Lifecycle & Forensic Verification
