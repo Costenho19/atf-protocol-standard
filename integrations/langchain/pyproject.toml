@@ -1,0 +1,36 @@
+[build-system]
+  requires = ["setuptools>=61", "wheel"]
+  build-backend = "setuptools.build_meta"
+
+  [project]
+  name = "atf-langchain"
+  version = "1.0.0"
+  description = "ATF Protocol governance layer for LangChain — RFC-ATF-1/2/3"
+  readme = "README.md"
+  license = {text = "CC-BY-4.0"}
+  requires-python = ">=3.9"
+  keywords = ["atf-protocol", "langchain", "ai-governance", "pqc", "delegation"]
+  classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+    "Topic :: Security :: Cryptography",
+  ]
+  dependencies = [
+    "langchain-core>=0.2",
+    "pydantic>=2.0",
+  ]
+
+  [project.optional-dependencies]
+  pqc  = ["pypqc>=0.0.8"]
+  full = ["langchain>=0.2", "langchain-openai>=0.1"]
+  dev  = ["pytest>=7", "pytest-asyncio"]
+
+  [project.urls]
+  "Protocol Standard"     = "https://costenho19.github.io/atf-protocol-standard/"
+  "GitHub"                = "https://github.com/Costenho19/atf-protocol-standard"
+  "RFC-ATF-1 (DOI)"       = "https://doi.org/10.5281/zenodo.20155016"
+  "RFC-ATF-2 (SSRN)"      = "https://papers.ssrn.com/sol3/papers.cfm?abstract_id=6763978"
+  
