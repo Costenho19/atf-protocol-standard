@@ -1,0 +1,1072 @@
+{
+  "atf_conformance_vectors_version": "1.0",
+  "generated": "2026-05-16",
+  "profile_coverage": {
+    "ATF-Compliant": {
+      "positive": 8,
+      "negative": 7
+    },
+    "ATF-RGC-Compliant": {
+      "positive": 6,
+      "negative": 5
+    },
+    "ATF-FEI-Compliant": {
+      "positive": 4,
+      "negative": 4
+    }
+  },
+  "vectors": [
+    {
+      "id": "V-ATF-001-P",
+      "profile": "ATF-Compliant",
+      "invariant": "ATF-INV-001",
+      "kind": "positive",
+      "description": "Valid DR: granted budget strictly less than delegator",
+      "input": {
+        "delegation_id": "ATFDR-AABBCCDDEEFF0011",
+        "atf_version": "1.0",
+        "receipt_type": "delegation_receipt",
+        "issuer_id": "HUMAN-principal-001",
+        "delegate_id": "AID-TEST-AABBCCDDEEFF0011",
+        "chain_root_id": "ATFDR-AABBCCDDEEFF0011",
+        "delegation_depth": 1,
+        "authority_budget_delegator": 100,
+        "authority_budget_granted": 60,
+        "task_scope": {
+          "action": "analyze",
+          "asset": "portfolio_x"
+        },
+        "issued_at": "2026-05-16T10:00:00Z",
+        "expires_at": "2026-05-16T18:00:00Z",
+        "content_hash": "sha256:placeholder",
+        "pqc_signature": "illustrative",
+        "pqc_algorithm": "ML-DSA-65"
+      },
+      "expected": {
+        "verdict": "PASS",
+        "reason_code": null
+      }
+    },
+    {
+      "id": "V-ATF-002-P",
+      "profile": "ATF-Compliant",
+      "invariant": "ATF-INV-001",
+      "kind": "positive",
+      "description": "Valid DR: granted budget exactly equal to delegator (boundary)",
+      "input": {
+        "delegation_id": "ATFDR-AABBCCDDEEFF0022",
+        "atf_version": "1.0",
+        "receipt_type": "delegation_receipt",
+        "issuer_id": "HUMAN-principal-001",
+        "delegate_id": "AID-TEST-AABBCCDDEEFF0022",
+        "chain_root_id": "ATFDR-AABBCCDDEEFF0022",
+        "delegation_depth": 1,
+        "authority_budget_delegator": 50,
+        "authority_budget_granted": 50,
+        "task_scope": {
+          "action": "read"
+        },
+        "issued_at": "2026-05-16T10:00:00Z",
+        "expires_at": "2026-05-17T10:00:00Z",
+        "content_hash": "sha256:placeholder",
+        "pqc_signature": "illustrative",
+        "pqc_algorithm": "ML-DSA-65"
+      },
+      "expected": {
+        "verdict": "PASS",
+        "reason_code": null
+      }
+    },
+    {
+      "id": "V-ATF-003-P",
+      "profile": "ATF-Compliant",
+      "invariant": "ATF-INV-001",
+      "kind": "positive",
+      "description": "Valid DR: granted budget is zero (minimal authority)",
+      "input": {
+        "delegation_id": "ATFDR-AABBCCDDEEFF0033",
+        "atf_version": "1.0",
+        "receipt_type": "delegation_receipt",
+        "issuer_id": "HUMAN-principal-001",
+        "delegate_id": "AID-TEST-AABBCCDDEEFF0033",
+        "chain_root_id": "ATFDR-AABBCCDDEEFF0033",
+        "delegation_depth": 1,
+        "authority_budget_delegator": 100,
+        "authority_budget_granted": 0,
+        "task_scope": {
+          "action": "observe"
+        },
+        "issued_at": "2026-05-16T10:00:00Z",
+        "expires_at": "2026-05-17T10:00:00Z",
+        "content_hash": "sha256:placeholder",
+        "pqc_signature": "illustrative",
+        "pqc_algorithm": "ML-DSA-65"
+      },
+      "expected": {
+        "verdict": "PASS",
+        "reason_code": null
+      }
+    },
+    {
+      "id": "V-ATF-004-P",
+      "profile": "ATF-Compliant",
+      "invariant": "ATF-INV-002",
+      "kind": "positive",
+      "description": "Valid delegation_id: ATFDR-{16HEX} format",
+      "input": {
+        "delegation_id": "ATFDR-0123456789ABCDEF",
+        "atf_version": "1.0",
+        "receipt_type": "delegation_receipt",
+        "issuer_id": "HUMAN-001",
+        "delegate_id": "AID-TEST-0011223344556677",
+        "chain_root_id": "ATFDR-0123456789ABCDEF",
+        "delegation_depth": 1,
+        "authority_budget_delegator": 100,
+        "authority_budget_granted": 50,
+        "task_scope": {
+          "action": "test"
+        },
+        "issued_at": "2026-05-16T10:00:00Z",
+        "expires_at": "2026-05-17T10:00:00Z",
+        "content_hash": "sha256:placeholder",
+        "pqc_signature": "illustrative",
+        "pqc_algorithm": "ML-DSA-65"
+      },
+      "expected": {
+        "verdict": "PASS",
+        "reason_code": null
+      }
+    },
+    {
+      "id": "V-ATF-005-P",
+      "profile": "ATF-Compliant",
+      "invariant": "ATF-INV-003",
+      "kind": "positive",
+      "description": "Root DR: chain_root_id equals delegation_id",
+      "input": {
+        "delegation_id": "ATFDR-FEDCBA9876543210",
+        "atf_version": "1.0",
+        "receipt_type": "delegation_receipt",
+        "issuer_id": "HUMAN-001",
+        "delegate_id": "AID-TEST-FEDCBA9876543210",
+        "chain_root_id": "ATFDR-FEDCBA9876543210",
+        "delegation_depth": 1,
+        "authority_budget_delegator": 100,
+        "authority_budget_granted": 80,
+        "task_scope": {
+          "action": "execute"
+        },
+        "issued_at": "2026-05-16T10:00:00Z",
+        "expires_at": "2026-05-17T10:00:00Z",
+        "content_hash": "sha256:placeholder",
+        "pqc_signature": "illustrative",
+        "pqc_algorithm": "ML-DSA-65"
+      },
+      "expected": {
+        "verdict": "PASS",
+        "reason_code": null
+      }
+    },
+    {
+      "id": "V-ATF-006-P",
+      "profile": "ATF-Compliant",
+      "invariant": "ATF-INV-004",
+      "kind": "positive",
+      "description": "Content hash excludes pqc_signature and pqc_algorithm fields",
+      "input": {
+        "delegation_id": "ATFDR-1122334455667788",
+        "atf_version": "1.0",
+        "receipt_type": "delegation_receipt",
+        "issuer_id": "HUMAN-001",
+        "delegate_id": "AID-TEST-1122334455667788",
+        "chain_root_id": "ATFDR-1122334455667788",
+        "delegation_depth": 1,
+        "authority_budget_delegator": 100,
+        "authority_budget_granted": 70,
+        "task_scope": {
+          "action": "analyze"
+        },
+        "issued_at": "2026-05-16T10:00:00Z",
+        "expires_at": "2026-05-17T10:00:00Z",
+        "content_hash": "sha256:placeholder",
+        "pqc_signature": "SIGNATURE_VALUE_A",
+        "pqc_algorithm": "ML-DSA-65"
+      },
+      "expected": {
+        "verdict": "PASS",
+        "reason_code": null
+      },
+      "note": "Replace pqc_signature with any value — content_hash must not change"
+    },
+    {
+      "id": "V-ATF-007-P",
+      "profile": "ATF-Compliant",
+      "invariant": "ATF-INV-005",
+      "kind": "positive",
+      "description": "Verifier produces result without network access",
+      "input": {
+        "delegation_id": "ATFDR-AABBCCDDEEFF0044",
+        "atf_version": "1.0",
+        "receipt_type": "delegation_receipt",
+        "issuer_id": "HUMAN-001",
+        "delegate_id": "AID-TEST-AABBCCDDEEFF0044",
+        "chain_root_id": "ATFDR-AABBCCDDEEFF0044",
+        "delegation_depth": 1,
+        "authority_budget_delegator": 100,
+        "authority_budget_granted": 55,
+        "task_scope": {
+          "action": "read"
+        },
+        "issued_at": "2026-05-16T10:00:00Z",
+        "expires_at": "2026-05-17T10:00:00Z",
+        "content_hash": "sha256:placeholder",
+        "pqc_signature": "illustrative",
+        "pqc_algorithm": "ML-DSA-65"
+      },
+      "expected": {
+        "verdict": "PASS",
+        "reason_code": null
+      },
+      "note": "Verifier must not make any network calls to produce this result"
+    },
+    {
+      "id": "V-ATF-008-P",
+      "profile": "ATF-Compliant",
+      "invariant": "ATF-INV-006",
+      "kind": "positive",
+      "description": "DR with non-expired expires_at timestamp",
+      "input": {
+        "delegation_id": "ATFDR-AABBCCDDEEFF0055",
+        "atf_version": "1.0",
+        "receipt_type": "delegation_receipt",
+        "issuer_id": "HUMAN-001",
+        "delegate_id": "AID-TEST-AABBCCDDEEFF0055",
+        "chain_root_id": "ATFDR-AABBCCDDEEFF0055",
+        "delegation_depth": 1,
+        "authority_budget_delegator": 100,
+        "authority_budget_granted": 45,
+        "task_scope": {
+          "action": "read"
+        },
+        "issued_at": "2026-05-16T10:00:00Z",
+        "expires_at": "2099-12-31T23:59:59Z",
+        "content_hash": "sha256:placeholder",
+        "pqc_signature": "illustrative",
+        "pqc_algorithm": "ML-DSA-65"
+      },
+      "expected": {
+        "verdict": "PASS",
+        "reason_code": null
+      }
+    },
+    {
+      "id": "V-ATF-001-N",
+      "profile": "ATF-Compliant",
+      "invariant": "ATF-INV-001",
+      "kind": "negative",
+      "description": "MAR violation: granted > delegator (privilege escalation)",
+      "input": {
+        "delegation_id": "ATFDR-BADBADBADBADBAD1",
+        "atf_version": "1.0",
+        "receipt_type": "delegation_receipt",
+        "issuer_id": "HUMAN-001",
+        "delegate_id": "AID-TEST-BADBADBADBADBAD1",
+        "chain_root_id": "ATFDR-BADBADBADBADBAD1",
+        "delegation_depth": 1,
+        "authority_budget_delegator": 50,
+        "authority_budget_granted": 51,
+        "task_scope": {
+          "action": "execute"
+        },
+        "issued_at": "2026-05-16T10:00:00Z",
+        "expires_at": "2026-05-17T10:00:00Z",
+        "content_hash": "sha256:placeholder",
+        "pqc_signature": "illustrative",
+        "pqc_algorithm": "ML-DSA-65"
+      },
+      "expected": {
+        "verdict": "FAIL",
+        "reason_code": "mar_atf_inv_001"
+      }
+    },
+    {
+      "id": "V-ATF-002-N",
+      "profile": "ATF-Compliant",
+      "invariant": "ATF-INV-001",
+      "kind": "negative",
+      "description": "MAR violation: granted = delegator + 0.001 (floating-point boundary)",
+      "input": {
+        "delegation_id": "ATFDR-BADBADBADBADBAD2",
+        "atf_version": "1.0",
+        "receipt_type": "delegation_receipt",
+        "issuer_id": "HUMAN-001",
+        "delegate_id": "AID-TEST-BADBADBADBADBAD2",
+        "chain_root_id": "ATFDR-BADBADBADBADBAD2",
+        "delegation_depth": 1,
+        "authority_budget_delegator": 100,
+        "authority_budget_granted": 100.001,
+        "task_scope": {
+          "action": "execute"
+        },
+        "issued_at": "2026-05-16T10:00:00Z",
+        "expires_at": "2026-05-17T10:00:00Z",
+        "content_hash": "sha256:placeholder",
+        "pqc_signature": "illustrative",
+        "pqc_algorithm": "ML-DSA-65"
+      },
+      "expected": {
+        "verdict": "FAIL",
+        "reason_code": "mar_atf_inv_001"
+      }
+    },
+    {
+      "id": "V-ATF-003-N",
+      "profile": "ATF-Compliant",
+      "invariant": "ATF-INV-002",
+      "kind": "negative",
+      "description": "Invalid delegation_id: does not match ATFDR-{16HEX} format",
+      "input": {
+        "delegation_id": "INVALID-ID",
+        "atf_version": "1.0",
+        "receipt_type": "delegation_receipt",
+        "issuer_id": "HUMAN-001",
+        "delegate_id": "AID-TEST-AABBCCDDEEFF0066",
+        "chain_root_id": "INVALID-ID",
+        "delegation_depth": 1,
+        "authority_budget_delegator": 100,
+        "authority_budget_granted": 50,
+        "task_scope": {
+          "action": "read"
+        },
+        "issued_at": "2026-05-16T10:00:00Z",
+        "expires_at": "2026-05-17T10:00:00Z",
+        "content_hash": "sha256:placeholder",
+        "pqc_signature": "illustrative",
+        "pqc_algorithm": "ML-DSA-65"
+      },
+      "expected": {
+        "verdict": "FAIL",
+        "reason_code": "id_format_atf_inv_002"
+      }
+    },
+    {
+      "id": "V-ATF-004-N",
+      "profile": "ATF-Compliant",
+      "invariant": "ATF-INV-003",
+      "kind": "negative",
+      "description": "Root DR with chain_root_id != delegation_id",
+      "input": {
+        "delegation_id": "ATFDR-AABBCCDDEEFF0077",
+        "atf_version": "1.0",
+        "receipt_type": "delegation_receipt",
+        "issuer_id": "HUMAN-001",
+        "delegate_id": "AID-TEST-AABBCCDDEEFF0077",
+        "chain_root_id": "ATFDR-FFFFFFFFFFFFFFFF",
+        "delegation_depth": 1,
+        "authority_budget_delegator": 100,
+        "authority_budget_granted": 50,
+        "task_scope": {
+          "action": "read"
+        },
+        "issued_at": "2026-05-16T10:00:00Z",
+        "expires_at": "2026-05-17T10:00:00Z",
+        "content_hash": "sha256:placeholder",
+        "pqc_signature": "illustrative",
+        "pqc_algorithm": "ML-DSA-65"
+      },
+      "expected": {
+        "verdict": "FAIL",
+        "reason_code": "chain_root_atf_inv_003"
+      }
+    },
+    {
+      "id": "V-ATF-005-N",
+      "profile": "ATF-Compliant",
+      "invariant": "ATF-INV-004",
+      "kind": "negative",
+      "description": "Tampered receipt: authority_budget_granted changed after signing",
+      "input": {
+        "delegation_id": "ATFDR-AABBCCDDEEFF0088",
+        "atf_version": "1.0",
+        "receipt_type": "delegation_receipt",
+        "issuer_id": "HUMAN-001",
+        "delegate_id": "AID-TEST-AABBCCDDEEFF0088",
+        "chain_root_id": "ATFDR-AABBCCDDEEFF0088",
+        "delegation_depth": 1,
+        "authority_budget_delegator": 100,
+        "authority_budget_granted": 99.9,
+        "task_scope": {
+          "action": "execute"
+        },
+        "issued_at": "2026-05-16T10:00:00Z",
+        "expires_at": "2026-05-17T10:00:00Z",
+        "content_hash": "sha256:ORIGINAL_HASH_BEFORE_TAMPERING",
+        "pqc_signature": "illustrative",
+        "pqc_algorithm": "ML-DSA-65",
+        "_test_note": "content_hash does not match recomputed hash — simulates post-signing tampering"
+      },
+      "expected": {
+        "verdict": "FAIL",
+        "reason_code": "content_hash_mismatch"
+      }
+    },
+    {
+      "id": "V-ATF-006-N",
+      "profile": "ATF-Compliant",
+      "invariant": "ATF-INV-006",
+      "kind": "negative",
+      "description": "Expired DR: expires_at is in the past",
+      "input": {
+        "delegation_id": "ATFDR-AABBCCDDEEFF0099",
+        "atf_version": "1.0",
+        "receipt_type": "delegation_receipt",
+        "issuer_id": "HUMAN-001",
+        "delegate_id": "AID-TEST-AABBCCDDEEFF0099",
+        "chain_root_id": "ATFDR-AABBCCDDEEFF0099",
+        "delegation_depth": 1,
+        "authority_budget_delegator": 100,
+        "authority_budget_granted": 50,
+        "task_scope": {
+          "action": "read"
+        },
+        "issued_at": "2020-01-01T00:00:00Z",
+        "expires_at": "2020-01-02T00:00:00Z",
+        "content_hash": "sha256:placeholder",
+        "pqc_signature": "illustrative",
+        "pqc_algorithm": "ML-DSA-65"
+      },
+      "expected": {
+        "verdict": "FAIL",
+        "reason_code": "expired_atf_inv_006"
+      }
+    },
+    {
+      "id": "V-ATF-007-N",
+      "profile": "ATF-Compliant",
+      "invariant": "ATF-INV-006",
+      "kind": "negative",
+      "description": "DR with issued_at after expires_at (temporal inversion)",
+      "input": {
+        "delegation_id": "ATFDR-AABBCCDDEEFF00AA",
+        "atf_version": "1.0",
+        "receipt_type": "delegation_receipt",
+        "issuer_id": "HUMAN-001",
+        "delegate_id": "AID-TEST-AABBCCDDEEFF00AA",
+        "chain_root_id": "ATFDR-AABBCCDDEEFF00AA",
+        "delegation_depth": 1,
+        "authority_budget_delegator": 100,
+        "authority_budget_granted": 50,
+        "task_scope": {
+          "action": "read"
+        },
+        "issued_at": "2026-05-16T12:00:00Z",
+        "expires_at": "2026-05-16T10:00:00Z",
+        "content_hash": "sha256:placeholder",
+        "pqc_signature": "illustrative",
+        "pqc_algorithm": "ML-DSA-65"
+      },
+      "expected": {
+        "verdict": "FAIL",
+        "reason_code": "temporal_inversion_atf_inv_006"
+      }
+    },
+    {
+      "id": "V-RGC-001-P",
+      "profile": "ATF-RGC-Compliant",
+      "invariant": "RGC-INV-001",
+      "kind": "positive",
+      "description": "Valid RCR with non-null tar_id",
+      "input": {
+        "rcr_id": "ATFRCR-1122334455667788",
+        "atf_version": "2.0",
+        "receipt_type": "runtime_continuity_record",
+        "delegation_id": "ATFDR-AABBCCDDEEFF0011",
+        "agent_id": "AID-TEST-AABBCCDDEEFF0011",
+        "chain_root_id": "ATFDR-AABBCCDDEEFF0011",
+        "tar_id": "ATFTAR-1F2E3D4C5B6A7890",
+        "execution_ns": 1747400000000000000,
+        "ces_temporal": 99,
+        "ces_budget": 100,
+        "ces_context": 80,
+        "ces_integrity": 100,
+        "ces_score": 95.7,
+        "continuity_status": "NOMINAL",
+        "budget_at_admission": 60,
+        "budget_remaining": 55,
+        "context_drift_pct": 20,
+        "content_hash": "sha256:placeholder",
+        "pqc_signature": "illustrative",
+        "pqc_algorithm": "ML-DSA-65"
+      },
+      "expected": {
+        "verdict": "PASS",
+        "reason_code": null
+      }
+    },
+    {
+      "id": "V-RGC-002-P",
+      "profile": "ATF-RGC-Compliant",
+      "invariant": "RGC-INV-002",
+      "kind": "positive",
+      "description": "CES score matches formula T×0.30+B×0.30+D×0.20+I×0.20",
+      "input": {
+        "rcr_id": "ATFRCR-AABBCCDDEEFF0011",
+        "atf_version": "2.0",
+        "receipt_type": "runtime_continuity_record",
+        "delegation_id": "ATFDR-AABBCCDDEEFF0011",
+        "agent_id": "AID-TEST-AABBCCDDEEFF0011",
+        "chain_root_id": "ATFDR-AABBCCDDEEFF0011",
+        "tar_id": "ATFTAR-1F2E3D4C5B6A7890",
+        "execution_ns": 1747400000000000000,
+        "ces_temporal": 80,
+        "ces_budget": 90,
+        "ces_context": 70,
+        "ces_integrity": 100,
+        "ces_score": 85,
+        "_ces_formula": "80*0.30 + 90*0.30 + 70*0.20 + 100*0.20 = 24+27+14+20 = 85.0",
+        "continuity_status": "NOMINAL",
+        "budget_at_admission": 60,
+        "budget_remaining": 50,
+        "context_drift_pct": 30,
+        "content_hash": "sha256:placeholder",
+        "pqc_signature": "illustrative",
+        "pqc_algorithm": "ML-DSA-65"
+      },
+      "expected": {
+        "verdict": "PASS",
+        "reason_code": null
+      }
+    },
+    {
+      "id": "V-RGC-003-P",
+      "profile": "ATF-RGC-Compliant",
+      "invariant": "RGC-INV-002",
+      "kind": "positive",
+      "description": "HALT condition: CES < 10.0",
+      "input": {
+        "rcr_id": "ATFRCR-AABBCCDDEEFF0022",
+        "atf_version": "2.0",
+        "receipt_type": "runtime_continuity_record",
+        "delegation_id": "ATFDR-AABBCCDDEEFF0011",
+        "agent_id": "AID-TEST-AABBCCDDEEFF0011",
+        "chain_root_id": "ATFDR-AABBCCDDEEFF0011",
+        "tar_id": "ATFTAR-1F2E3D4C5B6A7890",
+        "execution_ns": 1747400000000000000,
+        "ces_temporal": 5,
+        "ces_budget": 5,
+        "ces_context": 5,
+        "ces_integrity": 5,
+        "ces_score": 5,
+        "continuity_status": "HALT",
+        "budget_at_admission": 60,
+        "budget_remaining": 1,
+        "context_drift_pct": 95,
+        "content_hash": "sha256:placeholder",
+        "pqc_signature": "illustrative",
+        "pqc_algorithm": "ML-DSA-65"
+      },
+      "expected": {
+        "verdict": "PASS",
+        "reason_code": null
+      }
+    },
+    {
+      "id": "V-RGC-004-P",
+      "profile": "ATF-RGC-Compliant",
+      "invariant": "RGC-INV-003",
+      "kind": "positive",
+      "description": "Status correctly derived from CES thresholds",
+      "input": {
+        "rcr_id": "ATFRCR-AABBCCDDEEFF0033",
+        "atf_version": "2.0",
+        "receipt_type": "runtime_continuity_record",
+        "delegation_id": "ATFDR-AABBCCDDEEFF0011",
+        "agent_id": "AID-TEST-AABBCCDDEEFF0011",
+        "chain_root_id": "ATFDR-AABBCCDDEEFF0011",
+        "tar_id": "ATFTAR-1F2E3D4C5B6A7890",
+        "execution_ns": 1747400000000000000,
+        "ces_temporal": 60,
+        "ces_budget": 60,
+        "ces_context": 60,
+        "ces_integrity": 60,
+        "ces_score": 60,
+        "continuity_status": "MONITORING",
+        "budget_at_admission": 60,
+        "budget_remaining": 40,
+        "context_drift_pct": 40,
+        "content_hash": "sha256:placeholder",
+        "pqc_signature": "illustrative",
+        "pqc_algorithm": "ML-DSA-65"
+      },
+      "expected": {
+        "verdict": "PASS",
+        "reason_code": null
+      }
+    },
+    {
+      "id": "V-RGC-005-P",
+      "profile": "ATF-RGC-Compliant",
+      "invariant": "RGC-INV-004",
+      "kind": "positive",
+      "description": "HALT status is correctly identified by verifier",
+      "input": {
+        "rcr_id": "ATFRCR-AABBCCDDEEFF0044",
+        "atf_version": "2.0",
+        "receipt_type": "runtime_continuity_record",
+        "delegation_id": "ATFDR-AABBCCDDEEFF0011",
+        "agent_id": "AID-TEST-AABBCCDDEEFF0011",
+        "chain_root_id": "ATFDR-AABBCCDDEEFF0011",
+        "tar_id": "ATFTAR-1F2E3D4C5B6A7890",
+        "execution_ns": 1747400000000000000,
+        "ces_temporal": 3,
+        "ces_budget": 3,
+        "ces_context": 3,
+        "ces_integrity": 3,
+        "ces_score": 3,
+        "continuity_status": "HALT",
+        "budget_at_admission": 60,
+        "budget_remaining": 0.5,
+        "context_drift_pct": 99,
+        "content_hash": "sha256:placeholder",
+        "pqc_signature": "illustrative",
+        "pqc_algorithm": "ML-DSA-65"
+      },
+      "expected": {
+        "verdict": "PASS",
+        "reason_code": null
+      }
+    },
+    {
+      "id": "V-RGC-006-P",
+      "profile": "ATF-RGC-Compliant",
+      "invariant": "RGC-INV-006",
+      "kind": "positive",
+      "description": "execution_ns is a valid positive integer (nanoseconds)",
+      "input": {
+        "rcr_id": "ATFRCR-AABBCCDDEEFF0055",
+        "atf_version": "2.0",
+        "receipt_type": "runtime_continuity_record",
+        "delegation_id": "ATFDR-AABBCCDDEEFF0011",
+        "agent_id": "AID-TEST-AABBCCDDEEFF0011",
+        "chain_root_id": "ATFDR-AABBCCDDEEFF0011",
+        "tar_id": "ATFTAR-1F2E3D4C5B6A7890",
+        "execution_ns": 1747400000123456800,
+        "ces_temporal": 95,
+        "ces_budget": 95,
+        "ces_context": 95,
+        "ces_integrity": 95,
+        "ces_score": 95,
+        "continuity_status": "NOMINAL",
+        "budget_at_admission": 60,
+        "budget_remaining": 58,
+        "context_drift_pct": 5,
+        "content_hash": "sha256:placeholder",
+        "pqc_signature": "illustrative",
+        "pqc_algorithm": "ML-DSA-65"
+      },
+      "expected": {
+        "verdict": "PASS",
+        "reason_code": null
+      }
+    },
+    {
+      "id": "V-RGC-001-N",
+      "profile": "ATF-RGC-Compliant",
+      "invariant": "RGC-INV-001",
+      "kind": "negative",
+      "description": "RCR with null tar_id",
+      "input": {
+        "rcr_id": "ATFRCR-BADBADBADBADBAD1",
+        "atf_version": "2.0",
+        "receipt_type": "runtime_continuity_record",
+        "delegation_id": "ATFDR-AABBCCDDEEFF0011",
+        "agent_id": "AID-TEST-AABBCCDDEEFF0011",
+        "chain_root_id": "ATFDR-AABBCCDDEEFF0011",
+        "tar_id": null,
+        "execution_ns": 1747400000000000000,
+        "ces_temporal": 90,
+        "ces_budget": 90,
+        "ces_context": 90,
+        "ces_integrity": 90,
+        "ces_score": 90,
+        "continuity_status": "NOMINAL",
+        "budget_at_admission": 60,
+        "budget_remaining": 55,
+        "context_drift_pct": 10,
+        "content_hash": "sha256:placeholder",
+        "pqc_signature": "illustrative",
+        "pqc_algorithm": "ML-DSA-65"
+      },
+      "expected": {
+        "verdict": "FAIL",
+        "reason_code": "rgc_inv_001"
+      }
+    },
+    {
+      "id": "V-RGC-002-N",
+      "profile": "ATF-RGC-Compliant",
+      "invariant": "RGC-INV-002",
+      "kind": "negative",
+      "description": "CES score does not match formula (manipulation attempt)",
+      "input": {
+        "rcr_id": "ATFRCR-BADBADBADBADBAD2",
+        "atf_version": "2.0",
+        "receipt_type": "runtime_continuity_record",
+        "delegation_id": "ATFDR-AABBCCDDEEFF0011",
+        "agent_id": "AID-TEST-AABBCCDDEEFF0011",
+        "chain_root_id": "ATFDR-AABBCCDDEEFF0011",
+        "tar_id": "ATFTAR-1F2E3D4C5B6A7890",
+        "execution_ns": 1747400000000000000,
+        "ces_temporal": 10,
+        "ces_budget": 10,
+        "ces_context": 10,
+        "ces_integrity": 10,
+        "ces_score": 95,
+        "_test_note": "ces_score=95.0 but formula gives 10.0 — manipulation to fake NOMINAL status",
+        "continuity_status": "NOMINAL",
+        "budget_at_admission": 60,
+        "budget_remaining": 5,
+        "context_drift_pct": 90,
+        "content_hash": "sha256:placeholder",
+        "pqc_signature": "illustrative",
+        "pqc_algorithm": "ML-DSA-65"
+      },
+      "expected": {
+        "verdict": "FAIL",
+        "reason_code": "ces_formula_rgc_inv_002"
+      }
+    },
+    {
+      "id": "V-RGC-003-N",
+      "profile": "ATF-RGC-Compliant",
+      "invariant": "RGC-INV-002",
+      "kind": "negative",
+      "description": "CES score out of range (> 100.0)",
+      "input": {
+        "rcr_id": "ATFRCR-BADBADBADBADBAD3",
+        "atf_version": "2.0",
+        "receipt_type": "runtime_continuity_record",
+        "delegation_id": "ATFDR-AABBCCDDEEFF0011",
+        "agent_id": "AID-TEST-AABBCCDDEEFF0011",
+        "chain_root_id": "ATFDR-AABBCCDDEEFF0011",
+        "tar_id": "ATFTAR-1F2E3D4C5B6A7890",
+        "execution_ns": 1747400000000000000,
+        "ces_temporal": 100,
+        "ces_budget": 100,
+        "ces_context": 100,
+        "ces_integrity": 100,
+        "ces_score": 150,
+        "continuity_status": "NOMINAL",
+        "budget_at_admission": 60,
+        "budget_remaining": 60,
+        "context_drift_pct": 0,
+        "content_hash": "sha256:placeholder",
+        "pqc_signature": "illustrative",
+        "pqc_algorithm": "ML-DSA-65"
+      },
+      "expected": {
+        "verdict": "FAIL",
+        "reason_code": "ces_formula_rgc_inv_002"
+      }
+    },
+    {
+      "id": "V-RGC-004-N",
+      "profile": "ATF-RGC-Compliant",
+      "invariant": "RGC-INV-003",
+      "kind": "negative",
+      "description": "Status mismatch: NOMINAL claimed but CES=5.0 implies HALT",
+      "input": {
+        "rcr_id": "ATFRCR-BADBADBADBADBAD4",
+        "atf_version": "2.0",
+        "receipt_type": "runtime_continuity_record",
+        "delegation_id": "ATFDR-AABBCCDDEEFF0011",
+        "agent_id": "AID-TEST-AABBCCDDEEFF0011",
+        "chain_root_id": "ATFDR-AABBCCDDEEFF0011",
+        "tar_id": "ATFTAR-1F2E3D4C5B6A7890",
+        "execution_ns": 1747400000000000000,
+        "ces_temporal": 5,
+        "ces_budget": 5,
+        "ces_context": 5,
+        "ces_integrity": 5,
+        "ces_score": 5,
+        "continuity_status": "NOMINAL",
+        "budget_at_admission": 60,
+        "budget_remaining": 1,
+        "context_drift_pct": 95,
+        "content_hash": "sha256:placeholder",
+        "pqc_signature": "illustrative",
+        "pqc_algorithm": "ML-DSA-65"
+      },
+      "expected": {
+        "verdict": "FAIL",
+        "reason_code": "status_mismatch_rgc_inv_003"
+      }
+    },
+    {
+      "id": "V-RGC-005-N",
+      "profile": "ATF-RGC-Compliant",
+      "invariant": "RGC-INV-004",
+      "kind": "negative",
+      "description": "HALT status with no escalation_event_id (escalation not recorded)",
+      "input": {
+        "rcr_id": "ATFRCR-BADBADBADBADBAD5",
+        "atf_version": "2.0",
+        "receipt_type": "runtime_continuity_record",
+        "delegation_id": "ATFDR-AABBCCDDEEFF0011",
+        "agent_id": "AID-TEST-AABBCCDDEEFF0011",
+        "chain_root_id": "ATFDR-AABBCCDDEEFF0011",
+        "tar_id": "ATFTAR-1F2E3D4C5B6A7890",
+        "execution_ns": 1747400000000000000,
+        "ces_temporal": 5,
+        "ces_budget": 5,
+        "ces_context": 5,
+        "ces_integrity": 5,
+        "ces_score": 5,
+        "continuity_status": "HALT",
+        "escalation_event_id": null,
+        "budget_at_admission": 60,
+        "budget_remaining": 0.5,
+        "context_drift_pct": 99,
+        "content_hash": "sha256:placeholder",
+        "pqc_signature": "illustrative",
+        "pqc_algorithm": "ML-DSA-65"
+      },
+      "expected": {
+        "verdict": "FAIL",
+        "reason_code": "halt_no_escalation_rgc_inv_004"
+      }
+    },
+    {
+      "id": "V-FEI-001-P",
+      "profile": "ATF-FEI-Compliant",
+      "invariant": "EAP-INV-005",
+      "kind": "positive",
+      "description": "Verifier produces deterministic result across two identical runs",
+      "input": {
+        "delegation_id": "ATFDR-AABBCCDDEEFF00BB",
+        "atf_version": "1.0",
+        "receipt_type": "delegation_receipt",
+        "issuer_id": "HUMAN-001",
+        "delegate_id": "AID-TEST-AABBCCDDEEFF00BB",
+        "chain_root_id": "ATFDR-AABBCCDDEEFF00BB",
+        "delegation_depth": 1,
+        "authority_budget_delegator": 100,
+        "authority_budget_granted": 50,
+        "task_scope": {
+          "action": "analyze"
+        },
+        "issued_at": "2026-05-16T10:00:00Z",
+        "expires_at": "2099-12-31T23:59:59Z",
+        "content_hash": "sha256:placeholder",
+        "pqc_signature": "illustrative",
+        "pqc_algorithm": "ML-DSA-65"
+      },
+      "expected": {
+        "verdict": "PASS",
+        "reason_code": null
+      },
+      "note": "Run verifier twice with identical input — both runs must produce identical output (FVP-INV-007)"
+    },
+    {
+      "id": "V-FEI-002-P",
+      "profile": "ATF-FEI-Compliant",
+      "invariant": "EAP-INV-007",
+      "kind": "positive",
+      "description": "Entry hash computation is deterministic for identical payload",
+      "input": {
+        "delegation_id": "ATFDR-AABBCCDDEEFF00CC",
+        "atf_version": "1.0",
+        "receipt_type": "delegation_receipt",
+        "issuer_id": "HUMAN-001",
+        "delegate_id": "AID-TEST-AABBCCDDEEFF00CC",
+        "chain_root_id": "ATFDR-AABBCCDDEEFF00CC",
+        "delegation_depth": 1,
+        "authority_budget_delegator": 100,
+        "authority_budget_granted": 50,
+        "task_scope": {
+          "action": "archive"
+        },
+        "issued_at": "2026-05-16T10:00:00Z",
+        "expires_at": "2099-12-31T23:59:59Z",
+        "content_hash": "sha256:placeholder",
+        "pqc_signature": "illustrative",
+        "pqc_algorithm": "ML-DSA-65"
+      },
+      "expected": {
+        "verdict": "PASS",
+        "reason_code": null
+      }
+    },
+    {
+      "id": "V-FEI-003-P",
+      "profile": "ATF-FEI-Compliant",
+      "invariant": "OEP-INV-002",
+      "kind": "positive",
+      "description": "Content hash excludes all protocol-defined metadata fields",
+      "input": {
+        "delegation_id": "ATFDR-AABBCCDDEEFF00DD",
+        "atf_version": "1.0",
+        "receipt_type": "delegation_receipt",
+        "issuer_id": "HUMAN-001",
+        "delegate_id": "AID-TEST-AABBCCDDEEFF00DD",
+        "chain_root_id": "ATFDR-AABBCCDDEEFF00DD",
+        "delegation_depth": 1,
+        "authority_budget_delegator": 100,
+        "authority_budget_granted": 50,
+        "task_scope": {
+          "action": "verify"
+        },
+        "issued_at": "2026-05-16T10:00:00Z",
+        "expires_at": "2099-12-31T23:59:59Z",
+        "content_hash": "sha256:placeholder",
+        "pqc_signature": "SIGNATURE_VALUE_1",
+        "pqc_algorithm": "ML-DSA-65",
+        "_comment": "any"
+      },
+      "expected": {
+        "verdict": "PASS",
+        "reason_code": null
+      }
+    },
+    {
+      "id": "V-FEI-004-P",
+      "profile": "ATF-FEI-Compliant",
+      "invariant": "FVP-INV-007",
+      "kind": "positive",
+      "description": "Identical receipts produce identical content hash (determinism)",
+      "input": {
+        "delegation_id": "ATFDR-AABBCCDDEEFF00EE",
+        "atf_version": "1.0",
+        "receipt_type": "delegation_receipt",
+        "issuer_id": "HUMAN-001",
+        "delegate_id": "AID-TEST-AABBCCDDEEFF00EE",
+        "chain_root_id": "ATFDR-AABBCCDDEEFF00EE",
+        "delegation_depth": 1,
+        "authority_budget_delegator": 100,
+        "authority_budget_granted": 50,
+        "task_scope": {
+          "action": "verify"
+        },
+        "issued_at": "2026-05-16T10:00:00Z",
+        "expires_at": "2099-12-31T23:59:59Z",
+        "content_hash": "sha256:placeholder",
+        "pqc_signature": "illustrative",
+        "pqc_algorithm": "ML-DSA-65"
+      },
+      "expected": {
+        "verdict": "PASS",
+        "reason_code": null
+      }
+    },
+    {
+      "id": "V-FEI-001-N",
+      "profile": "ATF-FEI-Compliant",
+      "invariant": "EAP-INV-007",
+      "kind": "negative",
+      "description": "Entry hash does not match receipt payload (tampering)",
+      "input": {
+        "delegation_id": "ATFDR-BADBADBADBADBAD6",
+        "atf_version": "1.0",
+        "receipt_type": "delegation_receipt",
+        "issuer_id": "HUMAN-001",
+        "delegate_id": "AID-TEST-BADBADBADBADBAD6",
+        "chain_root_id": "ATFDR-BADBADBADBADBAD6",
+        "delegation_depth": 1,
+        "authority_budget_delegator": 100,
+        "authority_budget_granted": 99,
+        "task_scope": {
+          "action": "execute"
+        },
+        "issued_at": "2026-05-16T10:00:00Z",
+        "expires_at": "2099-12-31T23:59:59Z",
+        "content_hash": "sha256:0000000000000000000000000000000000000000000000000000000000000000",
+        "pqc_signature": "illustrative",
+        "pqc_algorithm": "ML-DSA-65",
+        "_test_note": "content_hash is zeroed — simulates archive entry hash mismatch"
+      },
+      "expected": {
+        "verdict": "FAIL",
+        "reason_code": "content_hash_mismatch"
+      }
+    },
+    {
+      "id": "V-FEI-002-N",
+      "profile": "ATF-FEI-Compliant",
+      "invariant": "OEP-INV-002",
+      "kind": "negative",
+      "description": "Receipt missing required fields (incomplete payload)",
+      "input": {
+        "delegation_id": "ATFDR-BADBADBADBADBAD7",
+        "receipt_type": "delegation_receipt",
+        "_test_note": "Missing mandatory fields: authority_budget_granted, authority_budget_delegator, content_hash"
+      },
+      "expected": {
+        "verdict": "FAIL",
+        "reason_code": "missing_required_fields"
+      }
+    },
+    {
+      "id": "V-FEI-003-N",
+      "profile": "ATF-FEI-Compliant",
+      "invariant": "FVP-INV-007",
+      "kind": "negative",
+      "description": "Two identical receipts with different pqc_signature produce same content_hash",
+      "input": {
+        "delegation_id": "ATFDR-AABBCCDDEEFF00FF",
+        "atf_version": "1.0",
+        "receipt_type": "delegation_receipt",
+        "issuer_id": "HUMAN-001",
+        "delegate_id": "AID-TEST-AABBCCDDEEFF00FF",
+        "chain_root_id": "ATFDR-AABBCCDDEEFF00FF",
+        "delegation_depth": 1,
+        "authority_budget_delegator": 100,
+        "authority_budget_granted": 50,
+        "task_scope": {
+          "action": "verify"
+        },
+        "issued_at": "2026-05-16T10:00:00Z",
+        "expires_at": "2099-12-31T23:59:59Z",
+        "content_hash": "sha256:placeholder",
+        "pqc_signature": "SIGNATURE_VALUE_B",
+        "pqc_algorithm": "ML-DSA-65",
+        "_test_note": "Changing pqc_signature must NOT change content_hash — if it does, verifier violates FVP-INV-007"
+      },
+      "expected": {
+        "verdict": "PASS",
+        "reason_code": null
+      },
+      "note": "This is a positive-outcome test for FVP-INV-007: signature field isolation must work"
+    },
+    {
+      "id": "V-FEI-004-N",
+      "profile": "ATF-FEI-Compliant",
+      "invariant": "FVP-INV-007",
+      "kind": "negative",
+      "description": "Non-deterministic verifier: same receipt produces different hash on two calls",
+      "input": {
+        "delegation_id": "ATFDR-AABBCCDDEEFF0100",
+        "atf_version": "1.0",
+        "receipt_type": "delegation_receipt",
+        "issuer_id": "HUMAN-001",
+        "delegate_id": "AID-TEST-AABBCCDDEEFF0100",
+        "chain_root_id": "ATFDR-AABBCCDDEEFF0100",
+        "delegation_depth": 1,
+        "authority_budget_delegator": 100,
+        "authority_budget_granted": 50,
+        "task_scope": {
+          "action": "verify"
+        },
+        "issued_at": "2026-05-16T10:00:00Z",
+        "expires_at": "2099-12-31T23:59:59Z",
+        "content_hash": "sha256:placeholder",
+        "pqc_signature": "illustrative",
+        "pqc_algorithm": "ML-DSA-65"
+      },
+      "expected": {
+        "verdict": "PASS",
+        "reason_code": null
+      },
+      "note": "Call compute_content_hash twice — must return identical string both times"
+    }
+  ]
+}
