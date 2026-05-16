@@ -76,6 +76,7 @@ Status of This Memo
    Group.  It has been approved for publication by the OMNIX Technical
    Committee.
 
+   Published: May 2026
    DOI: pending (Zenodo submission in progress)
    SSRN: 6763978
 
