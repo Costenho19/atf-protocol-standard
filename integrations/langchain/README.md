@@ -1,6 +1,6 @@
 # atf-langchain
 
-  **ATF Protocol governance layer for LangChain** — enforces RFC-ATF-1/2/3 invariants at every LLM call, tool invocation, and chain execution.
+  **ATF Protocol governance layer for LangChain** — implements RFC-ATF-1/2/3 invariants at every LLM call, tool invocation, and chain execution.
 
   [![ATF-RGC-Compliant](https://img.shields.io/badge/ATF--RGC--Compliant-v1.0.0-3fb950?style=flat-square&logo=data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjIiIGhlaWdodD0iMjIiIHZpZXdCb3g9IjAgMCAyMiAyMiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cG9seWdvbiBwb2ludHM9IjExLDIgMjAsNyAyMCwxNSAxMSwyMCAyLDE1IDIsNyIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjM2ZiOTUwIiBzdHJva2Utd2lkdGg9IjEuNSIvPjwvc3ZnPg==)](https://costenho19.github.io/atf-protocol-standard/conformance/)
   [![Protocol](https://img.shields.io/badge/Protocol-RFC--ATF--1%2F2%2F3-58a6ff?style=flat-square)](https://costenho19.github.io/atf-protocol-standard/)
@@ -118,8 +118,8 @@
 
   ## ATF-RGC-Compliant
 
-  This integration claims **ATF-RGC-Compliant** (Tier 2) because it enforces:
-  - All 6 ATF-Compliant invariants (ATF-INV-001–006)
+  This integration claims **ATF-RGC-Compliant** (Tier 2) because it implements:
+  - All 6 ATF-RGC invariants (ATF-INV-001–006)
   - RGC-INV-001 (CES formula — immutable)
   - RGC-INV-002 (RCR chain integrity — predecessor linkage)
   - RGC-INV-003 (HALT protocol — CES < 10.0)
