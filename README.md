@@ -11,6 +11,7 @@
 [![Invariants](https://img.shields.io/badge/Invariants-40%20Formal-orange?style=flat-square)](#invariants)
 [![License](https://img.shields.io/badge/License-CC%20BY%204.0-lightgrey?style=flat-square)](https://creativecommons.org/licenses/by/4.0/)
   [![CI](https://github.com/Costenho19/atf-protocol-standard/actions/workflows/ci.yml/badge.svg)](https://github.com/Costenho19/atf-protocol-standard/actions/workflows/ci.yml)
+  [![Threat Model](https://img.shields.io/badge/Threat%20Model-Published-red?style=flat-square)](./THREAT_MODEL.md)
 [![Website](https://img.shields.io/badge/Website-costenho19.github.io%2Fatf--protocol--standard-58a6ff?style=flat-square)](https://costenho19.github.io/atf-protocol-standard/)
 
   > **[📖 Browse the Protocol Website →](https://costenho19.github.io/atf-protocol-standard/)** — RFC Index · Public Verifier · Conformance Program
@@ -111,7 +112,45 @@ Adds Layer 5 — Forensic Evidence Infrastructure: policy interoperability acros
 
 ---
 
-## Quick Start
+
+  ---
+
+  ## Why ATF? — Comparison with Alternatives
+
+  | Property | ATF | Open Policy Agent | SPIFFE/SPIRE | JWT / OAuth 2.0 |
+  |---|---|---|---|---|
+  | Cryptographic delegation chain (who authorized what) | ✅ PQC-signed receipt per action | ❌ Policy only — no per-action proof | ❌ Identity only — no task scope | ❌ Bearer token — no chain |
+  | Authority budget monotonicity (MAR) | ✅ ATF-INV-001 — enforced cryptographically | ❌ | ❌ | ❌ |
+  | Runtime authority health monitoring | ✅ CES formula sampled nanosecond-precise | ❌ | ❌ | ❌ |
+  | Post-quantum cryptography (FIPS 204) | ✅ ML-DSA-65 | ❌ | ❌ | ❌ |
+  | Offline regulatory verification (no platform) | ✅ EAP-INV-005 — public key only | ❌ Requires OPA runtime | ❌ Requires SPIRE API | ❌ Requires issuer |
+  | Forensic evidence archive | ✅ Merkle-chained OEP | ❌ | ❌ | ❌ |
+  | AI agent-native design | ✅ | ❌ | ❌ | ❌ |
+  | Published threat model | ✅ [THREAT_MODEL.md](./THREAT_MODEL.md) | Partial | Partial | Partial |
+
+  ATF is **not** a replacement for OPA or SPIFFE. It is a complementary layer:
+  OPA decides *whether* an action is authorized; ATF proves *that* it was authorized,
+  *by whom*, *with what budget*, and *whether authority remained valid throughout execution*.
+
+  ---
+
+  ## Regulatory Alignment
+
+  ATF is architecturally aligned with — but does not constitute compliance with — the following frameworks:
+
+  | Framework | Requirement | ATF Artifact |
+  |---|---|---|
+  | **EU AI Act Art. 9** | Human oversight measures for high-risk AI | Delegation Receipt chain traces every agent action to a human principal |
+  | **EU AI Act Art. 12** | Record-keeping for high-risk AI systems | Evidence Archive Pipeline (EAP) + OEP forensic packages |
+  | **NIST AI RMF PR.AA-06** | AI system authorization | ATF-INV-001 (MAR) — authority budget tracked and bounded |
+  | **NIST AI RMF GV.RR** | Risk response governance | RGC escalation protocol — MONITORING → WARNING → CRITICAL → HALT |
+  | **ISO/IEC 42001 §9.2** | AI management system audit | OEP self-contained forensic packages — offline-verifiable by regulators |
+  | **NIST CSF 2.0 DE.CM** | Continuous monitoring | Runtime Continuity Records — sampled throughout execution lifecycle |
+
+  > ATF provides the **cryptographic evidence layer** that these frameworks require.
+  > It does not replace a compliance programme — it makes one auditable.
+
+  ## Quick Start
 
 **Verify a receipt offline (zero platform dependency):**
 
