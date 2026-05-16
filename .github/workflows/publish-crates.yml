@@ -1,26 +1,25 @@
 name: Publish to crates.io
 
-  on:
-    release:
-      types: [published]
-    workflow_dispatch:
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
 
-  jobs:
-    publish:
-      name: Publish atf-verifier to crates.io
-      runs-on: ubuntu-latest
+jobs:
+  publish:
+    name: Publish atf-verifier to crates.io
+    runs-on: ubuntu-latest
 
-      steps:
-        - uses: actions/checkout@v4
+    steps:
+      - uses: actions/checkout@v4
 
-        - name: Set up Rust (stable)
-          uses: dtolnay/rust-toolchain@stable
+      - name: Set up Rust (stable)
+        uses: dtolnay/rust-toolchain@stable
 
-        - name: Run tests
-          working-directory: ports/rust
-          run: cargo test
+      - name: Run tests
+        working-directory: ports/rust
+        run: cargo test
 
-        - name: Publish to crates.io
-          working-directory: ports/rust
-          run: cargo publish --token ${{ secrets.CRATES_IO_TOKEN }}
-  
+      - name: Publish to crates.io
+        working-directory: ports/rust
+        run: cargo publish --token ${{ secrets.CRATES_IO_TOKEN }}
