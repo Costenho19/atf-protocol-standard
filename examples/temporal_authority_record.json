@@ -11,7 +11,7 @@
   "time_remaining_at_admission_ns": 43200000000000,
   "authority_budget_at_admission": 60,
   "execution_profile": "MEDIUM",
-  "content_hash": "sha256:b4e6f8a0c2d4e6f8a0b2c4d6e8f0a2b4c6d8e0f2a4b6c8d0e2f4a6b8c0d2e4f6",
+  "content_hash": "sha256:3fe1a2bb2b308999af6fdadd574b8e7cb437bdebb04cc3060fe6e0106cf461cd",
   "pqc_signature": "BASE64_ML_DSA_65_SIGNATURE_OVER_CONTENT_HASH",
   "pqc_algorithm": "dilithium3",
   "status": "ACTIVE",
