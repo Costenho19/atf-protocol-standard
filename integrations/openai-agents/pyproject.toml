@@ -1,0 +1,24 @@
+[build-system]
+  requires = ["setuptools>=61","wheel"]
+  build-backend = "setuptools.build_meta"
+
+  [project]
+  name = "atf-openai-agents"
+  version = "1.0.0"
+  description = "ATF Protocol governance for OpenAI Agents SDK — RFC-ATF-1/2/3"
+  readme = "README.md"
+  license = {text = "CC-BY-4.0"}
+  requires-python = ">=3.9"
+  keywords = ["atf-protocol","openai","agents","ai-governance","pqc"]
+  dependencies = ["openai>=1.0"]
+
+  [project.optional-dependencies]
+  agents = ["openai-agents>=0.0.4"]
+  pqc    = ["pypqc>=0.0.8"]
+  dev    = ["pytest>=7","pytest-asyncio"]
+
+  [project.urls]
+  "Protocol Standard" = "https://costenho19.github.io/atf-protocol-standard/"
+  "GitHub" = "https://github.com/Costenho19/atf-protocol-standard"
+  "RFC-ATF-1 (DOI)" = "https://doi.org/10.5281/zenodo.20155016"
+  
