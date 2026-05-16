@@ -24,7 +24,7 @@
   "escalation_event_id": null,
   "reauth_challenge_id": null,
   "sample_reason": "SCHEDULED",
-  "content_hash": "sha256:c5d7e9f1b3a5c7e9f1b3a5c7e9f1b3a5c7e9f1b3a5c7e9f1b3a5c7e9f1b3a5c7",
+  "content_hash": "sha256:50057e575756d0a2e90931977ffdbf1be8a8f921033bb430ab49f90d95bc9bb9",
   "pqc_signature": "BASE64_ML_DSA_65_SIGNATURE_OVER_CONTENT_HASH",
   "pqc_algorithm": "dilithium3",
   "_ces_formula": "CES = T(99.31)×0.30 + B(100.0)×0.30 + D(73.0)×0.20 + I(100.0)×0.20 = 91.25 — NOMINAL"
