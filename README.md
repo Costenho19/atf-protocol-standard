@@ -10,6 +10,7 @@
 [![Spec Version](https://img.shields.io/badge/Spec-v3.0%20(RFC--ATF--3)-orange?style=flat-square)](./RFC-ATF-3.md)
 [![Invariants](https://img.shields.io/badge/Invariants-40%20Formal-orange?style=flat-square)](#invariants)
 [![License](https://img.shields.io/badge/License-CC%20BY%204.0-lightgrey?style=flat-square)](https://creativecommons.org/licenses/by/4.0/)
+  [![CI](https://github.com/Costenho19/atf-protocol-standard/actions/workflows/ci.yml/badge.svg)](https://github.com/Costenho19/atf-protocol-standard/actions/workflows/ci.yml)
 
 ---
 
@@ -214,6 +215,16 @@ atf-protocol-standard/
 ## Contributing
 
 See [CONTRIBUTING.md](./CONTRIBUTING.md). We welcome language ports (Go, TypeScript, Rust), conformance test contributions, and feedback on invariant completeness via Issues.
+
+  ## Releases & Changelog
+
+  | Version | RFC | Date | Invariants |
+  |---|---|---|---|
+  | [v3.0.0](https://github.com/Costenho19/atf-protocol-standard/releases/tag/v3.0.0) | RFC-ATF-3 | May 2026 | 40 total (26 new) |
+  | [v2.0.0](https://github.com/Costenho19/atf-protocol-standard/releases/tag/v2.0.0) | RFC-ATF-2 | Mar 2026 | 14 total (8 new) |
+  | [v1.0.0](https://github.com/Costenho19/atf-protocol-standard/releases/tag/v1.0.0) | RFC-ATF-1 | Jan 2026 | 6 |
+
+  See [CHANGELOG.md](./CHANGELOG.md) for the full history.
 
 ---
 
