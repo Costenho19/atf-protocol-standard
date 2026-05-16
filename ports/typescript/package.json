@@ -1,0 +1,54 @@
+{
+  "name": "@atf-protocol/verifier",
+  "version": "1.0.0",
+  "description": "Offline verifier for Agent Trust Fabric (ATF) receipts — RFC-ATF-1, RFC-ATF-2, RFC-ATF-3",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "build": "tsc",
+    "test": "node --experimental-vm-modules node_modules/.bin/jest",
+    "typecheck": "tsc --noEmit"
+  },
+  "keywords": [
+    "atf-protocol",
+    "agent-trust-fabric",
+    "governance",
+    "pqc",
+    "ml-dsa-65",
+    "dilithium",
+    "ai-governance",
+    "delegation",
+    "offline-verifier",
+    "post-quantum"
+  ],
+  "license": "CC-BY-4.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Costenho19/atf-protocol-standard"
+  },
+  "homepage": "https://github.com/Costenho19/atf-protocol-standard/tree/main/ports/typescript",
+  "peerDependencies": {
+    "@noble/post-quantum": "^0.2.0"
+  },
+  "peerDependenciesMeta": {
+    "@noble/post-quantum": {
+      "optional": true
+    }
+  },
+  "devDependencies": {
+    "typescript": "^5.4.0",
+    "jest": "^29.0.0",
+    "@types/jest": "^29.0.0",
+    "ts-jest": "^29.0.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
