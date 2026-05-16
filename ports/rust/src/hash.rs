@@ -12,6 +12,29 @@
 
   use crate::HASH_EXCLUDE_FIELDS;
   use sha2::{Digest, Sha256};
+  /// Normalize whole-number floats to integers for cross-language parity (FVP-INV-007).
+  /// Python serializes 90.0 as "90.0"; TypeScript JSON.parse drops the ".0" to 90.
+  /// Converting f64 whole numbers to i64 makes all three languages byte-identical.
+  fn normalize_value(v: serde_json::Value) -> serde_json::Value {
+      match v {
+          serde_json::Value::Number(n) => {
+              if let Some(f) = n.as_f64() {
+                  if f.fract() == 0.0 && f >= i64::MIN as f64 && f <= i64::MAX as f64 {
+                      return serde_json::Value::Number(serde_json::Number::from(f as i64));
+                  }
+              }
+              serde_json::Value::Number(n)
+          }
+          serde_json::Value::Object(map) => serde_json::Value::Object(
+              map.into_iter().map(|(k, v)| (k, normalize_value(v))).collect()
+          ),
+          serde_json::Value::Array(arr) => serde_json::Value::Array(
+              arr.into_iter().map(normalize_value).collect()
+          ),
+          other => other,
+      }
+  }
+
 
   /// Sort a JSON Value recursively — object keys sorted lexicographically.
   /// Arrays preserve element order (only object keys are sorted).
@@ -74,8 +97,8 @@
           .map(|(k, v)| (k.clone(), v.clone()))
           .collect();
 
-      // Step 2 — Sort keys lexicographically (recursive for nested objects)
-      let sorted = sort_value(serde_json::Value::Object(filtered));
+      // Step 2 — Normalize whole-number floats (FVP-INV-007), then sort keys
+      let sorted = sort_value(normalize_value(serde_json::Value::Object(filtered)));
 
       // Step 3 — Canonical JSON: compact, no whitespace
       let canonical = to_canonical(&sorted);
