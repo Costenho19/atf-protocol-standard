@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+  <html lang="en">
+  <head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RFC Index — ATF Protocol Standard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  :root{--bg:#0d1117;--bg2:#161b22;--bg3:#21262d;--border:#30363d;--border2:#21262d;--blue:#58a6ff;--blue-dim:#1f6feb;--blue-dark:#0d419d;--green:#3fb950;--gold:#d29922;--amber:#f0883e;--red:#f85149;--purple:#bc8cff;--text:#e6edf3;--muted:#8b949e;--faint:#484f58;--font:'Inter',system-ui,sans-serif;--mono:'JetBrains Mono',monospace;}
+  html{scroll-behavior:smooth}body{background:var(--bg);color:var(--text);font-family:var(--font);line-height:1.6;overflow-x:hidden}
+  a{color:var(--blue);text-decoration:none}a:hover{text-decoration:underline}
+  nav{position:sticky;top:0;z-index:100;background:rgba(13,17,23,.92);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:.75rem 2rem;gap:1rem;flex-wrap:wrap}
+  .nav-brand{display:flex;align-items:center;gap:.6rem;font-weight:700;font-size:.95rem;color:var(--text);text-decoration:none!important}
+  .nav-badge{background:var(--blue-dark);color:var(--blue);font-size:.65rem;font-weight:600;padding:.15rem .5rem;border-radius:999px;border:1px solid var(--blue-dim)}
+  .nav-links{display:flex;align-items:center;gap:.25rem;flex-wrap:wrap}
+  .nav-links a{color:var(--muted);font-size:.85rem;padding:.4rem .75rem;border-radius:6px;transition:all .15s}
+  .nav-links a:hover,.nav-links a.active{color:var(--text);background:var(--bg3);text-decoration:none}
+  .nav-cta{background:var(--blue-dim)!important;color:#fff!important;border-radius:6px;padding:.4rem .9rem;font-weight:500}
+  .nav-cta:hover{background:var(--blue)!important}
+  .container{max-width:1100px;margin:0 auto;padding:0 2rem}
+  .page-header{padding:4rem 2rem 3rem;max-width:1100px;margin:0 auto;border-bottom:1px solid var(--border)}
+  .page-header .section-label{font-size:.75rem;font-weight:600;color:var(--blue);letter-spacing:.1em;text-transform:uppercase;margin-bottom:.75rem}
+  .page-header h1{font-size:clamp(1.8rem,4vw,2.8rem);font-weight:800;letter-spacing:-.02em;margin-bottom:.75rem}
+  .page-header p{color:var(--muted);font-size:1rem;max-width:620px;line-height:1.7}
+  .tag{background:var(--bg3);border:1px solid var(--border);border-radius:5px;font-size:.72rem;font-family:var(--mono);padding:.2rem .5rem;color:var(--muted)}
+  .tag.blue{background:rgba(88,166,255,.1);border-color:rgba(88,166,255,.3);color:var(--blue)}
+  .tag.green{background:rgba(63,185,80,.1);border-color:rgba(63,185,80,.3);color:var(--green)}
+  .tag.gold{background:rgba(210,153,34,.1);border-color:rgba(210,153,34,.3);color:var(--gold)}
+  .tag.purple{background:rgba(188,140,255,.1);border-color:rgba(188,140,255,.3);color:var(--purple)}
+  footer{border-top:1px solid var(--border);padding:2rem;margin-top:4rem;text-align:center;font-size:.78rem;color:var(--faint)}
+  .rfc-nav{display:flex;gap:.5rem;padding:1.5rem 2rem;max-width:1100px;margin:0 auto;flex-wrap:wrap}
+  .rfc-tab{background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:.5rem 1.25rem;font-size:.85rem;font-weight:500;color:var(--muted);cursor:pointer;transition:all .15s;text-decoration:none}
+  .rfc-tab:hover,.rfc-tab.active{background:var(--blue-dim);border-color:var(--blue-dim);color:#fff;text-decoration:none}
+  .rfc-section{padding:2rem;max-width:1100px;margin:0 auto;display:none}
+  .rfc-section.active{display:block}
+  .rfc-header{background:var(--bg2);border:1px solid var(--border);border-radius:16px;padding:2rem;margin-bottom:2rem;position:relative;overflow:hidden}
+  .rfc-header::before{content:'';position:absolute;top:0;left:0;right:0;height:4px}
+  .rfc1-h::before{background:linear-gradient(90deg,var(--blue),var(--purple))}
+  .rfc2-h::before{background:linear-gradient(90deg,var(--purple),var(--amber))}
+  .rfc3-h::before{background:linear-gradient(90deg,var(--amber),var(--gold))}
+  .rfc-header .rfc-id{font-family:var(--mono);font-size:.75rem;color:var(--muted);margin-bottom:.5rem}
+  .rfc-header h2{font-size:1.5rem;font-weight:700;margin-bottom:.75rem}
+  .rfc-header .abstract{font-size:.9rem;color:var(--muted);line-height:1.7;max-width:800px;margin-bottom:1.25rem}
+  .rfc-header .meta-row{display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:1rem}
+  .rfc-header .links{display:flex;gap:1rem;flex-wrap:wrap;font-size:.85rem;font-weight:500}
+  .rfc-body{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem}
+  @media(max-width:700px){.rfc-body{grid-template-columns:1fr}}
+  .rfc-card{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:1.5rem}
+  .rfc-card h3{font-size:.9rem;font-weight:600;margin-bottom:1rem;color:var(--text);padding-bottom:.5rem;border-bottom:1px solid var(--border2)}
+  .inv-item{display:flex;gap:.75rem;align-items:flex-start;margin-bottom:.75rem;font-size:.83rem}
+  .inv-id{font-family:var(--mono);font-size:.72rem;background:var(--bg3);border:1px solid var(--border);padding:.2rem .5rem;border-radius:4px;white-space:nowrap;flex-shrink:0;color:var(--blue)}
+  .inv-desc{color:var(--muted);line-height:1.5}
+  .inv-desc strong{color:var(--text);display:block;margin-bottom:.15rem}
+  .toc{list-style:none;display:flex;flex-direction:column;gap:.4rem}
+  .toc li{display:flex;gap:.75rem;align-items:center}
+  .toc li .sec-n{font-family:var(--mono);font-size:.72rem;color:var(--faint);min-width:2rem}
+  .toc li a{font-size:.83rem;color:var(--muted)}
+  .toc li a:hover{color:var(--blue)}
+  .formula-box{background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:1.25rem;font-family:var(--mono);font-size:.9rem;margin:.75rem 0;text-align:center;color:var(--text)}
+  .stage-table{width:100%;border-collapse:collapse;font-size:.82rem;margin-top:.5rem}
+  .stage-table th{text-align:left;color:var(--muted);font-size:.72rem;font-weight:600;letter-spacing:.05em;text-transform:uppercase;padding:.5rem .75rem;border-bottom:1px solid var(--border)}
+  .stage-table td{padding:.5rem .75rem;border-bottom:1px solid var(--border2);color:var(--muted)}
+  .stage-table td:first-child{font-family:var(--mono);font-weight:600}
+  .stage-table tr:hover td{background:var(--bg3)}
+  .gpil-levels{display:flex;flex-direction:column;gap:.75rem;margin-top:.5rem}
+  .gpil-level{background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:.9rem 1rem}
+  .gpil-level .lv-title{font-size:.82rem;font-weight:600;margin-bottom:.25rem}
+  .gpil-level .lv-desc{font-size:.78rem;color:var(--muted);line-height:1.5}
+  </style>
+  </head>
+  <body>
+  <nav>
+    <a class="nav-brand" href="../index.html"><svg width="20" height="20" viewBox="0 0 22 22" fill="none"><polygon points="11,2 20,7 20,15 11,20 2,15 2,7" fill="none" stroke="#58a6ff" stroke-width="1.5"/><polygon points="11,6 16,9 16,13 11,16 6,13 6,9" fill="#58a6ff" opacity=".3"/><circle cx="11" cy="11" r="2" fill="#58a6ff"/></svg>&nbsp;ATF Protocol <span class="nav-badge">v3.0</span></a>
+    <div class="nav-links">
+      <a href="../rfc/index.html">RFC Index</a>
+      <a href="../verify/index.html">Verifier</a>
+      <a href="../conformance/index.html">Conformance</a>
+      <a href="https://github.com/Costenho19/atf-protocol-standard" target="_blank">GitHub</a>
+    </div>
+  </nav>
+  <div class="page-header">
+    <div class="section-label">Specifications</div>
+    <h1>RFC Index</h1>
+    <p>The complete Agent Trust Fabric protocol stack — three coordinated open standards, 40 formal invariants, and a published academic record.</p>
+  </div>
+
+  <div class="rfc-nav">
+    <a class="rfc-tab active" href="#rfc1" id="tab-rfc1" onclick="showRFC('rfc1')">RFC-ATF-1 — Delegation</a>
+    <a class="rfc-tab" href="#rfc2" id="tab-rfc2" onclick="showRFC('rfc2')">RFC-ATF-2 — Continuity</a>
+    <a class="rfc-tab" href="#rfc3" id="tab-rfc3" onclick="showRFC('rfc3')">RFC-ATF-3 — Evidence</a>
+  </div>
+
+  <!-- RFC-ATF-1 -->
+  <div id="rfc1" class="rfc-section active">
+  <div class="rfc-header rfc1-h">
+    <div class="rfc-id">RFC-ATF-1 · v1.0.0 · Standards Track · OMNIX QUANTUM LTD · May 2026</div>
+    <h2>Agent Trust Fabric Delegation Protocol</h2>
+    <p class="abstract">Specifies the Agent Identity Record, Delegation Receipt, Trust Lattice, and Monotonic Authority Reduction invariant — a cryptographic framework for post-quantum-secured agent authority delegation. Every delegation event produces an artifact verifiable by any third party without platform access.</p>
+    <div class="meta-row">
+      <span class="tag blue">6 Invariants</span><span class="tag">ML-DSA-65 / FIPS 204</span><span class="tag">Trust Lattice</span><span class="tag">TLA+ Spec</span>
+    </div>
+    <div class="links">
+      <a href="https://doi.org/10.5281/zenodo.20155016" target="_blank">DOI: 10.5281/zenodo.20155016 ↗</a>
+      <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=6757339" target="_blank">SSRN: 6757339 ↗</a>
+      <a href="https://github.com/Costenho19/atf-protocol-standard/blob/main/RFC-ATF-1.md" target="_blank">Full Text on GitHub ↗</a>
+    </div>
+  </div>
+  <div class="rfc-body">
+    <div class="rfc-card">
+      <h3>Table of Contents</h3>
+      <ul class="toc">
+        <li><span class="sec-n">§1</span><a href="#">Introduction</a></li>
+        <li><span class="sec-n">§2</span><a href="#">Conventions and Terminology</a></li>
+        <li><span class="sec-n">§3</span><a href="#">Architecture Overview</a></li>
+        <li><span class="sec-n">§4</span><a href="#">Agent Identity Record (AIR)</a></li>
+        <li><span class="sec-n">§5</span><a href="#">Delegation Receipt (DR)</a></li>
+        <li><span class="sec-n">§6</span><a href="#">Trust Lattice</a></li>
+        <li><span class="sec-n">§7</span><a href="#">Core Invariants</a></li>
+        <li><span class="sec-n">§8</span><a href="#">Verification Protocol</a></li>
+        <li><span class="sec-n">§9</span><a href="#">Wire Format (JSON)</a></li>
+        <li><span class="sec-n">§10</span><a href="#">Cryptographic Algorithms</a></li>
+        <li><span class="sec-n">§11</span><a href="#">Security Considerations</a></li>
+        <li><span class="sec-n">§12</span><a href="#">IANA / Registry Considerations</a></li>
+        <li><span class="sec-n">§13</span><a href="#">Conformance Requirements</a></li>
+        <li><span class="sec-n">§14</span><a href="#">Implementation Notes</a></li>
+        <li><span class="sec-n">§15</span><a href="#">ABNF Grammar</a></li>
+      </ul>
+    </div>
+    <div class="rfc-card">
+      <h3>6 Core Invariants</h3>
+      <div class="inv-item"><span class="inv-id">ATF-INV-001</span><div class="inv-desc"><strong>Monotonic Authority Reduction (MAR)</strong>budget_granted ≤ budget_delegator. Authority can only decrease through the chain.</div></div>
+      <div class="inv-item"><span class="inv-id">ATF-INV-002</span><div class="inv-desc"><strong>Receipt Signing</strong>Every DR must carry a valid ML-DSA-65 signature by the delegating principal.</div></div>
+      <div class="inv-item"><span class="inv-id">ATF-INV-003</span><div class="inv-desc"><strong>Chain Root Traceability</strong>Every delegation chain must trace to a TIER-1 (human) identity root.</div></div>
+      <div class="inv-item"><span class="inv-id">ATF-INV-004</span><div class="inv-desc"><strong>Budget Ceiling</strong>No agent may possess authority_budget exceeding its AIR ceiling.</div></div>
+      <div class="inv-item"><span class="inv-id">ATF-INV-005</span><div class="inv-desc"><strong>Receipt Immutability</strong>content_hash must match the deterministic SHA-256 of the canonical receipt fields.</div></div>
+      <div class="inv-item"><span class="inv-id">ATF-INV-006</span><div class="inv-desc"><strong>Independent Verifiability</strong>Any party with the issuer's public key can verify any receipt without platform access.</div></div>
+    </div>
+    <div class="rfc-card">
+      <h3>Agent Identity Record (AIR)</h3>
+      <div style="font-size:.82rem;color:var(--muted);line-height:1.7">
+        <p>Every agent operating under ATF governance must have an AIR — a PQC-signed document establishing:</p>
+        <ul style="margin:.5rem 0 .5rem 1.25rem;display:flex;flex-direction:column;gap:.3rem">
+          <li><code style="font-family:var(--mono);font-size:.75rem;color:var(--blue)">agent_id</code> — format: <code style="font-family:var(--mono);font-size:.75rem">AID-{JURISDICTION}-{DATE}-{HEX16}</code></li>
+          <li><code style="font-family:var(--mono);font-size:.75rem;color:var(--blue)">tier</code> — TIER-1 (Human) · TIER-2 (Autonomous) · TIER-3 (Subordinate)</li>
+          <li><code style="font-family:var(--mono);font-size:.75rem;color:var(--blue)">authority_budget</code> — ceiling [0.0, 1.0]</li>
+          <li><code style="font-family:var(--mono);font-size:.75rem;color:var(--blue)">pqc_public_key</code> — ML-DSA-65 public key</li>
+          <li><code style="font-family:var(--mono);font-size:.75rem;color:var(--blue)">content_hash</code> — SHA-256 canonical hash</li>
+        </ul>
+        <p>Tier determines registration tier and default authority ceiling.</p>
+      </div>
+    </div>
+    <div class="rfc-card">
+      <h3>Trust Lattice</h3>
+      <div style="font-size:.82rem;color:var(--muted);line-height:1.7">
+        <p>The Trust Lattice is a directed acyclic graph where each node is an AIR and each edge is a signed DR. Properties:</p>
+        <ul style="margin:.5rem 0 .5rem 1.25rem;display:flex;flex-direction:column;gap:.3rem">
+          <li>Acyclic — no authority loops permitted</li>
+          <li>Single root per chain — must be TIER-1</li>
+          <li>Edge weight = authority_budget (non-increasing)</li>
+          <li>ATF Chain Completeness Score (CCS) measures verifiable depth</li>
+          <li>Offline-verifiable from any node upward to root</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  </div>
+
+  <!-- RFC-ATF-2 -->
+  <div id="rfc2" class="rfc-section">
+  <div class="rfc-header rfc2-h">
+    <div class="rfc-id">RFC-ATF-2 · v1.0.0 · Extension to RFC-ATF-1 · OMNIX QUANTUM LTD · May 2026</div>
+    <h2>Runtime Governance Continuity</h2>
+    <p class="abstract">Extends RFC-ATF-1 into the full execution lifecycle of long-running agent workflows. Introduces the Runtime Continuity Record, the Continuity Eligibility Score, the Authority Fragmentation Guard, and the Escalation Protocol. Adds 8 RGC invariants.</p>
+    <div class="meta-row">
+      <span class="tag purple">+8 Invariants (14 total)</span><span class="tag">CES Formula</span><span class="tag">AFG</span><span class="tag">HALT Protocol</span><span class="tag">Escalation</span>
+    </div>
+    <div class="links">
+      <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=6763978" target="_blank">SSRN: 6763978 ↗</a>
+      <a href="https://github.com/Costenho19/atf-protocol-standard/blob/main/RFC-ATF-2.md" target="_blank">Full Text on GitHub ↗</a>
+    </div>
+  </div>
+  <div class="rfc-body">
+    <div class="rfc-card">
+      <h3>Continuity Eligibility Score (CES)</h3>
+      <div class="formula-box">CES = T×0.30 + B×0.30 + D×0.20 + I×0.20</div>
+      <div style="font-size:.78rem;color:var(--muted);margin-bottom:.75rem">All components ∈ [0, 100]. Weights are protocol invariants (RGC-INV-001) — immutable at runtime.</div>
+      <table class="stage-table">
+        <thead><tr><th>Stage</th><th>Threshold</th><th>Effect</th></tr></thead>
+        <tbody>
+          <tr><td style="color:var(--green)">NOMINAL</td><td>≥ 75.0</td><td>Standard operation</td></tr>
+          <tr><td style="color:var(--blue)">MONITORING</td><td>≥ 50.0</td><td>Elevated logging</td></tr>
+          <tr><td style="color:var(--gold)">WARNING</td><td>≥ 25.0</td><td>Reduced confidence</td></tr>
+          <tr><td style="color:var(--amber)">CRITICAL</td><td>≥ 10.0</td><td>Single-decision auth</td></tr>
+          <tr><td style="color:var(--red)">HALT</td><td>&lt; 10.0</td><td>All execution blocked</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="rfc-card">
+      <h3>8 RGC Invariants</h3>
+      <div class="inv-item"><span class="inv-id">RGC-INV-001</span><div class="inv-desc"><strong>CES Formula Fixed</strong>CES = T×0.30 + B×0.30 + D×0.20 + I×0.20. Weights immutable.</div></div>
+      <div class="inv-item"><span class="inv-id">RGC-INV-002</span><div class="inv-desc"><strong>RCR Chain Integrity</strong>Each RCR must reference predecessor_rcr_id forming a verified chain from TAR.</div></div>
+      <div class="inv-item"><span class="inv-id">RGC-INV-003</span><div class="inv-desc"><strong>HALT Protocol</strong>CES &lt; 10.0 → all execution blocked. Emergency evidence seal triggered.</div></div>
+      <div class="inv-item"><span class="inv-id">RGC-INV-004</span><div class="inv-desc"><strong>Escalation Event Integrity</strong>CEEs must carry escalation_event_id and signed audit trail.</div></div>
+      <div class="inv-item"><span class="inv-id">RGC-INV-005</span><div class="inv-desc"><strong>AFG Budget Ceiling</strong>Sum of granted budgets across concurrent sub-agents ≤ chain root budget × AFG_LIMIT.</div></div>
+      <div class="inv-item"><span class="inv-id">RGC-INV-006</span><div class="inv-desc"><strong>Reauthorization Integrity</strong>RC must reference originating CEE and be approved by TIER-1.</div></div>
+      <div class="inv-item"><span class="inv-id">RGC-INV-007</span><div class="inv-desc"><strong>CES Threshold Immutability</strong>Stage thresholds are protocol constants, not runtime configuration.</div></div>
+      <div class="inv-item"><span class="inv-id">RGC-INV-008</span><div class="inv-desc"><strong>TAR Anchor Integrity</strong>Every RCR must carry the TAR ID of the originating admission event.</div></div>
+    </div>
+    <div class="rfc-card">
+      <h3>Authority Fragmentation Guard (AFG)</h3>
+      <div style="font-size:.82rem;color:var(--muted);line-height:1.7">
+        <p>Closes an attack vector that MAR alone cannot detect: authority amplification through concurrent sub-agents each receiving near-full delegations from the same chain root.</p>
+        <ul style="margin:.5rem 0 .5rem 1.25rem;display:flex;flex-direction:column;gap:.3rem">
+          <li>AFG_FRAGMENTATION_LIMIT default: <strong style="color:var(--text)">0.90</strong></li>
+          <li>Never exceed 0.95 in production</li>
+          <li>Values &gt; 1.0 are rejected by protocol</li>
+          <li>Enforced aggregate-level, not per-agent</li>
+        </ul>
+      </div>
+    </div>
+    <div class="rfc-card">
+      <h3>Runtime Continuity Record (RCR)</h3>
+      <div style="font-size:.82rem;color:var(--muted);line-height:1.7">
+        <p>A PQC-signed, TAR-anchored authority health artifact emitted at governed intervals. Key fields:</p>
+        <ul style="margin:.5rem 0 .5rem 1.25rem;display:flex;flex-direction:column;gap:.3rem">
+          <li><code style="font-family:var(--mono);font-size:.75rem;color:var(--purple)">rcr_id</code> — format: ATFRCR-{16HEX}</li>
+          <li><code style="font-family:var(--mono);font-size:.75rem;color:var(--purple)">ces_score</code> — computed CES value</li>
+          <li><code style="font-family:var(--mono);font-size:.75rem;color:var(--purple)">continuity_status</code> — NOMINAL/MONITORING/WARNING/CRITICAL/HALT</li>
+          <li><code style="font-family:var(--mono);font-size:.75rem;color:var(--purple)">tar_id</code> — anchor to admission TAR</li>
+          <li><code style="font-family:var(--mono);font-size:.75rem;color:var(--purple)">predecessor_rcr_id</code> — chain linkage</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  </div>
+
+  <!-- RFC-ATF-3 -->
+  <div id="rfc3" class="rfc-section">
+  <div class="rfc-header rfc3-h">
+    <div class="rfc-id">RFC-ATF-3 · v1.0.0 · Extension to RFC-ATF-1 and RFC-ATF-2 · OMNIX QUANTUM LTD · May 2026</div>
+    <h2>Governance Policy Interoperability, Evidence Lifecycle &amp; Forensic Verification</h2>
+    <p class="abstract">Three coordinated extensions: GPIL (cross-runtime governance compatibility at three interoperability levels), ELP (eight evidence classes, HOT/WARM/COLD retention tiers), and FVP (OEP forensic packages, two-plane verification, key identity fingerprinting). Adds 26 invariants bringing the total to 40.</p>
+    <div class="meta-row">
+      <span class="tag gold">+26 Invariants (40 total)</span><span class="tag">GPIL</span><span class="tag">EAP</span><span class="tag">OEP</span><span class="tag">FVP</span>
+    </div>
+    <div class="links">
+      <a href="https://github.com/Costenho19/atf-protocol-standard/blob/main/RFC-ATF-3.md" target="_blank">Full Text on GitHub ↗</a>
+    </div>
+  </div>
+  <div class="rfc-body">
+    <div class="rfc-card">
+      <h3>GPIL — Three Interoperability Levels</h3>
+      <div class="gpil-levels">
+        <div class="gpil-level"><div class="lv-title" style="color:var(--blue)">Level 1 — Cryptographic (CI)</div><div class="lv-desc">Binary: a receipt either passes ML-DSA-65 verification or it does not. Unconditional. Requires only the platform public key. Defined by ATF-INV-006.</div></div>
+        <div class="gpil-level"><div class="lv-title" style="color:var(--purple)">Level 2 — Protocol (PI)</div><div class="lv-desc">All ATF-RGC-Compliant runtimes share the identical CES formula, threshold values, and invariant table. Changing the formula means non-compliance.</div></div>
+        <div class="gpil-level"><div class="lv-title" style="color:var(--gold)">Level 3 — Governance Policy (GPI)</div><div class="lv-desc">Sovereign runtimes may configure policy parameters within protocol-bounded ranges. Two PI-compliant runtimes may reach different verdicts for the same receipt.</div></div>
+      </div>
+    </div>
+    <div class="rfc-card">
+      <h3>Evidence Lifecycle Pipeline</h3>
+      <div style="font-size:.82rem;color:var(--muted);line-height:1.7;margin-bottom:.75rem">Three retention tiers with Merkle-chained block sealing:</div>
+      <div style="display:flex;flex-direction:column;gap:.5rem">
+        <div style="background:rgba(63,185,80,.08);border:1px solid rgba(63,185,80,.2);border-radius:8px;padding:.75rem 1rem">
+          <div style="font-weight:600;font-size:.82rem;color:var(--green);margin-bottom:.2rem">HOT Tier</div>
+          <div style="font-size:.78rem;color:var(--muted)">Active evidence in live database. Sub-second query access. Signature verification on every read. Max 90 days default.</div>
+        </div>
+        <div style="background:rgba(88,166,255,.08);border:1px solid rgba(88,166,255,.2);border-radius:8px;padding:.75rem 1rem">
+          <div style="font-weight:600;font-size:.82rem;color:var(--blue);margin-bottom:.2rem">WARM Tier</div>
+          <div style="font-size:.78rem;color:var(--muted)">Merkle-sealed Parquet blocks. Read-optimized, near-line. Predecessor hash chaining. 90 days – 7 years.</div>
+        </div>
+        <div style="background:rgba(210,153,34,.08);border:1px solid rgba(210,153,34,.2);border-radius:8px;padding:.75rem 1rem">
+          <div style="font-weight:600;font-size:.82rem;color:var(--gold);margin-bottom:.2rem">COLD Tier</div>
+          <div style="font-size:.78rem;color:var(--muted)">Immutable ML-DSA-65–signed blocks. Offline. Verifiable without platform. Emergency seal protocol. 7+ years.</div>
+        </div>
+      </div>
+    </div>
+    <div class="rfc-card">
+      <h3>26 New Invariants</h3>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:.4rem">
+        <div style="font-size:.78rem"><strong style="font-family:var(--mono);font-size:.7rem;color:var(--gold)">GPIL × 3</strong><br><span style="color:var(--muted)">INV-001: Layer hierarchy<br>INV-002: Param bounds<br>INV-003: CRGC integrity</span></div>
+        <div style="font-size:.78rem"><strong style="font-family:var(--mono);font-size:.7rem;color:var(--green)">ELR × 4</strong><br><span style="color:var(--muted)">INV-001: Class assignment<br>INV-002: Tier ordering<br>INV-003: Seal integrity<br>INV-004: Transition audit</span></div>
+        <div style="font-size:.78rem"><strong style="font-family:var(--mono);font-size:.7rem;color:var(--amber)">EAP × 7</strong><br><span style="color:var(--muted)">INV-001–007: Archive pipeline, hash chain, emergency seal, tier ordering, entry hash determinism</span></div>
+        <div style="font-size:.78rem"><strong style="font-family:var(--mono);font-size:.7rem;color:var(--purple)">OEP × 6</strong><br><span style="color:var(--muted)">INV-001–006: Package integrity, self-containment, offline verifiability</span></div>
+        <div style="font-size:.78rem"><strong style="font-family:var(--mono);font-size:.7rem;color:var(--blue)">FEA × 5</strong><br><span style="color:var(--muted)">INV-001–005: Export RBAC, key isolation, caller key prohibition</span></div>
+        <div style="font-size:.78rem"><strong style="font-family:var(--mono);font-size:.7rem;color:var(--red)">FVP × 1</strong><br><span style="color:var(--muted)">INV-007: Two-plane verification independence</span></div>
+      </div>
+    </div>
+    <div class="rfc-card">
+      <h3>OMNIX Evidence Package (OEP)</h3>
+      <div style="font-size:.82rem;color:var(--muted);line-height:1.7">
+        <p>A cryptographically sealed, self-contained forensic ZIP package. Contains everything needed to verify a complete authority chain offline, years after the issuing system is decommissioned:</p>
+        <ul style="margin:.5rem 0 .5rem 1.25rem;display:flex;flex-direction:column;gap:.3rem">
+          <li>All receipts (DR + TAR + RCR chain)</li>
+          <li>COLD archive blocks with Merkle proofs</li>
+          <li>Platform public key at time of export</li>
+          <li>Forensic HTML report</li>
+          <li>ML-DSA-65 package signature over canonical manifest</li>
+          <li>Custody log with RBAC-controlled export record</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  </div>
+
+  <footer>
+    Agent Trust Fabric Protocol Standard · OMNIX QUANTUM LTD · <a href="https://github.com/Costenho19/atf-protocol-standard" target="_blank">GitHub</a> · <a href="https://doi.org/10.5281/zenodo.20155016" target="_blank">DOI</a> · CC BY 4.0
+  </footer>
+  <script>
+  function showRFC(id) {
+    document.querySelectorAll('.rfc-section').forEach(s => s.classList.remove('active'));
+    document.querySelectorAll('.rfc-tab').forEach(t => t.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    document.getElementById('tab-' + id).classList.add('active');
+    return false;
+  }
+  // Handle hash on load
+  const h = location.hash.replace('#','');
+  if (h === 'rfc2' || h === 'rfc3') showRFC(h);
+  </script>
+  </body>
+  </html>
