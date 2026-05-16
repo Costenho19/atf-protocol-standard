@@ -1,0 +1,23 @@
+[build-system]
+  requires = ["setuptools>=61","wheel"]
+  build-backend = "setuptools.build_meta"
+
+  [project]
+  name = "atf-fastapi"
+  version = "1.0.0"
+  description = "ATF Protocol governance middleware for FastAPI — RFC-ATF-1/2/3"
+  readme = "README.md"
+  license = {text = "CC-BY-4.0"}
+  requires-python = ">=3.9"
+  keywords = ["atf-protocol","fastapi","ai-governance","pqc","middleware"]
+  dependencies = ["fastapi>=0.100","starlette>=0.27"]
+
+  [project.optional-dependencies]
+  pqc = ["pypqc>=0.0.8"]
+  dev = ["pytest>=7","httpx","pytest-asyncio"]
+
+  [project.urls]
+  "Protocol Standard" = "https://costenho19.github.io/atf-protocol-standard/"
+  "GitHub" = "https://github.com/Costenho19/atf-protocol-standard"
+  "RFC-ATF-1 (DOI)" = "https://doi.org/10.5281/zenodo.20155016"
+  
