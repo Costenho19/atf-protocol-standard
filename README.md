@@ -6,6 +6,7 @@
 [![RFC-ATF-1 SSRN](https://img.shields.io/badge/SSRN-6757339-blue?style=flat-square)](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=6757339)
 [![RFC-ATF-2 DOI](https://img.shields.io/badge/DOI-10.5281%2Fzenodo.20241344-blue?style=flat-square)](https://doi.org/10.5281/zenodo.20241344)
 [![RFC-ATF-2 SSRN](https://img.shields.io/badge/SSRN-6763978-blue?style=flat-square)](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=6763978)
+[![RFC-ATF-3 DOI](https://img.shields.io/badge/DOI-10.5281%2Fzenodo.20247342-blue?style=flat-square)](https://doi.org/10.5281/zenodo.20247342)
 [![PQC Algorithm](https://img.shields.io/badge/PQC-ML--DSA--65%20FIPS%20204-8A2BE2?style=flat-square)](https://csrc.nist.gov/pubs/fips/204/final)
 [![Offline Verifiable](https://img.shields.io/badge/Verification-Offline%20Independent-green?style=flat-square)](./verifier/verify_receipt.py)
 [![Spec Version](https://img.shields.io/badge/Spec-v3.0%20(RFC--ATF--3)-orange?style=flat-square)](./RFC-ATF-3.md)
@@ -108,6 +109,7 @@ Extends RFC-ATF-1 for long-running executions: Continuity Eligibility Score (CES
 Adds Layer 5 — Forensic Evidence Infrastructure: policy interoperability across sovereign runtimes (GPIL), evidence lifecycle classification with HOT/WARM/COLD tiers (ELR), immutable Merkle archive pipeline (EAP), self-contained forensic packages (OEP), and key identity verification protocol (FVP).
 
 - **Status:** Published — May 2026
+- **DOI:** [10.5281/zenodo.20247342](https://doi.org/10.5281/zenodo.20247342)
 - **Extends:** RFC-ATF-1 + RFC-ATF-2
 - **New compliance designation:** ATF-FEI-Compliant
 - **Specification:** [RFC-ATF-3.md](./RFC-ATF-3.md)
@@ -372,7 +374,7 @@ See [CONTRIBUTING.md](./CONTRIBUTING.md). We welcome language ports (Go, TypeScr
 
   | Version | RFC | Date | Invariants |
   |---|---|---|---|
-  | [v3.0.0](https://github.com/Costenho19/atf-protocol-standard/releases/tag/v3.0.0) | RFC-ATF-3 | May 2026 | 40 total (26 new) |
+  | [v3.0.0](https://github.com/Costenho19/atf-protocol-standard/releases/tag/v3.0.0) | [RFC-ATF-3](https://doi.org/10.5281/zenodo.20247342) | May 2026 | 40 total (26 new) · DOI: 10.5281/zenodo.20247342 |
   | [v2.0.0](https://github.com/Costenho19/atf-protocol-standard/releases/tag/v2.0.0) | RFC-ATF-2 | Mar 2026 | 14 total (8 new) |
   | [v1.0.0](https://github.com/Costenho19/atf-protocol-standard/releases/tag/v1.0.0) | RFC-ATF-1 | Jan 2026 | 6 |
 
