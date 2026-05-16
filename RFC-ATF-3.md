@@ -58,7 +58,7 @@ Abstract
    GPIL-INV-001–003, ELR-INV-001–004, EAP-INV-001–007, OEP-INV-001–006,
    FEA-INV-001–005, and FVP-INV-007.  Combined with the fourteen
    invariants of RFC-ATF-1 and RFC-ATF-2, the full ATF invariant stack
-   reaches forty formally specified, model-checkable constraints.
+   reaches forty formally specified, formally specified constraints.
 
    An implementation that complies with RFC-ATF-1, RFC-ATF-2, and
    RFC-ATF-3 is designated ATF-FEI-Compliant (Forensic Evidence
