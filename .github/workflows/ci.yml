@@ -83,42 +83,44 @@ jobs:
         run: |
           cd reference-implementation
           pip install -e .
-          python -c "
-          from atf_core import create_delegation_receipt, create_runtime_continuity_record, verify_receipt
+          python << 'PYEOF'
+from atf_core import create_delegation_receipt, create_runtime_continuity_record, verify_receipt
 
-          dr = create_delegation_receipt(
-            delegator_id='HUMAN-test',
-            delegate_id='AID-TEST-AABBCCDDEEFF0011',
-            task_scope={'action': 'test'},
-            budget_granted=60.0,
-            budget_delegator=100.0,
-          )
-          result = verify_receipt(dr)
-          assert result['verdict'] == 'PASS', f'DR verify failed: {result}'
-          print('DR create + verify: PASS')
+dr = create_delegation_receipt(
+    delegator_id='HUMAN-test',
+    delegate_id='AID-TEST-AABBCCDDEEFF0011',
+    task_scope={'action': 'test'},
+    budget_granted=60.0,
+    budget_delegator=100.0,
+)
+result = verify_receipt(dr)
+assert result['verdict'] == 'PASS', f"DR verify failed: {result}"
+print('DR create + verify: PASS')
 
-          try:
-            create_delegation_receipt(
-              delegator_id='HUMAN-test',
-              delegate_id='AID-TEST-AABBCCDDEEFF0011',
-              task_scope={'action': 'test'},
-              budget_granted=110.0,
-              budget_delegator=100.0,
-            )
-            assert False, 'MAR violation should have raised'
-          except ValueError as e:
-            assert 'ATF-INV-001' in str(e)
-            print('ATF-INV-001 enforcement: PASS')
+try:
+    create_delegation_receipt(
+        delegator_id='HUMAN-test',
+        delegate_id='AID-TEST-AABBCCDDEEFF0011',
+        task_scope={'action': 'test'},
+        budget_granted=110.0,
+        budget_delegator=100.0,
+    )
+    assert False, 'MAR violation should have raised'
+except ValueError as e:
+    assert 'ATF-INV-001' in str(e)
+    print('ATF-INV-001 enforcement: PASS')
 
-          rcr = create_runtime_continuity_record(
-            tar_id='ATFTAR-1F2E3D4C5B6A7890',
-            delegation_id=dr['delegation_id'],
-            agent_id='AID-TEST-AABBCCDDEEFF0011',
-            chain_root_id=dr['chain_root_id'],
-            ces_temporal=99.0, ces_budget=100.0, ces_context=80.0, ces_integrity=100.0,
-            budget_at_admission=60.0, budget_remaining=60.0, context_drift_pct=20.0,
-          )
-          assert rcr['continuity_status'] == 'NOMINAL'
-          print(f'RCR: PASS — CES={rcr["ces_score"]} {rcr["continuity_status"]}')
-          print('All smoke tests passed.')
-          "
+rcr = create_runtime_continuity_record(
+    tar_id='ATFTAR-1F2E3D4C5B6A7890',
+    delegation_id=dr['delegation_id'],
+    agent_id='AID-TEST-AABBCCDDEEFF0011',
+    chain_root_id=dr['chain_root_id'],
+    ces_temporal=99.0, ces_budget=100.0, ces_context=80.0, ces_integrity=100.0,
+    budget_at_admission=60.0, budget_remaining=60.0, context_drift_pct=20.0,
+)
+assert rcr['continuity_status'] == 'NOMINAL'
+ces = rcr['ces_score']
+status = rcr['continuity_status']
+print(f'RCR: PASS — CES={ces} {status}')
+print('All smoke tests passed.')
+PYEOF
