@@ -21,6 +21,7 @@
   | GitHub Pages site (8 pages) | ✅ | Whitepaper · Verifier · Quickstart · Integrations · Diagrams |
   | Rust port skeleton (`ports/rust/`) | ✅ | cargo check passes |
   | Rust complete verifier (`ports/rust/src/`) | ✅ | All conformance tests pass |
+    | Threat model audit (THREAT_MODEL.md) | ✅ | 13 vectors · 4 fixes · 9 documented |
   | LangChain integration (`integrations/langchain/`) | ✅ | ATF-RGC-Compliant |
   | FastAPI middleware (`integrations/fastapi/`) | ✅ | ATF-Compliant |
   | OpenAI Agents SDK wrapper (`integrations/openai-agents/`) | ✅ | ATF-Compliant |
