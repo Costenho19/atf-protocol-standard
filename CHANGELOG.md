@@ -198,4 +198,61 @@ vectors pass. Everything else is done:
 
   *OMNIX QUANTUM LTD · standards@omnixquantum.com*
   *© 2026 CC BY 4.0*
+## [v3.3.0] — 2026-05-16
+
+  ### Security Hardening — Threat Model Audit
+
+  Full implementation-level threat model audit across all three verifier ports
+  (Python, TypeScript, Rust). Four vulnerabilities fixed, nine documented with
+  mitigations. See [THREAT_MODEL.md](./THREAT_MODEL.md) for full details.
+
+  #### Fixed
+
+  - **IMP-TM-001 [Critical]** `verify_receipt.py`: Removed `content_hash.endswith("01")`
+    bypass — ATF-INV-004 was silently skipped for any hash ending in "01",
+    allowing field tampering without detection.
+
+  - **IMP-TM-003 [High]** `verify_receipt.py` + `receipts.py`: NaN/Inf authority
+    budgets now raise `ValueError` at creation time and return `FAIL` at
+    verification time. `float('nan') > 100.0` evaluates to `False` in Python,
+    previously bypassing the MAR guard.
+
+  - **IMP-TM-004 [Medium]** All verifiers: Negative authority budgets
+    (`budget_granted < 0.0`) are now explicitly rejected. Semantically undefined
+    in the protocol and not caught by the `granted <= delegator` check alone.
+
+  - **IMP-TM-005 [Medium]** `verify_receipt.py` + `receipts.py`: CES sub-score
+    components (`ces_temporal`, `ces_budget`, `ces_context`, `ces_integrity`)
+    are now range-validated to [0.0, 100.0]. Values above 100 inflated the CES
+    score beyond the protocol-defined maximum.
+
+  #### Added
+
+  - `THREAT_MODEL.md` — Full published threat model: 13 vectors across 4 attack
+    surfaces (receipt integrity bypass, numeric edge cases, OEP archive, cross-language).
+
+  - `tests/test_threat_model.py` — 15 adversarial tests covering all IMP-TM, OEP-TM,
+    and XL-TM vectors. Runs in CI alongside the conformance suite.
+
+  #### Documented
+
+  - **IMP-TM-002** — `BASE64_` placeholder bypass in the reference verifier is
+    by-design for example receipts. Production deployments must use `--strict` mode.
+
+  - **IMP-TM-006** — CES tolerance 0.1 cannot shift status bands (band width ≥ 10 pts).
+    Rust uses 0.01; Python/TypeScript tolerance reduction tracked in ROADMAP.
+
+  - **IMP-TM-007** — TypeScript BigInt precision loss for `execution_ns > 2⁵³`:
+    use `computeContentHashFromString()` when reading from disk.
+
+  - **XL-TM-001** — Cross-language parser differential for missing
+    `authority_budget_delegator`: Python skips MAR, TypeScript/Rust default to MAX.
+    JSON Schema marks the field as `required` — schema-validating callers are protected.
+
+  - **XL-TM-002** — Unicode NFC/NFD normalization drift: normalize field values to
+    NFC at receipt creation time.
+
+  ---
+
+  
   
