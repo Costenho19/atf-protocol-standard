@@ -1,6 +1,6 @@
 # ATF Conformance Program — v1.0
 
-  The ATF Conformance Program is the official mechanism by which implementations
+  The ATF Conformance Program is the primary mechanism by which implementations
   of the Agent Trust Fabric protocol declare and evidence their compliance.
 
   **Three profiles — progressively stricter:**
@@ -15,7 +15,15 @@
 
   ## How to Claim Conformance
 
-  ### Step 1 — Run the official test vectors
+  > **Self-certification note:** Conformance designations are self-declared by implementers
+  > based on the test vectors and verification tools provided in this repository.
+  > No third-party certification body is currently designated. False or unverifiable
+  > conformance claims may be removed from [IMPLEMENTATIONS.md](./IMPLEMENTATIONS.md)
+  > at the Editor's discretion.
+
+  
+
+  ### Step 1 — Run the conformance test vectors
 
   ```bash
   pip install pytest pypqc jsonschema
