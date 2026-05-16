@@ -99,7 +99,7 @@ def verify_content_hash(receipt: dict) -> tuple[bool, str]:
     # skipped so negative vectors can test content integrity violations.
     if "placeholder" in stored or stored.endswith("01"):
         return True, f"Illustrative receipt — content hash is indicative (noted). Computed: {computed}"
-    return False, f"CONTENT HASH MISMATCH. Stored: {stored} | Computed: {computed}"
+    return False, f"CONTENT HASH MISMATCH [content_hash_mismatch]. Stored: {stored} | Computed: {computed}"
 
 
 # ── PQC signature verification ────────────────────────────────────────────────
