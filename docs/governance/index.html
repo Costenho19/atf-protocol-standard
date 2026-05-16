@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+  <html lang="en">
+  <head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>Governance Model — ATF Protocol Standard</title>
+  <meta name="description" content="ATF Protocol governance model — RFC lifecycle, versioning policy, conformance claims, and editor process. Open standard governed by proof, not opinion.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  :root{--bg:#0d1117;--bg2:#161b22;--bg3:#21262d;--border:#30363d;--blue:#58a6ff;--blue-dim:#1f6feb;--blue-dark:#0d419d;--green:#3fb950;--gold:#d29922;--amber:#f0883e;--red:#f85149;--purple:#bc8cff;--text:#e6edf3;--muted:#8b949e;--faint:#484f58;--font:'Inter',system-ui,sans-serif;--mono:'JetBrains Mono',monospace;}
+  html{scroll-behavior:smooth}body{background:var(--bg);color:var(--text);font-family:var(--font);line-height:1.6;overflow-x:hidden}
+  a{color:var(--blue);text-decoration:none}a:hover{text-decoration:underline}
+  nav{position:sticky;top:0;z-index:100;background:rgba(13,17,23,.92);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:.75rem 2rem;gap:1rem;flex-wrap:wrap}
+  .nav-brand{display:flex;align-items:center;gap:.6rem;font-weight:700;font-size:.95rem;color:var(--text);text-decoration:none!important}
+  .nav-badge{background:var(--blue-dark);color:var(--blue);font-size:.65rem;font-weight:600;padding:.15rem .5rem;border-radius:999px;border:1px solid var(--blue-dim)}
+  .nav-links{display:flex;align-items:center;gap:.25rem;flex-wrap:wrap}
+  .nav-links a{color:var(--muted);font-size:.85rem;padding:.4rem .75rem;border-radius:6px;transition:all .15s}
+  .nav-links a:hover{color:var(--text);background:var(--bg3);text-decoration:none}
+  .nav-links a.active{color:var(--text);background:var(--bg3)}
+  .page-header{padding:3.5rem 2rem 2.5rem;max-width:1100px;margin:0 auto;border-bottom:1px solid var(--border)}
+  .section-label{font-size:.75rem;font-weight:600;color:var(--blue);letter-spacing:.1em;text-transform:uppercase;margin-bottom:.75rem}
+  .page-header h1{font-size:clamp(1.8rem,4vw,2.6rem);font-weight:800;letter-spacing:-.02em;margin-bottom:.75rem}
+  .page-header p{color:var(--muted);font-size:1rem;max-width:640px;line-height:1.7}
+  .main{max-width:1100px;margin:0 auto;padding:2.5rem 2rem}
+  .principle-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1.25rem;margin-bottom:3rem}
+  .principle-card{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:1.5rem}
+  .principle-card .icon{font-size:1.5rem;margin-bottom:.75rem}
+  .principle-card h3{font-size:.95rem;font-weight:700;margin-bottom:.5rem}
+  .principle-card p{color:var(--muted);font-size:.85rem;line-height:1.6}
+  .section-title{font-size:1.25rem;font-weight:700;margin-bottom:1.25rem;padding-top:2.5rem;border-top:1px solid var(--border)}
+  .section-title:first-of-type{border-top:none;padding-top:0}
+  .lifecycle{display:flex;align-items:center;gap:0;flex-wrap:wrap;margin-bottom:2rem;background:var(--bg2);border:1px solid var(--border);border-radius:12px;overflow:hidden}
+  .lifecycle-stage{flex:1;min-width:120px;padding:1rem 1.25rem;text-align:center;position:relative}
+  .lifecycle-stage:not(:last-child)::after{content:'→';position:absolute;right:-10px;top:50%;transform:translateY(-50%);color:var(--faint);z-index:1;font-size:.9rem}
+  .lifecycle-stage .stage-name{font-size:.75rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--muted)}
+  .lifecycle-stage .stage-desc{font-size:.72rem;color:var(--faint);margin-top:.25rem}
+  .lifecycle-stage.ratified{background:rgba(63,185,80,.06);border-right:none}
+  .lifecycle-stage.ratified .stage-name{color:var(--green)}
+  .rfc-table,.profile-table{width:100%;border-collapse:collapse;font-size:.85rem;margin-bottom:2rem}
+  .rfc-table th,.profile-table th{background:var(--bg3);color:var(--muted);font-weight:600;text-align:left;padding:.65rem 1rem;border-bottom:1px solid var(--border);font-size:.75rem;text-transform:uppercase;letter-spacing:.05em}
+  .rfc-table td,.profile-table td{padding:.75rem 1rem;border-bottom:1px solid var(--border2);vertical-align:top}
+  .rfc-table tr:last-child td,.profile-table tr:last-child td{border-bottom:none}
+  .status-badge{display:inline-block;padding:.15rem .55rem;border-radius:5px;font-size:.72rem;font-weight:600;font-family:var(--mono)}
+  .status-published{background:rgba(63,185,80,.15);color:var(--green);border:1px solid rgba(63,185,80,.3)}
+  .status-candidate{background:rgba(210,153,34,.12);color:var(--gold);border:1px solid rgba(210,153,34,.3)}
+  .status-draft{background:rgba(88,166,255,.1);color:var(--blue);border:1px solid rgba(88,166,255,.3)}
+  .version-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-bottom:2rem}
+  .version-card{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:1.25rem}
+  .version-card .bump{font-family:var(--mono);font-size:1.1rem;font-weight:700;color:var(--text);margin-bottom:.4rem}
+  .version-card .bump.major{color:var(--amber)}
+  .version-card .bump.minor{color:var(--blue)}
+  .version-card .bump.patch{color:var(--green)}
+  .version-card .desc{font-size:.82rem;color:var(--muted)}
+  .version-card .example{font-family:var(--mono);font-size:.75rem;color:var(--faint);margin-top:.5rem}
+  .conformance-note{background:var(--bg2);border:1px solid var(--border);border-left:3px solid var(--purple);border-radius:0 10px 10px 0;padding:1.1rem 1.5rem;margin:1.5rem 0;font-size:.85rem;color:var(--muted);line-height:1.7}
+  .conformance-note strong{color:var(--text)}
+  .invariant-note{background:rgba(88,166,255,.05);border:1px solid rgba(88,166,255,.2);border-radius:10px;padding:1.1rem 1.5rem;font-size:.85rem;color:var(--muted);line-height:1.7;margin-bottom:2rem}
+  .invariant-note strong{color:var(--blue)}
+  .editor-card{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:1.75rem;display:flex;gap:1.5rem;align-items:flex-start;margin-bottom:2rem}
+  .editor-avatar{width:56px;height:56px;border-radius:50%;background:linear-gradient(135deg,var(--blue-dim),var(--purple));display:flex;align-items:center;justify-content:center;font-size:1.4rem;font-weight:800;color:#fff;flex-shrink:0}
+  .editor-info h3{font-size:1rem;font-weight:700;margin-bottom:.25rem}
+  .editor-info .title{font-size:.82rem;color:var(--muted);margin-bottom:.75rem}
+  .editor-duties{font-size:.82rem;color:var(--muted);line-height:1.7}
+  .editor-duties li{margin-left:1.25rem;margin-bottom:.2rem}
+  .license-block{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:1.25rem 1.5rem;font-size:.85rem;line-height:1.7;color:var(--muted)}
+  .license-block strong{color:var(--text)}
+  .process-steps{counter-reset:step;list-style:none;margin-bottom:2rem}
+  .process-steps li{counter-increment:step;padding:.75rem 1rem .75rem 3.5rem;position:relative;border-left:1px solid var(--border);margin-left:1rem;font-size:.88rem;color:var(--muted);line-height:1.7}
+  .process-steps li:last-child{border-left:none}
+  .process-steps li::before{content:counter(step);position:absolute;left:-14px;top:.7rem;width:28px;height:28px;border-radius:50%;background:var(--bg3);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:.75rem;font-weight:700;color:var(--text);line-height:1}
+  .process-steps li strong{color:var(--text)}
+  footer{border-top:1px solid var(--border);padding:2rem;margin-top:3rem;text-align:center;font-size:.78rem;color:var(--faint)}
+  @media(max-width:640px){.version-grid{grid-template-columns:1fr}.lifecycle{flex-direction:column}.lifecycle-stage:not(:last-child)::after{content:'↓';right:auto;left:50%;top:auto;bottom:-10px;transform:translateX(-50%)}}
+  </style>
+  </head>
+  <body>
+  <nav>
+    <a class="nav-brand" href="../index.html">
+      <svg width="22" height="22" viewBox="0 0 22 22" fill="none"><polygon points="11,2 20,7 20,15 11,20 2,15 2,7" fill="none" stroke="#58a6ff" stroke-width="1.5"/><polygon points="11,6 16,9 16,13 11,16 6,13 6,9" fill="#58a6ff" opacity=".3"/><circle cx="11" cy="11" r="2" fill="#58a6ff"/></svg>
+      ATF Protocol <span class="nav-badge">v3.0</span>
+    </a>
+    <div class="nav-links">
+      <a href="../rfc/index.html">RFC Index</a>
+      <a href="../verify/index.html">Verifier</a>
+      <a href="../conformance/index.html">Conformance</a>
+      <a href="../whitepaper/index.html">Whitepaper</a>
+      <a href="../integrations/index.html">Integrations</a>
+      <a href="../diagrams/index.html">Diagrams</a>
+      <a href="index.html" class="active">Governance</a>
+      <a href="../quickstart/index.html" style="background:rgba(88,166,255,.12);color:#58a6ff;border:1px solid rgba(88,166,255,.3);padding:.4rem .75rem;border-radius:6px;">Quickstart →</a>
+      <a href="https://github.com/Costenho19/atf-protocol-standard" target="_blank">GitHub</a>
+    </div>
+  </nav>
+
+  <div class="page-header">
+    <div class="section-label">Open Standard</div>
+    <h1>Governance Model</h1>
+    <p>ATF is governed by proof, not opinion. Every invariant requires a conformance test vector. Every RFC change requires a 30-day review. Ratified invariants are permanent.</p>
+  </div>
+
+  <div class="main">
+
+    <!-- Principles -->
+    <div class="section-title" style="border-top:none;padding-top:0">Four Governing Principles</div>
+    <div class="principle-grid">
+      <div class="principle-card">
+        <div class="icon">🔒</div>
+        <h3>Stability First</h3>
+        <p>Ratified invariants are immutable. Implementations that pass the conformance suite today will pass it in perpetuity. No retroactive breakage.</p>
+      </div>
+      <div class="principle-card">
+        <div class="icon">🧪</div>
+        <h3>Proof-Backed Changes</h3>
+        <p>Every new invariant requires a conformance test vector. Opinion-only changes are rejected regardless of source. The test suite is the source of truth.</p>
+      </div>
+      <div class="principle-card">
+        <div class="icon">🔍</div>
+        <h3>Independent Verifiability</h3>
+        <p>ATF-INV-006 is also a governance principle: no change may reduce the protocol's offline verifiability. Receipts must always be verifiable without platform access.</p>
+      </div>
+      <div class="principle-card">
+        <div class="icon">🌐</div>
+        <h3>Language Agnosticism</h3>
+        <p>The Python reference implementation is the source of truth for ambiguous cases. All language ports must produce identical output for identical input (FVP-INV-007).</p>
+      </div>
+    </div>
+
+    <!-- RFC Process -->
+    <div class="section-title">RFC Lifecycle</div>
+    <div class="lifecycle">
+      <div class="lifecycle-stage">
+        <div class="stage-name">Draft</div>
+        <div class="stage-desc">Work in progress. Breaking changes allowed.</div>
+      </div>
+      <div class="lifecycle-stage">
+        <div class="stage-name">Review</div>
+        <div class="stage-desc">Feature-complete. 30-day review period.</div>
+      </div>
+      <div class="lifecycle-stage">
+        <div class="stage-name">Candidate</div>
+        <div class="stage-desc">Changes frozen. Conformance suite finalized.</div>
+      </div>
+      <div class="lifecycle-stage ratified">
+        <div class="stage-name">Ratified</div>
+        <div class="stage-desc">Invariants now stable. Implementations may claim compliance.</div>
+      </div>
+      <div class="lifecycle-stage">
+        <div class="stage-name">Published</div>
+        <div class="stage-desc">DOI assigned. Citable. Permanent.</div>
+      </div>
+    </div>
+
+    <!-- Published RFCs -->
+    <div class="section-title">Published RFCs</div>
+    <table class="rfc-table">
+      <thead><tr><th>RFC</th><th>Title</th><th>Status</th><th>References</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><strong>RFC-ATF-1</strong></td>
+          <td>Agent Trust Fabric Delegation Protocol<br><span style="color:var(--muted);font-size:.8rem">6 invariants · MAR · PQC · Temporal validity</span></td>
+          <td><span class="status-badge status-published">PUBLISHED</span></td>
+          <td><a href="https://doi.org/10.5281/zenodo.20155016" target="_blank">DOI 10.5281/zenodo.20155016</a><br><a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=6757339" target="_blank">SSRN 6757339</a></td>
+        </tr>
+        <tr>
+          <td><strong>RFC-ATF-2</strong></td>
+          <td>Runtime Governance Continuity Protocol<br><span style="color:var(--muted);font-size:.8rem">8 invariants · CES · HALT · RCR chain</span></td>
+          <td><span class="status-badge status-published">PUBLISHED</span></td>
+          <td><a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=6763978" target="_blank">SSRN 6763978</a></td>
+        </tr>
+        <tr>
+          <td><strong>RFC-ATF-3</strong></td>
+          <td>Evidence Lifecycle, Policy Interoperability &amp; Forensic Verification<br><span style="color:var(--muted);font-size:.8rem">26 invariants · GPIL · EAP · OEP · FEA · FVP</span></td>
+          <td><span class="status-badge status-candidate">CANDIDATE</span></td>
+          <td>Zenodo DOI pending</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- How to propose -->
+    <div class="section-title">Proposing a New RFC</div>
+    <ol class="process-steps">
+      <li><strong>Open a GitHub Issue</strong> with title <code style="font-family:var(--mono);background:var(--bg3);padding:.1rem .4rem;border-radius:4px">[RFC] &lt;short title&gt;</code>. Include motivation, invariants proposed, and failure mode addressed.</li>
+      <li><strong>Community discussion.</strong> Objections must include a counter-test-vector. Opinion-only objections are noted but do not block progress.</li>
+      <li><strong>Draft period.</strong> The Editor opens an RFC document in <code style="font-family:var(--mono);background:var(--bg3);padding:.1rem .4rem;border-radius:4px">/rfcs/</code>. The draft is iterated until feature-complete.</li>
+      <li><strong>30-day review.</strong> The RFC enters REVIEW status. Substantive changes require a new conformance test vector. The conformance suite is finalized.</li>
+      <li><strong>Ratification or closure.</strong> The Editor ratifies (invariants become stable) or closes with explanation. Ratification requires at least one passing implementation.</li>
+    </ol>
+
+    <!-- Versioning -->
+    <div class="section-title">Versioning Policy</div>
+    <div class="version-grid">
+      <div class="version-card">
+        <div class="bump major">MAJOR</div>
+        <div class="desc">New invariant (breaking change). Existing implementations must update.</div>
+        <div class="example">1.x → 2.0</div>
+      </div>
+      <div class="version-card">
+        <div class="bump minor">MINOR</div>
+        <div class="desc">New non-normative guidance. No existing implementation breaks.</div>
+        <div class="example">1.0 → 1.1</div>
+      </div>
+      <div class="version-card">
+        <div class="bump patch">PATCH</div>
+        <div class="desc">Clarification, typo fix, example update. Fully backward-compatible.</div>
+        <div class="example">1.0.0 → 1.0.1</div>
+      </div>
+    </div>
+    <div class="invariant-note">
+      <strong>Invariant stability guarantee:</strong> Once ratified, an invariant's reason code and check logic are never modified. Existing conformance vectors are never invalidated. New vectors may be added; existing ones are immutable (FVP-INV-007).
+    </div>
+
+    <!-- Conformance -->
+    <div class="section-title">Conformance Claims</div>
+    <table class="profile-table">
+      <thead><tr><th>Profile</th><th>Invariants Required</th><th>Test Vectors</th><th>Badge</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><strong>ATF-Compliant</strong></td>
+          <td>ATF-INV-001 through ATF-INV-006</td>
+          <td>15 vectors (8P + 7N)</td>
+          <td><img src="https://img.shields.io/badge/ATF--Compliant-v1.0.0-58a6ff?style=flat-square" alt="ATF-Compliant badge"></td>
+        </tr>
+        <tr>
+          <td><strong>ATF-RGC-Compliant</strong></td>
+          <td>ATF-Compliant + RGC-INV-001 through RGC-INV-008</td>
+          <td>+ 11 vectors (6P + 5N)</td>
+          <td><img src="https://img.shields.io/badge/ATF--RGC--Compliant-v1.0.0-3fb950?style=flat-square" alt="ATF-RGC-Compliant badge"></td>
+        </tr>
+        <tr>
+          <td><strong>ATF-FEI-Compliant</strong></td>
+          <td>ATF-RGC-Compliant + GPIL + EAP + OEP + FEA + FVP invariants</td>
+          <td>+ 8 vectors (4P + 4N)</td>
+          <td><img src="https://img.shields.io/badge/ATF--FEI--Compliant-v1.0.0-bc8cff?style=flat-square" alt="ATF-FEI-Compliant badge"></td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="conformance-note">
+      <strong>Conformance is self-claimed.</strong> The Editor does not certify implementations. Conformance claims are the responsibility of implementation authors. To add your implementation, open a PR updating <code style="font-family:var(--mono)">IMPLEMENTATIONS.md</code>. False claims will be removed. See the full <a href="../conformance/index.html">Conformance Program →</a>
+    </div>
+
+    <!-- Editor -->
+    <div class="section-title">Editor</div>
+    <div class="editor-card">
+      <div class="editor-avatar">HN</div>
+      <div class="editor-info">
+        <h3>Harold Nunes</h3>
+        <div class="title">Founder &amp; Editor — OMNIX QUANTUM LTD · UAE / UK</div>
+        <ul class="editor-duties">
+          <li>RFC lifecycle decisions (ratification, rejection)</li>
+          <li>Conformance vector quality and immutability</li>
+          <li>IMPLEMENTATIONS.md maintenance</li>
+          <li>Security response (acknowledge within 72h)</li>
+          <li>Governance model amendments (subject to RFC process)</li>
+        </ul>
+        <div style="margin-top:.75rem;font-size:.82rem">
+          Contact: <a href="https://github.com/Costenho19/atf-protocol-standard/issues" target="_blank">GitHub Issues</a> · <a href="https://github.com/Costenho19/atf-protocol-standard/security" target="_blank">Security Advisories</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Security -->
+    <div class="section-title">Security Policy</div>
+    <p style="color:var(--muted);font-size:.88rem;line-height:1.8;margin-bottom:1rem">
+      Report vulnerabilities privately via <a href="https://github.com/Costenho19/atf-protocol-standard/security" target="_blank">GitHub Security Advisories</a>. The Editor will acknowledge within 72 hours. Protocol-level vulnerabilities (invariant bypass) are treated as critical and receive a patch-priority RFC. See <a href="https://github.com/Costenho19/atf-protocol-standard/blob/main/SECURITY.md" target="_blank">SECURITY.md</a> for the full policy.
+    </p>
+
+    <!-- License -->
+    <div class="section-title">License</div>
+    <div class="license-block">
+      <strong>CC BY 4.0</strong> — You may implement, extend, or build upon ATF in any software (open or proprietary) provided you attribute: <em>"Based on the ATF Protocol Standard by OMNIX QUANTUM LTD"</em>. Reference implementations and tooling are published under the same license. <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank">Full license text →</a>
+    </div>
+
+  </div>
+
+  <footer>
+    ATF Protocol Standard · <a href="https://github.com/Costenho19/atf-protocol-standard" target="_blank">GitHub</a> · <a href="https://doi.org/10.5281/zenodo.20155016" target="_blank">DOI: 10.5281/zenodo.20155016</a> · CC BY 4.0
+    <div style="margin-top:.4rem">Governed by proof. Not opinion.</div>
+  </footer>
+  </body>
+  </html>
