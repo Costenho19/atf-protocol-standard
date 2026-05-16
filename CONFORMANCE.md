@@ -220,4 +220,8 @@ Vector additions are patch-level changes.
 
 ---
 
+**Published specifications:**
+- RFC-ATF-1: DOI 10.5281/zenodo.20155016
+- RFC-ATF-2: DOI 10.5281/zenodo.20241344
+
 *OMNIX QUANTUM LTD · standards@omnixquantum.com · CC BY 4.0*
