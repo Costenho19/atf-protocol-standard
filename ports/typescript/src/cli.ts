@@ -6,11 +6,13 @@
    *   npx atf-verify receipt.json
    *   npx atf-verify receipt.json --verbose
    *   npx atf-verify receipt.json --public-key key.b64
+   *   npx atf-verify receipt.json --hash-only
    */
 
   import * as fs   from 'fs';
   import * as path from 'path';
   import { verifyReceipt } from './verifier';
+  import { computeContentHashFromString } from './hash';
 
   const args = process.argv.slice(2);
   if (args.length === 0 || args[0] === '--help' || args[0] === '-h') {
@@ -19,12 +21,13 @@
   RFC-ATF-1 / RFC-ATF-2 / RFC-ATF-3
 
   Usage:
-    npx atf-verify <receipt.json> [--verbose] [--public-key <key.b64>]
+    npx atf-verify <receipt.json> [--verbose] [--public-key <key.b64>] [--hash-only]
 
   Examples:
     npx atf-verify delegation_receipt.json
     npx atf-verify runtime_continuity_record.json --verbose
     npx atf-verify receipt.json --public-key my_public_key.b64
+    npx atf-verify receipt.json --hash-only
 
   Protocol: https://costenho19.github.io/atf-protocol-standard/
   `);
@@ -33,15 +36,29 @@
 
   const filePath  = args[0];
   const verbose   = args.includes('--verbose');
+  const hashOnly  = args.includes('--hash-only');
   const pkIdx     = args.indexOf('--public-key');
   const publicKey = pkIdx !== -1 ? args[pkIdx + 1] : undefined;
 
-  let receipt: Record<string, unknown>;
+  let raw: string;
   try {
-    const raw = fs.readFileSync(path.resolve(filePath), 'utf8');
-    receipt = JSON.parse(raw);
+    raw = fs.readFileSync(path.resolve(filePath), 'utf8');
   } catch (e) {
     console.error(`Error reading ${filePath}: ${(e as Error).message}`);
+    process.exit(1);
+  }
+
+  // --hash-only: print content_hash and exit (used by hash parity CI, FVP-INV-007)
+  if (hashOnly) {
+    console.log(computeContentHashFromString(raw));
+    process.exit(0);
+  }
+
+  let receipt: Record<string, unknown>;
+  try {
+    receipt = JSON.parse(raw);
+  } catch (e) {
+    console.error(`Error parsing JSON: ${(e as Error).message}`);
     process.exit(1);
   }
 
