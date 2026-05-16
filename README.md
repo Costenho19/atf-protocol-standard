@@ -76,7 +76,7 @@ flowchart TD
 | L5 | Evidence Package (OEP) + GPIL + EAP | RFC-ATF-3 | 26 new invariants |
 
 **40 total formally specified invariants** across three RFCs.
-Algorithm: **ML-DSA-65** (Dilithium-3, FIPS 204) — post-quantum secure against both classical and quantum adversaries.
+Algorithm: **ML-DSA-65** (Dilithium-3, FIPS 204) — designed to resist classical and quantum attacks per NIST FIPS 204 (ML-DSA-65).
 
 ---
 
@@ -319,7 +319,7 @@ See [CONTRIBUTING.md](./CONTRIBUTING.md). We welcome language ports (Go, TypeScr
 
   ## Conformance Program
 
-  The official ATF Conformance Program provides test vectors for each profile.
+  The ATF Conformance Program provides test vectors for each profile.
   See [CONFORMANCE.md](./CONFORMANCE.md) for the full program.
 
   | Profile | Invariants | Test Vectors | Badge |
@@ -333,13 +333,36 @@ See [CONTRIBUTING.md](./CONTRIBUTING.md). We welcome language ports (Go, TypeScr
   | Language | Package | Status | Invariants |
   |---|---|---|---|
   | **Python** (reference) | [`reference-implementation/`](./reference-implementation/) | ✅ Stable | ATF-Compliant + ATF-RGC-Compliant |
-  | **TypeScript** | [`ports/typescript/`](./ports/typescript/) | 🔶 Beta | ATF-RGC-Compliant (11 invariants) |
+  | **TypeScript** | [`ports/typescript/`](./ports/typescript/) | ✅ Stable | ATF-RGC-Compliant (11 invariants) |
   | Go | — | ❌ Wanted | [Contribute](./CONTRIBUTING.md) |
   | Rust | — | ❌ Wanted | [Contribute](./CONTRIBUTING.md) |
 
 ---
 
-## Contact
+
+  ---
+
+  ## Protocol Scope and Boundaries
+
+  ATF specifies cryptographic and protocol mechanisms for three things:
+
+  1. **Delegating agent authority** — from a human principal to an AI agent, with PQC-signed, chain-traceable receipts (RFC-ATF-1)
+  2. **Monitoring authority health at runtime** — continuous CES scoring, HALT propagation, escalation (RFC-ATF-2)
+  3. **Archiving and verifying the resulting evidence** — lifecycle classification, Merkle-chained archive, self-contained forensic packages (RFC-ATF-3)
+
+  **ATF explicitly does NOT specify:**
+
+  | Out of Scope | Notes |
+  |---|---|
+  | Pre-execution authority resolution | Whether an action *should* be authorized is outside ATF — ATF records what *was* authorized and that it was still valid |
+  | AI model selection or safety constraints | ATF is model-agnostic |
+  | Real-time revocation notification | HALT propagates within a session; inter-session revocation requires out-of-band coordination (see [SECURITY.md](./SECURITY.md)) |
+  | Network transport or API protocols | ATF defines receipt formats, not wire protocols |
+  | Regulatory compliance | ATF is architecturally aligned with traceability requirements in EU AI Act, NIST AI RMF, and ISO/IEC 42001 — it does not constitute compliance with any of them |
+
+  **Conformance designations are self-declared** based on the test vectors and verification tools in this repository. No third-party certification body is currently designated. See [GOVERNANCE.md](./GOVERNANCE.md) for the conformance claim process.
+
+  ## Contact
 
 standards@omnixquantum.com | https://omnixquantum.com
 
