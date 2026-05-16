@@ -6,7 +6,42 @@
 
   ---
 
-  ## [v3.1.0] — 2026-05-16
+  ## [v3.2.0] — 2026-05-16
+
+### Added — Rust Port Skeleton
+
+#### Rust Skeleton (`ports/rust/`)
+
+Complete Rust port skeleton for the ATF offline verifier.
+A contributor needs to implement three functions to make all 34 conformance
+vectors pass. Everything else is done:
+
+- `src/types.rs` — Full type definitions: `DelegationReceipt`, `RuntimeContinuityRecord`,
+  `ContinuityStatus`, `VerificationResult`, `ReasonCode` (all 40 invariants)
+- `src/lib.rs` — Skeleton with detailed TODO comments for all 9 invariants,
+  protocol constants (`HASH_EXCLUDE_FIELDS`, `CES_WEIGHT_*`, `CES_TOLERANCE`),
+  fully implemented helpers (`ces_score_to_status()`, `derive_verdict()`)
+- `src/hash.rs` — `compute_content_hash()` skeleton + `sha256_hex()` helper + 3 unit tests
+- `src/main.rs` — CLI binary dispatching by `receipt_type`
+- `tests/conformance.rs` — Conformance harness loading all 34 official vectors,
+  organized by profile (`atf_vectors`, `rgc_vectors`, `fei_vectors`),
+  plus FVP-INV-007 determinism tests
+- `Cargo.toml` — Dependencies: `serde`, `serde_json`, `sha2`, `hex`, `base64`, `chrono`, `regex`
+- `README.md` — What is done, what needs implementation, claiming ATF-RGC-Compliant
+- `PORTING_GUIDE.md` — 14-step implementation guide with Python reference pseudocode,
+  normative reason code table, CES thresholds, cross-implementation parity test
+
+**To contribute:** `cargo test` → implement 3 functions → all 34 vectors pass → PR.
+
+#### IMPLEMENTATIONS.md
+- Rust skeleton registered as official port skeleton
+- Language port table updated: Rust now shows `🔶 skeleton ready`
+
+#### CONTRIBUTING.md
+- Added Rust quick-start section for new contributors
+
+---
+## [v3.1.0] — 2026-05-16
 
   ### Added — Verifiers, Conformance Program, TypeScript Port
 
