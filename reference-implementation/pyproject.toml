@@ -1,6 +1,6 @@
 [build-system]
-  requires = ["setuptools>=61"]
-  build-backend = "setuptools.backends.legacy:build"
+  requires = ["setuptools>=61", "wheel"]
+  build-backend = "setuptools.build_meta"
 
   [project]
   name = "atf-core"
@@ -17,5 +17,4 @@
 
   [project.urls]
   "Protocol Standard" = "https://github.com/Costenho19/atf-protocol-standard"
-  "OMNIX QUANTUM" = "https://omnixquantum.com"
   
