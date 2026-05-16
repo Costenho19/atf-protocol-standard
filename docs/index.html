@@ -1,0 +1,716 @@
+<!DOCTYPE html>
+  <html lang="en">
+  <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ATF Protocol Standard — Agent Trust Fabric</title>
+  <meta name="description" content="Open protocol standard for cryptographically verifiable AI agent authority governance. RFC-ATF-1 · RFC-ATF-2 · RFC-ATF-3. Post-quantum secured. 40 formal invariants.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  :root{
+    --bg:#0d1117;--bg2:#161b22;--bg3:#21262d;
+    --border:#30363d;--border2:#21262d;
+    --blue:#58a6ff;--blue-dim:#1f6feb;--blue-dark:#0d419d;
+    --green:#3fb950;--gold:#d29922;--amber:#f0883e;
+    --red:#f85149;--purple:#bc8cff;
+    --text:#e6edf3;--muted:#8b949e;--faint:#484f58;
+    --font:'Inter',system-ui,sans-serif;
+    --mono:'JetBrains Mono',monospace;
+  }
+  html{scroll-behavior:smooth;font-size:16px}
+  body{background:var(--bg);color:var(--text);font-family:var(--font);line-height:1.6;overflow-x:hidden}
+  a{color:var(--blue);text-decoration:none}
+  a:hover{text-decoration:underline}
+
+  /* NAV */
+  nav{position:sticky;top:0;z-index:100;background:rgba(13,17,23,.92);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:.75rem 2rem;gap:1rem}
+  .nav-brand{display:flex;align-items:center;gap:.6rem;font-weight:700;font-size:.95rem;color:var(--text);text-decoration:none!important}
+  .nav-badge{background:var(--blue-dark);color:var(--blue);font-size:.65rem;font-weight:600;padding:.15rem .5rem;border-radius:999px;border:1px solid var(--blue-dim)}
+  .nav-links{display:flex;align-items:center;gap:.25rem;flex-wrap:wrap}
+  .nav-links a{color:var(--muted);font-size:.85rem;padding:.4rem .75rem;border-radius:6px;transition:all .15s}
+  .nav-links a:hover{color:var(--text);background:var(--bg3);text-decoration:none}
+  .nav-cta{background:var(--blue-dim);color:#fff!important;border-radius:6px;padding:.4rem .9rem;font-size:.85rem;font-weight:500;transition:background .15s}
+  .nav-cta:hover{background:var(--blue)!important;text-decoration:none!important}
+
+  /* HERO */
+  .hero{padding:5rem 2rem 4rem;text-align:center;max-width:900px;margin:0 auto}
+  .hero-eyebrow{display:inline-flex;align-items:center;gap:.5rem;background:var(--bg2);border:1px solid var(--border);border-radius:999px;padding:.35rem 1rem;font-size:.78rem;font-weight:500;color:var(--muted);margin-bottom:2rem}
+  .hero-eyebrow .dot{width:6px;height:6px;border-radius:50%;background:var(--green);animation:pulse 2s infinite}
+  @keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+  h1{font-size:clamp(2.2rem,5vw,3.8rem);font-weight:800;line-height:1.1;letter-spacing:-.03em;margin-bottom:1.25rem}
+  h1 .gradient{background:linear-gradient(135deg,var(--blue) 0%,var(--purple) 60%,var(--amber) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+  .hero-sub{font-size:1.15rem;color:var(--muted);max-width:640px;margin:0 auto 2.5rem;line-height:1.7}
+  .hero-actions{display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;margin-bottom:3rem}
+  .btn-primary{background:var(--blue-dim);color:#fff;padding:.75rem 1.75rem;border-radius:8px;font-weight:600;font-size:.95rem;transition:all .15s;border:none;cursor:pointer;display:inline-block}
+  .btn-primary:hover{background:var(--blue);text-decoration:none;color:#fff;transform:translateY(-1px)}
+  .btn-secondary{background:transparent;color:var(--text);padding:.75rem 1.75rem;border-radius:8px;font-weight:500;font-size:.95rem;border:1px solid var(--border);transition:all .15s;display:inline-block}
+  .btn-secondary:hover{border-color:var(--blue);color:var(--blue);text-decoration:none;transform:translateY(-1px)}
+  .hero-stats{display:flex;gap:2.5rem;justify-content:center;flex-wrap:wrap}
+  .stat{text-align:center}
+  .stat-n{font-size:2rem;font-weight:800;color:var(--text);letter-spacing:-.02em}
+  .stat-l{font-size:.78rem;color:var(--muted);margin-top:.15rem}
+  .stat-n.blue{color:var(--blue)}
+  .stat-n.green{color:var(--green)}
+  .stat-n.gold{color:var(--gold)}
+  .stat-n.purple{color:var(--purple)}
+
+  /* SECTION */
+  section{padding:5rem 2rem;max-width:1100px;margin:0 auto}
+  .section-label{font-size:.75rem;font-weight:600;color:var(--blue);letter-spacing:.1em;text-transform:uppercase;margin-bottom:.75rem}
+  h2{font-size:clamp(1.6rem,3vw,2.4rem);font-weight:700;letter-spacing:-.02em;margin-bottom:1rem}
+  .section-sub{color:var(--muted);font-size:1rem;max-width:600px;margin-bottom:3rem;line-height:1.7}
+  .section-divider{border:none;border-top:1px solid var(--border);max-width:1100px;margin:0 auto}
+
+  /* PROBLEM GRID */
+  .problem-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:1.25rem}
+  .problem-card{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:1.75rem}
+  .problem-card .icon{font-size:1.5rem;margin-bottom:1rem}
+  .problem-card h3{font-size:1rem;font-weight:600;margin-bottom:.5rem}
+  .problem-card p{font-size:.9rem;color:var(--muted);line-height:1.6}
+  .problem-card .solution{margin-top:1rem;padding-top:1rem;border-top:1px solid var(--border2);font-size:.85rem;color:var(--green);font-weight:500}
+
+  /* STACK DIAGRAM */
+  .stack-container{background:var(--bg2);border:1px solid var(--border);border-radius:16px;padding:2rem;overflow-x:auto}
+  .stack-layer{display:flex;align-items:stretch;gap:1rem;margin-bottom:.75rem;border-radius:10px;overflow:hidden;cursor:default;transition:transform .15s}
+  .stack-layer:last-child{margin-bottom:0}
+  .stack-layer:hover{transform:translateX(4px)}
+  .layer-label{min-width:48px;display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:.75rem;font-weight:600;padding:.5rem;border-radius:6px 0 0 6px}
+  .layer-body{flex:1;padding:.9rem 1.25rem;background:var(--bg3);border-radius:0 6px 6px 0}
+  .layer-name{font-weight:600;font-size:.9rem;margin-bottom:.2rem}
+  .layer-desc{font-size:.8rem;color:var(--muted)}
+  .layer-rfc{font-size:.72rem;font-family:var(--mono);color:var(--faint);margin-top:.25rem}
+  .l5{background:rgba(210,153,34,.15);color:var(--gold)}
+  .l4{background:rgba(88,166,255,.15);color:var(--blue)}
+  .l3{background:rgba(188,140,255,.15);color:var(--purple)}
+  .l2{background:rgba(63,185,80,.15);color:var(--green)}
+  .l1{background:rgba(240,136,62,.15);color:var(--amber)}
+  .l0{background:rgba(248,81,73,.15);color:var(--red)}
+
+  /* RFC CARDS */
+  .rfc-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:1.5rem}
+  .rfc-card{background:var(--bg2);border:1px solid var(--border);border-radius:16px;padding:2rem;position:relative;overflow:hidden;transition:border-color .2s,transform .2s}
+  .rfc-card:hover{border-color:var(--blue-dim);transform:translateY(-2px)}
+  .rfc-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px}
+  .rfc-card.rfc1::before{background:linear-gradient(90deg,var(--blue),var(--purple))}
+  .rfc-card.rfc2::before{background:linear-gradient(90deg,var(--purple),var(--amber))}
+  .rfc-card.rfc3::before{background:linear-gradient(90deg,var(--amber),var(--gold))}
+  .rfc-number{font-family:var(--mono);font-size:.75rem;color:var(--muted);margin-bottom:.5rem;font-weight:500}
+  .rfc-card h3{font-size:1.1rem;font-weight:700;margin-bottom:.75rem;line-height:1.3}
+  .rfc-card p{font-size:.875rem;color:var(--muted);line-height:1.6;margin-bottom:1.25rem}
+  .rfc-meta{display:flex;flex-wrap:wrap;gap:.5rem;margin-bottom:1.25rem}
+  .tag{background:var(--bg3);border:1px solid var(--border);border-radius:5px;font-size:.72rem;font-family:var(--mono);padding:.2rem .5rem;color:var(--muted)}
+  .tag.blue{background:rgba(88,166,255,.1);border-color:rgba(88,166,255,.3);color:var(--blue)}
+  .tag.green{background:rgba(63,185,80,.1);border-color:rgba(63,185,80,.3);color:var(--green)}
+  .tag.gold{background:rgba(210,153,34,.1);border-color:rgba(210,153,34,.3);color:var(--gold)}
+  .rfc-links{display:flex;gap:.75rem;flex-wrap:wrap}
+  .rfc-links a{font-size:.8rem;color:var(--blue);font-weight:500}
+
+  /* INVARIANTS */
+  .inv-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1rem}
+  .inv-group{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:1.5rem}
+  .inv-group h4{font-size:.85rem;font-weight:600;margin-bottom:1rem;display:flex;align-items:center;gap:.5rem}
+  .inv-badge{font-family:var(--mono);font-size:.7rem;padding:.15rem .5rem;border-radius:4px;font-weight:600}
+  .inv-list{list-style:none;display:flex;flex-direction:column;gap:.4rem}
+  .inv-list li{font-size:.8rem;color:var(--muted);display:flex;gap:.5rem;align-items:flex-start}
+  .inv-list li::before{content:'→';color:var(--faint);flex-shrink:0;margin-top:.05rem}
+  .inv-list li strong{color:var(--text);font-weight:500}
+
+  /* CES FORMULA */
+  .ces-box{background:var(--bg2);border:1px solid var(--border);border-radius:16px;padding:2.5rem;text-align:center}
+  .ces-formula{font-family:var(--mono);font-size:clamp(.9rem,2.5vw,1.3rem);color:var(--text);background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:1.5rem 2rem;display:inline-block;margin:1.5rem auto;letter-spacing:.02em}
+  .ces-formula .t{color:var(--purple)}
+  .ces-formula .b{color:var(--blue)}
+  .ces-formula .d{color:var(--amber)}
+  .ces-formula .i{color:var(--green)}
+  .ces-thresholds{display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;margin-top:1.5rem}
+  .ces-stage{text-align:center;padding:.75rem 1.25rem;background:var(--bg3);border:1px solid var(--border);border-radius:8px;min-width:110px}
+  .ces-stage .stage-name{font-size:.75rem;font-weight:600;margin-bottom:.2rem}
+  .ces-stage .stage-val{font-family:var(--mono);font-size:.85rem;color:var(--muted)}
+  .stage-nominal .stage-name{color:var(--green)}
+  .stage-monitoring .stage-name{color:var(--blue)}
+  .stage-warning .stage-name{color:var(--gold)}
+  .stage-critical .stage-name{color:var(--amber)}
+  .stage-halt .stage-name{color:var(--red)}
+
+  /* CONFORMANCE */
+  .conf-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1.5rem}
+  .conf-card{background:var(--bg2);border:1px solid var(--border);border-radius:16px;padding:2rem;transition:border-color .2s}
+  .conf-card:hover{border-color:var(--blue-dim)}
+  .conf-tier{font-size:.7rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;margin-bottom:.5rem}
+  .conf-card h3{font-size:1.05rem;font-weight:700;margin-bottom:.5rem}
+  .conf-card .coverage{font-size:.8rem;color:var(--muted);margin-bottom:1rem}
+  .conf-reqs{list-style:none;display:flex;flex-direction:column;gap:.35rem;margin-bottom:1.25rem}
+  .conf-reqs li{font-size:.8rem;display:flex;align-items:center;gap:.5rem}
+  .conf-reqs li::before{content:'✓';color:var(--green);font-weight:600}
+  .conf-badge-preview{margin-top:1rem;padding:.75rem;background:var(--bg3);border-radius:8px;text-align:center}
+  .conf-badge-preview img{max-width:200px}
+
+  /* REGULATORY */
+  .reg-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:1rem}
+  .reg-card{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:1.5rem}
+  .reg-logo{font-size:1.1rem;font-weight:700;margin-bottom:.5rem;color:var(--text)}
+  .reg-card p{font-size:.82rem;color:var(--muted);line-height:1.6}
+  .reg-articles{margin-top:.75rem;display:flex;flex-wrap:wrap;gap:.4rem}
+
+  /* RESEARCH */
+  .research-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1rem}
+  .research-card{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:1.5rem;display:flex;flex-direction:column;gap:.75rem}
+  .research-card h4{font-size:.95rem;font-weight:600;line-height:1.4}
+  .research-card p{font-size:.82rem;color:var(--muted);flex:1;line-height:1.6}
+  .doi-badge{font-family:var(--mono);font-size:.72rem;background:rgba(88,166,255,.1);border:1px solid rgba(88,166,255,.25);color:var(--blue);padding:.2rem .5rem;border-radius:4px;display:inline-block}
+  .ssrn-badge{font-family:var(--mono);font-size:.72rem;background:rgba(210,153,34,.1);border:1px solid rgba(210,153,34,.25);color:var(--gold);padding:.2rem .5rem;border-radius:4px;display:inline-block}
+
+  /* GET STARTED */
+  .gs-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1rem}
+  .gs-card{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:1.75rem;transition:border-color .2s,transform .15s}
+  .gs-card:hover{border-color:var(--blue-dim);transform:translateY(-2px)}
+  .gs-card .step-n{font-family:var(--mono);font-size:.75rem;color:var(--faint);margin-bottom:.5rem}
+  .gs-card h3{font-size:.95rem;font-weight:600;margin-bottom:.5rem}
+  .gs-card p{font-size:.82rem;color:var(--muted);line-height:1.6;margin-bottom:1rem}
+  .gs-card a{font-size:.82rem;font-weight:500}
+
+  /* CODE BLOCK */
+  .code-block{background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:1rem 1.25rem;font-family:var(--mono);font-size:.8rem;overflow-x:auto;color:#a5d6ff;line-height:1.6;margin:.75rem 0}
+  .code-block .key{color:#79c0ff}
+  .code-block .str{color:#a5d6ff}
+  .code-block .num{color:#79c0ff}
+  .code-block .comment{color:var(--faint)}
+
+  /* FOOTER */
+  footer{border-top:1px solid var(--border);padding:3rem 2rem;margin-top:4rem}
+  .footer-inner{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:2rem}
+  .footer-brand p{font-size:.82rem;color:var(--muted);margin-top:.5rem;line-height:1.6}
+  .footer-col h5{font-size:.8rem;font-weight:600;color:var(--muted);letter-spacing:.08em;text-transform:uppercase;margin-bottom:.75rem}
+  .footer-col ul{list-style:none;display:flex;flex-direction:column;gap:.4rem}
+  .footer-col ul li a{font-size:.85rem;color:var(--muted);transition:color .15s}
+  .footer-col ul li a:hover{color:var(--text);text-decoration:none}
+  .footer-bottom{max-width:1100px;margin:2rem auto 0;border-top:1px solid var(--border2);padding-top:1.5rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem}
+  .footer-bottom p{font-size:.78rem;color:var(--faint)}
+  .footer-badges{display:flex;gap:.5rem;flex-wrap:wrap}
+  </style>
+  </head>
+  <body>
+
+  <!-- NAVIGATION -->
+  <nav>
+    <a class="nav-brand" href="./index.html">
+      <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg"><polygon points="11,2 20,7 20,15 11,20 2,15 2,7" fill="none" stroke="#58a6ff" stroke-width="1.5"/><polygon points="11,6 16,9 16,13 11,16 6,13 6,9" fill="#58a6ff" opacity=".3"/><circle cx="11" cy="11" r="2" fill="#58a6ff"/></svg>
+      ATF Protocol
+      <span class="nav-badge">v3.0</span>
+    </a>
+    <div class="nav-links">
+      <a href="./rfc/index.html">RFC Index</a>
+      <a href="./verify/index.html">Verifier</a>
+      <a href="./conformance/index.html">Conformance</a>
+      <a href="https://github.com/Costenho19/atf-protocol-standard" target="_blank">GitHub</a>
+      <a href="https://doi.org/10.5281/zenodo.20155016" target="_blank">Zenodo</a>
+      <a href="./verify/index.html" class="nav-cta">Try Verifier →</a>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-eyebrow">
+      <span class="dot"></span>
+      Open Protocol Standard · OMNIX QUANTUM LTD · May 2026
+    </div>
+    <h1>
+      Verifiable Authority for<br>
+      <span class="gradient">Autonomous AI Agents</span>
+    </h1>
+    <p class="hero-sub">
+      The Agent Trust Fabric is an open protocol for cryptographically verifiable AI agent authority governance — PQC-secured, formally specified, independently verifiable offline by any auditor.
+    </p>
+    <div class="hero-actions">
+      <a href="./rfc/index.html" class="btn-primary">Explore the RFCs</a>
+      <a href="./verify/index.html" class="btn-secondary">Try the Verifier</a>
+    </div>
+    <div class="hero-stats">
+      <div class="stat"><div class="stat-n blue">3</div><div class="stat-l">RFCs Published</div></div>
+      <div class="stat"><div class="stat-n green">40</div><div class="stat-l">Formal Invariants</div></div>
+      <div class="stat"><div class="stat-n gold">66</div><div class="stat-l">Conformance Tests</div></div>
+      <div class="stat"><div class="stat-n purple">2</div><div class="stat-l">Academic DOI/SSRN</div></div>
+    </div>
+  </div>
+
+  <hr class="section-divider">
+
+  <!-- THE PROBLEM -->
+  <section>
+    <div class="section-label">The Problem</div>
+    <h2>Three structural gaps in AI governance</h2>
+    <p class="section-sub">Every regulated AI deployment faces the same trio of unresolved challenges. ATF is the first protocol to address all three with cryptographic guarantees.</p>
+    <div class="problem-grid">
+      <div class="problem-card">
+        <div class="icon">🔗</div>
+        <h3>Opaque Delegation</h3>
+        <p>When an autonomous agent acts, there is typically no signed, auditable record linking that agent's authority to a human principal. Who authorized it? What scope? When did it expire?</p>
+        <div class="solution">→ ATF Delegation Receipts — PQC-signed chains from human to agent</div>
+      </div>
+      <div class="problem-card">
+        <div class="icon">⏱️</div>
+        <h3>No Runtime Continuity Guarantee</h3>
+        <p>Autonomous sessions degrade mid-execution — temporal windows close, authority budgets are consumed, context drifts. No formal mechanism detects illegitimacy before the next decision.</p>
+        <div class="solution">→ CES — continuous session health at nanosecond precision</div>
+      </div>
+      <div class="problem-card">
+        <div class="icon">🧊</div>
+        <h3>Evidence Evaporation</h3>
+        <p>Decision evidence typically exists only in live databases. After migration, decommissioning, or a security incident, the ability to independently verify past decisions is permanently lost.</p>
+        <div class="solution">→ EAP + OEP — immutable forensic archive, offline-verifiable forever</div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="section-divider">
+
+  <!-- PROTOCOL STACK -->
+  <section>
+    <div class="section-label">Architecture</div>
+    <h2>The ATF Protocol Stack</h2>
+    <p class="section-sub">Six layers. Authority propagates downward from human to agent. Evidence propagates upward — every artifact PQC-signed, independently verifiable.</p>
+    <div class="stack-container">
+      <div class="stack-layer"><div class="layer-label l5">L5</div><div class="layer-body"><div class="layer-name">Immutable Evidence Archive + OEP</div><div class="layer-desc">Merkle-chained COLD blocks · Self-contained Evidence Packages · Offline forensic verification by regulators</div><div class="layer-rfc">RFC-ATF-3 · EAP-INV-001–007 · OEP-INV-001–006 · FVP-INV-007</div></div></div>
+      <div class="stack-layer"><div class="layer-label l4">L4</div><div class="layer-body"><div class="layer-name">Governance Policy Interoperability (GPIL)</div><div class="layer-desc">Three interoperability levels (CI/PI/GPI) · Policy Parameter Registry · Cross-Runtime Governance Contracts</div><div class="layer-rfc">RFC-ATF-3 · GPIL-INV-001–003 · ELR-INV-001–004</div></div></div>
+      <div class="stack-layer"><div class="layer-label l3">L3</div><div class="layer-body"><div class="layer-name">Runtime Continuity (RCR + CES + AFG)</div><div class="layer-desc">Continuity Eligibility Score sampled throughout execution · Authority Fragmentation Guard · Escalation Protocol</div><div class="layer-rfc">RFC-ATF-2 · RGC-INV-001–008 · CES = T×0.30 + B×0.30 + D×0.20 + I×0.20</div></div></div>
+      <div class="stack-layer"><div class="layer-label l2">L2</div><div class="layer-body"><div class="layer-name">Temporal Admissibility (TAR)</div><div class="layer-desc">Hard time bounds for every decision session · nanosecond-precise admission timestamp · TTL enforcement</div><div class="layer-rfc">RFC-ATF-1 §6 · ATF-INV-004</div></div></div>
+      <div class="stack-layer"><div class="layer-label l1">L1</div><div class="layer-body"><div class="layer-name">Delegation Receipt (DR)</div><div class="layer-desc">Task scope · Authority budget · MAR enforced · PQC-signed by delegator · Chain-traceable to human root</div><div class="layer-rfc">RFC-ATF-1 §5 · ATF-INV-001 (MAR) · ATF-INV-002/005/006</div></div></div>
+      <div class="stack-layer"><div class="layer-label l0">L0</div><div class="layer-body"><div class="layer-name">Human Authority Root (AIR)</div><div class="layer-desc">Agent Identity Receipt · Unique AID · ML-DSA-65 public key · Authority budget ceiling · Tier classification</div><div class="layer-rfc">RFC-ATF-1 §4 · ATF-INV-003 (Chain Root Traceability)</div></div></div>
+    </div>
+  </section>
+
+  <hr class="section-divider">
+
+  <!-- THREE RFCS -->
+  <section>
+    <div class="section-label">Specifications</div>
+    <h2>Three open protocol specifications</h2>
+    <p class="section-sub">Each RFC extends the previous without replacing it — a layered invariant stack that grows formally verifiable.</p>
+    <div class="rfc-grid">
+      <div class="rfc-card rfc1">
+        <div class="rfc-number">RFC-ATF-1 · v1.0.0</div>
+        <h3>Agent Trust Fabric Delegation Protocol</h3>
+        <p>Defines the Agent Identity Record, Delegation Receipt, Trust Lattice, and Monotonic Authority Reduction invariant. Every delegation produces a PQC-signed artifact verifiable by any party without platform access.</p>
+        <div class="rfc-meta">
+          <span class="tag blue">6 Invariants</span>
+          <span class="tag">ML-DSA-65</span>
+          <span class="tag">MAR</span>
+          <span class="tag">Trust Lattice</span>
+        </div>
+        <div class="rfc-links">
+          <a href="https://doi.org/10.5281/zenodo.20155016" target="_blank">DOI: 10.5281/zenodo.20155016 ↗</a>
+          <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=6757339" target="_blank">SSRN 6757339 ↗</a>
+          <a href="./rfc/index.html#rfc1">Read RFC →</a>
+        </div>
+      </div>
+      <div class="rfc-card rfc2">
+        <div class="rfc-number">RFC-ATF-2 · v1.0.0</div>
+        <h3>Runtime Governance Continuity</h3>
+        <p>Extends RFC-ATF-1 into the full execution lifecycle. Introduces the Continuity Eligibility Score, Authority Fragmentation Guard, and Escalation Protocol — covering temporal expiry, budget exhaustion, context drift, and integrity degradation mid-execution.</p>
+        <div class="rfc-meta">
+          <span class="tag blue">+8 Invariants</span>
+          <span class="tag">CES Formula</span>
+          <span class="tag">AFG</span>
+          <span class="tag">Halt Protocol</span>
+        </div>
+        <div class="rfc-links">
+          <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=6763978" target="_blank">SSRN 6763978 ↗</a>
+          <a href="./rfc/index.html#rfc2">Read RFC →</a>
+        </div>
+      </div>
+      <div class="rfc-card rfc3">
+        <div class="rfc-number">RFC-ATF-3 · v1.0.0</div>
+        <h3>Policy Interoperability, Evidence Lifecycle &amp; Forensic Verification</h3>
+        <p>Addresses what happens to governance evidence after execution. GPIL for cross-runtime compatibility, the Evidence Archive Pipeline for immutable retention, and the OEP format for forensic deliverables verifiable by regulators years after decommissioning.</p>
+        <div class="rfc-meta">
+          <span class="tag blue">+26 Invariants</span>
+          <span class="tag">GPIL</span>
+          <span class="tag">EAP</span>
+          <span class="tag">OEP</span>
+          <span class="tag gold">FEI-Compliant</span>
+        </div>
+        <div class="rfc-links">
+          <a href="./rfc/index.html#rfc3">Read RFC →</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="section-divider">
+
+  <!-- CES FORMULA -->
+  <section>
+    <div class="section-label">RFC-ATF-2 · Core Metric</div>
+    <h2>Continuity Eligibility Score</h2>
+    <p class="section-sub">A real-time composite metric [0–100] quantifying the runtime health of an agent's authorization. Sampled at every governance decision point. Protocol invariant — weights are immutable.</p>
+    <div class="ces-box">
+      <div class="ces-formula">
+        CES = <span class="t">T × 0.30</span> + <span class="b">B × 0.30</span> + <span class="d">D × 0.20</span> + <span class="i">I × 0.20</span>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:1rem;max-width:700px;margin:1.5rem auto;text-align:left">
+        <div style="background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:1rem">
+          <div style="color:var(--purple);font-weight:700;font-size:.8rem;margin-bottom:.25rem">T — Temporal (30%)</div>
+          <div style="font-size:.78rem;color:var(--muted)">Fraction of TAR window remaining. Degrades as time passes.</div>
+        </div>
+        <div style="background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:1rem">
+          <div style="color:var(--blue);font-weight:700;font-size:.8rem;margin-bottom:.25rem">B — Budget (30%)</div>
+          <div style="font-size:.78rem;color:var(--muted)">Authority budget remaining vs. admission. Degrades as decisions consume it.</div>
+        </div>
+        <div style="background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:1rem">
+          <div style="color:var(--amber);font-weight:700;font-size:.8rem;margin-bottom:.25rem">D — Context (20%)</div>
+          <div style="font-size:.78rem;color:var(--muted)">Contextual fidelity = 100 − drift%. Degrades with market/state drift.</div>
+        </div>
+        <div style="background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:1rem">
+          <div style="color:var(--green);font-weight:700;font-size:.8rem;margin-bottom:.25rem">I — Integrity (20%)</div>
+          <div style="font-size:.78rem;color:var(--muted)">Chain health. Degrades on hash mismatches or PQC failures.</div>
+        </div>
+      </div>
+      <div class="ces-thresholds">
+        <div class="ces-stage stage-nominal"><div class="stage-name">NOMINAL</div><div class="stage-val">≥ 75.0</div></div>
+        <div class="ces-stage stage-monitoring"><div class="stage-name">MONITORING</div><div class="stage-val">≥ 50.0</div></div>
+        <div class="ces-stage stage-warning"><div class="stage-name">WARNING</div><div class="stage-val">≥ 25.0</div></div>
+        <div class="ces-stage stage-critical"><div class="stage-name">CRITICAL</div><div class="stage-val">≥ 10.0</div></div>
+        <div class="ces-stage stage-halt"><div class="stage-name">HALT</div><div class="stage-val">&lt; 10.0</div></div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="section-divider">
+
+  <!-- INVARIANTS -->
+  <section>
+    <div class="section-label">Formal Invariant System</div>
+    <h2>40 formally specified invariants</h2>
+    <p class="section-sub">Grouped by protocol family. Model-checked properties — not configuration. Any implementation claiming compliance must enforce all invariants in its declared profile.</p>
+    <div class="inv-grid">
+      <div class="inv-group">
+        <h4><span class="inv-badge" style="background:rgba(88,166,255,.15);color:var(--blue)">ATF × 6</span> RFC-ATF-1</h4>
+        <ul class="inv-list">
+          <li><strong>ATF-INV-001</strong> — Monotonic Authority Reduction (MAR)</li>
+          <li><strong>ATF-INV-002</strong> — Receipt Signing (ML-DSA-65)</li>
+          <li><strong>ATF-INV-003</strong> — Chain Root Traceability</li>
+          <li><strong>ATF-INV-004</strong> — Budget Ceiling</li>
+          <li><strong>ATF-INV-005</strong> — Receipt Immutability</li>
+          <li><strong>ATF-INV-006</strong> — Independent Verifiability</li>
+        </ul>
+      </div>
+      <div class="inv-group">
+        <h4><span class="inv-badge" style="background:rgba(188,140,255,.15);color:var(--purple)">RGC × 8</span> RFC-ATF-2</h4>
+        <ul class="inv-list">
+          <li><strong>RGC-INV-001</strong> — CES Formula Fixed</li>
+          <li><strong>RGC-INV-002</strong> — RCR Chain Integrity</li>
+          <li><strong>RGC-INV-003</strong> — HALT Protocol</li>
+          <li><strong>RGC-INV-004</strong> — Escalation Event Integrity</li>
+          <li><strong>RGC-INV-005</strong> — AFG Budget Ceiling</li>
+          <li><strong>RGC-INV-006</strong> — Reauthorization Integrity</li>
+          <li><strong>RGC-INV-007</strong> — CES Threshold Immutability</li>
+          <li><strong>RGC-INV-008</strong> — TAR Anchor Integrity</li>
+        </ul>
+      </div>
+      <div class="inv-group">
+        <h4><span class="inv-badge" style="background:rgba(210,153,34,.15);color:var(--gold)">GPIL × 3</span> RFC-ATF-3</h4>
+        <ul class="inv-list">
+          <li><strong>GPIL-INV-001</strong> — Interoperability Layer Hierarchy</li>
+          <li><strong>GPIL-INV-002</strong> — Policy Parameter Bounds</li>
+          <li><strong>GPIL-INV-003</strong> — CRGC Integrity</li>
+        </ul>
+      </div>
+      <div class="inv-group">
+        <h4><span class="inv-badge" style="background:rgba(63,185,80,.15);color:var(--green)">ELR × 4</span> RFC-ATF-3</h4>
+        <ul class="inv-list">
+          <li><strong>ELR-INV-001</strong> — Evidence Class Assignment</li>
+          <li><strong>ELR-INV-002</strong> — Retention Tier Ordering</li>
+          <li><strong>ELR-INV-003</strong> — Seal Integrity</li>
+          <li><strong>ELR-INV-004</strong> — Transition Audit</li>
+        </ul>
+      </div>
+      <div class="inv-group">
+        <h4><span class="inv-badge" style="background:rgba(240,136,62,.15);color:var(--amber)">EAP × 7</span> RFC-ATF-3</h4>
+        <ul class="inv-list">
+          <li><strong>EAP-INV-001</strong> — Genesis Block Integrity</li>
+          <li><strong>EAP-INV-002</strong> — Block Content Hash</li>
+          <li><strong>EAP-INV-003</strong> — Hash Chain Integrity</li>
+          <li><strong>EAP-INV-004</strong> — Block Immutability</li>
+          <li><strong>EAP-INV-005</strong> — Emergency Seal Protocol</li>
+          <li><strong>EAP-INV-006</strong> — HOT→WARM→COLD Ordering</li>
+          <li><strong>EAP-INV-007</strong> — Entry Hash Determinism</li>
+        </ul>
+      </div>
+      <div class="inv-group">
+        <h4><span class="inv-badge" style="background:rgba(248,81,73,.15);color:var(--red)">OEP+FEA+FVP × 12</span> RFC-ATF-3</h4>
+        <ul class="inv-list">
+          <li><strong>OEP-INV-001–006</strong> — Evidence Package integrity</li>
+          <li><strong>FEA-INV-001–005</strong> — Forensic export access control</li>
+          <li><strong>FVP-INV-007</strong> — Two-plane verification independence</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <hr class="section-divider">
+
+  <!-- CONFORMANCE -->
+  <section>
+    <div class="section-label">Conformance Program</div>
+    <h2>Three compliance profiles</h2>
+    <p class="section-sub">Progressive conformance tiers. Each profile has a defined set of invariants, a conformance test suite, and a badge implementors can include in their documentation.</p>
+    <div class="conf-grid">
+      <div class="conf-card">
+        <div class="conf-tier" style="color:var(--blue)">Tier 1</div>
+        <h3>ATF-Compliant</h3>
+        <div class="coverage">RFC-ATF-1 · 6 invariants</div>
+        <ul class="conf-reqs">
+          <li>Delegation Receipt structure</li>
+          <li>ML-DSA-65 PQC signing</li>
+          <li>MAR invariant (ATF-INV-001)</li>
+          <li>Chain root traceability</li>
+          <li>Content hash verification</li>
+          <li>Offline independent verification</li>
+        </ul>
+        <div class="conf-badge-preview">
+          <img src="https://img.shields.io/badge/ATF-Compliant-blue?style=for-the-badge&logo=data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTYiIGhlaWdodD0iMTYiIHZpZXdCb3g9IjAgMCAxNiAxNiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cG9seWdvbiBwb2ludHM9IjgsMiAxNCw1IDE0LDExIDgsMTQgMiwxMSAyLDUiIGZpbGw9Im5vbmUiIHN0cm9rZT0id2hpdGUiIHN0cm9rZS13aWR0aD0iMS41Ii8+PC9zdmc+" alt="ATF-Compliant">
+        </div>
+        <a href="./conformance/index.html" style="font-size:.82rem;display:inline-block;margin-top:.75rem">Conformance details →</a>
+      </div>
+      <div class="conf-card">
+        <div class="conf-tier" style="color:var(--purple)">Tier 2</div>
+        <h3>ATF-RGC-Compliant</h3>
+        <div class="coverage">RFC-ATF-1 + RFC-ATF-2 · 14 invariants</div>
+        <ul class="conf-reqs">
+          <li>All Tier 1 requirements</li>
+          <li>CES formula (exact weights)</li>
+          <li>RCR chain with TAR anchor</li>
+          <li>HALT protocol (RGC-INV-003)</li>
+          <li>Authority Fragmentation Guard</li>
+          <li>Escalation event integrity</li>
+        </ul>
+        <div class="conf-badge-preview">
+          <img src="https://img.shields.io/badge/ATF--RGC-Compliant-purple?style=for-the-badge" alt="ATF-RGC-Compliant">
+        </div>
+        <a href="./conformance/index.html" style="font-size:.82rem;display:inline-block;margin-top:.75rem">Conformance details →</a>
+      </div>
+      <div class="conf-card">
+        <div class="conf-tier" style="color:var(--gold)">Tier 3</div>
+        <h3>ATF-FEI-Compliant</h3>
+        <div class="coverage">RFC-ATF-1 + 2 + 3 · 40 invariants</div>
+        <ul class="conf-reqs">
+          <li>All Tier 1 + Tier 2 requirements</li>
+          <li>Evidence lifecycle pipeline</li>
+          <li>Immutable archive (HOT/WARM/COLD)</li>
+          <li>OEP self-contained packages</li>
+          <li>Two-plane forensic verification</li>
+          <li>Policy interoperability (GPIL)</li>
+        </ul>
+        <div class="conf-badge-preview">
+          <img src="https://img.shields.io/badge/ATF--FEI-Compliant-gold?style=for-the-badge" alt="ATF-FEI-Compliant">
+        </div>
+        <a href="./conformance/index.html" style="font-size:.82rem;display:inline-block;margin-top:.75rem">Conformance details →</a>
+      </div>
+    </div>
+  </section>
+
+  <hr class="section-divider">
+
+  <!-- RESEARCH -->
+  <section>
+    <div class="section-label">Published Research</div>
+    <h2>Academic record</h2>
+    <p class="section-sub">Permanently archived specifications and research artifacts with academic citation infrastructure.</p>
+    <div class="research-grid">
+      <div class="research-card">
+        <h4>RFC-ATF-1: Agent Trust Fabric Delegation Protocol</h4>
+        <p>First publication of the ATF delegation protocol. Defines AIR, DR, Trust Lattice, and 6 core invariants. Includes TLA+ formal specification.</p>
+        <div style="display:flex;gap:.5rem;flex-wrap:wrap">
+          <a href="https://doi.org/10.5281/zenodo.20155016" target="_blank"><span class="doi-badge">DOI: 10.5281/zenodo.20155016</span></a>
+          <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=6757339" target="_blank"><span class="ssrn-badge">SSRN: 6757339</span></a>
+        </div>
+      </div>
+      <div class="research-card">
+        <h4>RFC-ATF-2: Runtime Governance Continuity</h4>
+        <p>Extension specifying CES, AFG, Escalation Protocol, and 8 RGC invariants. Full formal model-checking specifications.</p>
+        <div style="display:flex;gap:.5rem;flex-wrap:wrap">
+          <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=6763978" target="_blank"><span class="ssrn-badge">SSRN: 6763978</span></a>
+          <span class="ssrn-badge" style="opacity:.5">Zenodo DOI: pending</span>
+        </div>
+      </div>
+      <div class="research-card">
+        <h4>RFC-ATF-3: Evidence Lifecycle &amp; Policy Interoperability</h4>
+        <p>GPIL taxonomy, EAP pipeline, OEP format, and 26 new invariants. Defines the forensic verification standard.</p>
+        <div style="display:flex;gap:.5rem;flex-wrap:wrap">
+          <span class="ssrn-badge" style="opacity:.5">Publication pending</span>
+        </div>
+      </div>
+      <div class="research-card">
+        <h4>TLA+ Formal Verification</h4>
+        <p>5 formal properties model-checked against the ATF specification. Included in Zenodo v1.0.0 archive.</p>
+        <div style="display:flex;gap:.5rem;flex-wrap:wrap">
+          <a href="https://github.com/Costenho19/atf-protocol-standard" target="_blank"><span class="doi-badge">GitHub: ATF-TLA-SPEC.tla</span></a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="section-divider">
+
+  <!-- REGULATORY -->
+  <section>
+    <div class="section-label">Regulatory Alignment</div>
+    <h2>Designed for regulated environments</h2>
+    <p class="section-sub">ATF addresses requirements across the major regulatory frameworks governing AI systems in 2026.</p>
+    <div class="reg-grid">
+      <div class="reg-card">
+        <div class="reg-logo">EU AI Act</div>
+        <p>Article 13 (Transparency) and Article 14 (Human Oversight) for high-risk AI systems. DR chains provide the signed, auditable human oversight record mandated by Art. 14.</p>
+        <div class="reg-articles">
+          <span class="tag blue">Art. 13 Transparency</span>
+          <span class="tag blue">Art. 14 Human Oversight</span>
+        </div>
+      </div>
+      <div class="reg-card">
+        <div class="reg-logo">NIST AI RMF</div>
+        <p>Implements the GOVERN function — accountability, traceability, and organizational responsibility for AI decision-making. CES provides continuous measurable accountability.</p>
+        <div class="reg-articles">
+          <span class="tag">GOVERN Function</span>
+          <span class="tag">MANAGE Function</span>
+        </div>
+      </div>
+      <div class="reg-card">
+        <div class="reg-logo">UAE DFSA / ADGM</div>
+        <p>Aligns with DFSA MKT and CIR rules for audit trails and technology risk management in financial services. Evidence Package (OEP) satisfies forensic audit requirements.</p>
+        <div class="reg-articles">
+          <span class="tag gold">DFSA MKT Rules</span>
+          <span class="tag gold">ADGM CIR</span>
+        </div>
+      </div>
+      <div class="reg-card">
+        <div class="reg-logo">FIPS 204 (ML-DSA-65)</div>
+        <p>All delegation receipts and evidence artifacts are signed with ML-DSA-65 (Dilithium-3), the NIST-standardized post-quantum digital signature algorithm. PQC-hardened by design.</p>
+        <div class="reg-articles">
+          <span class="tag green">FIPS 204</span>
+          <span class="tag green">Post-Quantum</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="section-divider">
+
+  <!-- WHO SHOULD IMPLEMENT -->
+  <section>
+    <div class="section-label">Implementation</div>
+    <h2>Who should implement ATF?</h2>
+    <p class="section-sub">ATF is relevant to any organization deploying autonomous AI agents in contexts where authorization provenance, execution continuity, or forensic evidence retention are material requirements.</p>
+    <div class="gs-grid">
+      <div class="gs-card">
+        <div class="step-n">Category 01</div>
+        <h3>AI Orchestration Platforms</h3>
+        <p>Multi-agent frameworks, LLM orchestrators, and autonomous workflow engines that need to prove every agent action was within explicitly delegated scope.</p>
+        <a href="./conformance/index.html">Get ATF-Compliant →</a>
+      </div>
+      <div class="gs-card">
+        <div class="step-n">Category 02</div>
+        <h3>Regulated Financial AI</h3>
+        <p>Trading algorithms, credit decisioning, and risk management systems operating under DFSA, FCA, or MiFID II — where agent authority chains are regulatory evidence.</p>
+        <a href="./conformance/index.html">Get ATF-RGC-Compliant →</a>
+      </div>
+      <div class="gs-card">
+        <div class="step-n">Category 03</div>
+        <h3>Healthcare & Safety-Critical AI</h3>
+        <p>Clinical decision support, autonomous diagnosis support, and safety-critical systems under EU AI Act Article 6 high-risk classification.</p>
+        <a href="./conformance/index.html">Get ATF-FEI-Compliant →</a>
+      </div>
+      <div class="gs-card">
+        <div class="step-n">Category 04</div>
+        <h3>Sovereign AI Infrastructure</h3>
+        <p>Government, defense, and national AI initiatives requiring cryptographic proof of human control over autonomous decision chains, resistant to post-quantum adversaries.</p>
+        <a href="./conformance/index.html">Get ATF-FEI-Compliant →</a>
+      </div>
+    </div>
+  </section>
+
+  <hr class="section-divider">
+
+  <!-- GET STARTED -->
+  <section>
+    <div class="section-label">Get Started</div>
+    <h2>Start implementing ATF</h2>
+    <p class="section-sub">Reference implementation, conformance test vectors, JSON schemas, and verifier tools — all in one open repository.</p>
+    <div class="gs-grid">
+      <div class="gs-card">
+        <div class="step-n">Step 01</div>
+        <h3>Read the RFC</h3>
+        <p>Start with RFC-ATF-1 for the delegation protocol. Each RFC is self-contained and builds on the previous.</p>
+        <a href="./rfc/index.html">Browse RFC Index →</a>
+      </div>
+      <div class="gs-card">
+        <div class="step-n">Step 02</div>
+        <h3>Run the Reference Implementation</h3>
+        <p>Python reference implementation with full test suite. Install, verify examples, run conformance vectors.</p>
+        <a href="https://github.com/Costenho19/atf-protocol-standard/tree/main/reference-implementation" target="_blank">View on GitHub →</a>
+      </div>
+      <div class="gs-card">
+        <div class="step-n">Step 03</div>
+        <h3>Verify Your Receipts</h3>
+        <p>Use the public verifier to validate ATF receipts — checks content hash, MAR invariant, CES formula, and field structure.</p>
+        <a href="./verify/index.html">Open Verifier →</a>
+      </div>
+      <div class="gs-card">
+        <div class="step-n">Step 04</div>
+        <h3>Claim Conformance</h3>
+        <p>Run the conformance test suite against your implementation and declare your profile tier in your documentation.</p>
+        <a href="./conformance/index.html">Conformance Program →</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <a class="nav-brand" href="./index.html" style="margin-bottom:.5rem;display:inline-flex">
+          <svg width="20" height="20" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg"><polygon points="11,2 20,7 20,15 11,20 2,15 2,7" fill="none" stroke="#58a6ff" stroke-width="1.5"/><polygon points="11,6 16,9 16,13 11,16 6,13 6,9" fill="#58a6ff" opacity=".3"/><circle cx="11" cy="11" r="2" fill="#58a6ff"/></svg>
+          &nbsp;ATF Protocol
+        </a>
+        <p>Open protocol standard for verifiable AI agent authority governance. Published by OMNIX QUANTUM LTD under CC BY 4.0.</p>
+      </div>
+      <div class="footer-col">
+        <h5>Specifications</h5>
+        <ul>
+          <li><a href="./rfc/index.html#rfc1">RFC-ATF-1 — Delegation</a></li>
+          <li><a href="./rfc/index.html#rfc2">RFC-ATF-2 — Continuity</a></li>
+          <li><a href="./rfc/index.html#rfc3">RFC-ATF-3 — Evidence</a></li>
+          <li><a href="https://github.com/Costenho19/atf-protocol-standard/blob/main/CONFORMANCE.md" target="_blank">Conformance Program</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h5>Tools</h5>
+        <ul>
+          <li><a href="./verify/index.html">Public Verifier</a></li>
+          <li><a href="https://github.com/Costenho19/atf-protocol-standard/tree/main/reference-implementation" target="_blank">Python Reference Impl.</a></li>
+          <li><a href="https://github.com/Costenho19/atf-protocol-standard/tree/main/ports/rust" target="_blank">Rust Port</a></li>
+          <li><a href="https://github.com/Costenho19/atf-protocol-standard/tree/main/conformance" target="_blank">Test Vectors (JSON)</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h5>Research</h5>
+        <ul>
+          <li><a href="https://doi.org/10.5281/zenodo.20155016" target="_blank">Zenodo DOI (RFC-ATF-1)</a></li>
+          <li><a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=6757339" target="_blank">SSRN 6757339</a></li>
+          <li><a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=6763978" target="_blank">SSRN 6763978</a></li>
+          <li><a href="https://github.com/Costenho19/atf-protocol-standard" target="_blank">GitHub Repository</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2026 OMNIX QUANTUM LTD · Harold Nunes, Editor · standards@omnixquantum.com</p>
+      <div class="footer-badges">
+        <img src="https://img.shields.io/badge/License-CC%20BY%204.0-lightgrey?style=flat-square" alt="CC BY 4.0">
+        <img src="https://img.shields.io/badge/PQC-ML--DSA--65-8A2BE2?style=flat-square" alt="PQC">
+        <img src="https://img.shields.io/github/actions/workflow/status/Costenho19/atf-protocol-standard/ci.yml?style=flat-square&label=CI" alt="CI">
+      </div>
+    </div>
+  </footer>
+  </body>
+  </html>
