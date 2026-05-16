@@ -62,6 +62,17 @@ def create_delegation_receipt(
 
     Enforces ATF-INV-001 (MAR): budget_granted MUST NOT exceed budget_delegator.
     """
+    import math as _m
+    if not _m.isfinite(budget_granted) or not _m.isfinite(budget_delegator):
+        raise ValueError(
+            f"ATF-INV-001: authority budgets must be finite numbers "
+            f"(budget_granted={budget_granted}, budget_delegator={budget_delegator})"
+        )
+    if budget_granted < 0.0 or budget_delegator < 0.0:
+        raise ValueError(
+            f"ATF-INV-001: authority budgets must be \u2265 0 "
+            f"(budget_granted={budget_granted}, budget_delegator={budget_delegator})"
+        )
     if budget_granted > budget_delegator:
         raise ValueError(
             f"ATF-INV-001 (MAR) VIOLATED: budget_granted ({budget_granted}) "
@@ -127,6 +138,10 @@ def create_runtime_continuity_record(
     """
     if not tar_id:
         raise ValueError("RGC-INV-001 VIOLATED: tar_id must not be null")
+    for _n, _v in [("ces_temporal", ces_temporal), ("ces_budget", ces_budget),
+                    ("ces_context", ces_context), ("ces_integrity", ces_integrity)]:
+        if not (0.0 <= _v <= 100.0):
+            raise ValueError(f"RGC-INV-002: {_n} must be in [0.0, 100.0], got {_v}")
 
     valid_reasons = {"SCHEDULED", "EVENT_DRIVEN", "MANUAL", "EXECUTION_COMPLETE", "HALT"}
     if sample_reason not in valid_reasons:
